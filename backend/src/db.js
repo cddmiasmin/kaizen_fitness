@@ -3,15 +3,14 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
+    password: process.env.DB_PASS,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT
 });
 
 connection.connect((error) => {
-   
-    console.log(`Conectado ao BD: ${process.env.DB_NAME}`)
+    if(error) console.log(`${error}`);
+    else console.log(`Conectado ao BD: ${process.env.DB_NAME}`);
 });
 
 module.exports = connection;
-console.log(`Conectado ao BD: ${process.env.DB_NAME}`)
