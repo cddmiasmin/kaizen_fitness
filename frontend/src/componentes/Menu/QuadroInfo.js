@@ -18,7 +18,7 @@ export default function Menu() {
     </View>
     <Image
         style={[styles.icon, StyleSheet.absoluteFillObject]}
-        source={require('./../../../assets/icons/quadroinfo_mulher.png')}
+        source={require('./../../../assets/icons/quadroinfo_homem.png')}
     />
    </View>
   );
