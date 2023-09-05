@@ -31,18 +31,33 @@ module.exports = {
         });
     },
 
-    CadastrarUsuario: (nome, email, senha) => {
+    CadastrarUsuario: (foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade) => {
         return new Promise((aceito, rejeitado)=> {
 
-            db.query('INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)',
-                [nome, email, senha],
+            db.query('INSERT INTO tb_usuario (foto, nome, sobrenome, dt_nascimento, email, senha, estado, cidade) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                [foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade],
                 (error, results) => {
                     if(error){ 
                         rejeitado(error); 
                         return; 
                     }
-
                     aceito(results.insertId); 
+                }
+            );
+        });
+    },
+
+    CadastrarConsumidor: (cpf, peso, altura, usuarioCodigo) => {
+        return new Promise((aceito, rejeitado)=> {
+
+            db.query('INSERT INTO tb_usuario_consumidor (cpf, peso, altura, id_usuario) VALUES (?, ?, ?, ?)',
+                [cpf, peso, altura, usuarioCodigo],
+                (error, results) => {
+                    if(error){ 
+                        rejeitado(error); 
+                        return; 
+                    }
+                    aceito(results); 
                 }
             );
         });

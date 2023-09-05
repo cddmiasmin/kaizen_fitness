@@ -10,7 +10,8 @@ export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
 
-    const [usuarioInfo, setUsuarioInfo] = useState(null);
+    const [usuarioInfo, setUsuarioInfo] = useState([]);
+
 /*
     const [requisicao, resposta, promptAsync] = Google.useAuthRequest({
         androidClientId: ANDROID_CLIENT_ID
@@ -26,13 +27,12 @@ export const UserContextProvider = ({ children }) => {
     }
 */
 
-    
+
     return (
         <UserContext.Provider
             value={{
                 usuarioInfo,
-                setUsuarioInfo,
-                promptAsync
+                setUsuarioInfo
             }}
         >
             {children}

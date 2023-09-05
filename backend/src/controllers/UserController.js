@@ -36,21 +36,18 @@ module.exports = {
     CadastrarUsuario: async(req, res) => {
         let json = {error:'', result:{}};
 
-        let {nome} = req.body;
-        let {email} = req.body;
-        let {senha} = req.body;
+        let { foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade, cpf, peso, altura } = req.body
+        let fotoa = req.body.foto
 
-        console.log(req.body);
+        console.log(req.body, 'iasmin', fotoa);
 
         if (nome && email && senha){
     
-            let usuarioCodigo = await UserService.CadastrarUsuario(nome, email, senha);
+            let usuarioCodigo = await UserService.CadastrarUsuario(foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade);
+            await UserService.CadastrarConsumidor(cpf, peso, altura, usuarioCodigo);
 
             json.result = {
-                codigo: usuarioCodigo,
-                nome,
-                email,
-                senha
+                codigo: usuarioCodigo, foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade, cpf, peso, altura
             };
 
         } else {

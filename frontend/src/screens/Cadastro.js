@@ -3,7 +3,6 @@ import { useContext, useState } from 'react';
 import { View, StyleSheet, StatusBar, Text, TouchableOpacity, TextInput,  KeyboardAvoidingView, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-
 import { AntDesign } from '@expo/vector-icons';
 
 import { papelDeParede } from '../colors/colors';
@@ -14,24 +13,24 @@ import { UserContext } from '../contexts/UserContext';
 
 export default function Cadastro() {
 
-  const [email, setEmail] = useState('');
-
   const navigation = useNavigation();
+
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
   const {
     color
   } = useContext(ColorContext);
 
   const {
-    usuarioInfo,
+    setUsuarioInfo,
     promptAsync
   } = useContext(UserContext);
 
-  console.log('user', usuarioInfo);
 
   return (
     <View style={styles.container}>
-       <StatusBar backgroundColor={papelDeParede} barStyle="light-content" />
+      <StatusBar backgroundColor={papelDeParede} barStyle="light-content" />
       <View style={styles.caixaTextos}>
         <Text style={styles.titulo}>Cadastro</Text>
         <Text style={styles.subtitulo}>Crie uma conta</Text>
@@ -46,8 +45,8 @@ export default function Cadastro() {
           <TextInput
               style={styles.input}
               underlineColorAndroid="transparent"
-              onChange={setEmail}
-              value={usuarioInfo}
+              onChangeText={(text) => setEmail(text)}
+              value={email}
           />
         </View>
         <Text style={[styles.span, { color: color, marginTop: 20 }]}>Senha</Text>
@@ -55,14 +54,22 @@ export default function Cadastro() {
           <TextInput
               style={styles.input}
               underlineColorAndroid="transparent"
-              onChange={setEmail}
-              value={email}
+              onChangeText={(text) => setSenha(text)}
+              value={senha}
           />
         </View>
       </KeyboardAvoidingView>
       <View style={styles.footer}>
         <TouchableOpacity 
-            onPress={() => navigation.navigate('CadastroCompleto')} 
+            onPress={() => {
+              setUsuarioInfo({
+                'foto': '',
+                'nome': '',
+                'email': email,
+                'senha': senha
+              });
+              navigation.navigate('MeusDados');
+            }} 
             style={[styles.cadastrar, { backgroundColor: color }]}
         >
           <Text style={styles.tituloBotao}>Continuar cadastro</Text>

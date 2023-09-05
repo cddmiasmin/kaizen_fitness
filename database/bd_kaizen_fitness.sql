@@ -4,6 +4,7 @@ USE bd_kaizen_fitness;
 
 CREATE TABLE tb_usuario (
     id_usuario INT PRIMARY KEY,
+    foto VARCHAR(255),
     nome VARCHAR(255),
     sobrenome VARCHAR(255),
     dt_nascimento DATE,

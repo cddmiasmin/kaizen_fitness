@@ -27,6 +27,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "sheme": "frontend"
+    "sheme": "frontend",
+    "extra": {
+      "eas": {
+        "projectId": "72ccb5a5-f4c2-45d0-8dd2-f125900c7206"
+      }
+    }
   }
 }
