@@ -1,14 +1,20 @@
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, SafeAreaView, StatusBar, ScrollView, Text, KeyboardAvoidingView , TextInput, TouchableOpacity} from 'react-native';
 import { papelDeParede } from '../colors/colors';
-import { Avatar } from 'react-native-paper';
+import { Avatar, Snackbar } from 'react-native-paper';
 import axios from 'axios';
 import { API_URL } from '@env';
 import { ColorContext } from '../contexts/ColorContext';
 import { UserContext } from '../contexts/UserContext';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 export default function MeusDados() {
+
+ const  route  = useRoute();
+ const navigation = useNavigation();
+ 
+ const  screen  = route.params?.screen || 'undefined';
 
  const { color } = useContext(ColorContext);
 
@@ -26,6 +32,9 @@ export default function MeusDados() {
  const [peso, setPeso] = useState('45.2');
  const [altura, setAltura] = useState('1.80');
 
+ const [SnackBarText, setSnackBarText] = useState('');
+ const [visivel, setVisivel] = useState(false);
+
  const cadastrarUsuario = async () => {
 
   const NomeAux = () => {
@@ -37,7 +46,7 @@ export default function MeusDados() {
 
   NomeAux();
 
-  axios.post(`${API_URL}/usuario`, {
+  axios.post(`${API_URL}/usuario/cadastro`, {
     foto: foto,
     nome: nome,
     sobrenome: sobrenome,
@@ -53,9 +62,14 @@ export default function MeusDados() {
     .then(function (response) {
 
       if (response.data.error) {
-        console.log(response.data.error)
+        console.log(response.data.error, 'oi')
       } else {
-        console.log('deu certo')
+        setVisivel(true);
+        setSnackBarText('Cadastro realizado com sucesso!');
+
+        console.log(screen);
+
+        if(screen == 'Cadastro') navigation.navigate('Home');
       }
 
     })
@@ -180,6 +194,12 @@ export default function MeusDados() {
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </View>
+          <Snackbar
+            visible={visivel}
+            onDismiss={() => setVisivel(!visivel)}
+          >
+          {SnackBarText}
+        </Snackbar>
      </ScrollView>
    </SafeAreaView>
   );

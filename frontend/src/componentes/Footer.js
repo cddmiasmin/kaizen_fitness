@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { View, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { IconButton, Button } from 'react-native-paper';
 
@@ -10,17 +10,39 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { colorConsumidor } from '../colors/colors';
+import { ColorContext } from '../contexts/ColorContext';
 
 export default function Footer() {
 
+const route = useRoute();
+
 const navigation = useNavigation();
+
+console.log(route.name);
+
+const { color } = useContext(ColorContext);
 
  return (
    <View style={styles.footer}>
     <View style={styles.container}>      
-        <Ionicons name="calendar" size={30} color="white" onPress={() => navigation.navigate('Agenda')}/>
-        <MaterialIcons name="home-filled" size={35} color={colorConsumidor} onPress={() => navigation.navigate('Home')}/>
-        <Ionicons name="ios-person-circle" size={30} color="white" onPress={() => navigation.navigate('Perfil')}/>
+        <Ionicons 
+            name="calendar" 
+            size={route.name == 'Agenda' ? 35 : 25} 
+            color={route.name == 'Agenda' ? color : 'white'} 
+            onPress={() => navigation.navigate('Agenda')}
+        />
+        <MaterialIcons 
+            name="home-filled" 
+            size={route.name == 'Home' ? 35 : 25} 
+            color={route.name == 'Home' ? color : 'white'} 
+            onPress={() => navigation.navigate('Home')}
+        />
+        <Ionicons 
+            name="ios-person-circle" 
+            size={route.name == 'Perfil' ? 35 : 25} 
+            color={route.name == 'Perfil' ? color : 'white'} 
+            onPress={() => navigation.navigate('Perfil')}
+        />
     </View>
    </View>
   );

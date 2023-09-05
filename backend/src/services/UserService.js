@@ -1,33 +1,25 @@
 const db = require('../db');
 
 module.exports = {
-    ConsultarUsuarios: () => {
-        return new Promise((aceito, rejeitado)=>{
-
-            db.query('SELECT * FROM usuario', (error, results)=>{
-                if(error) { rejeitado(error); return; }
-                aceito(results);
-            });
-        });
-    },
     
-    ConsultarUsuario: (codigo) => {
+    ObterUsuarioConsumidor: (email, senha) => {
         return new Promise((aceito, rejeitado)=>{
 
-            db.query('SELECT * FROM usuario WHERE id = ?', [codigo], 
+            db.query("SELECT tb_usuario.id_usuario as 'idUsuario', tb_usuario.foto, tb_usuario.nome, tb_usuario.sobrenome, tb_usuario.dt_nascimento as 'dtNascimento', tb_usuario.email, tb_usuario.senha, tb_usuario_consumidor.id_usuario_consumidor as 'idConsumidor', tb_usuario_consumidor.cpf, tb_usuario_consumidor.peso, tb_usuario_consumidor.altura FROM tb_usuario INNER JOIN tb_usuario_consumidor WHERE tb_usuario.email = ? or tb_usuario.senha = ?", 
             
-            (error, results) => {
-                if(error) { 
-                    rejeitado(error); 
-                    return; 
-                }
+            [email, senha], 
+                (error, results) => {
+                    if(error) { 
+                        rejeitado(error); 
+                        return; 
+                    }
 
-                if(results.length > 0) { 
-                    aceito(results[0]);
-                } else {
-                    aceito(false);
-                }
-            });
+                    if(results.length > 0) { 
+                        aceito(results[0]);
+                    } else {
+                        aceito(false);
+                    }
+                });
         });
     },
 

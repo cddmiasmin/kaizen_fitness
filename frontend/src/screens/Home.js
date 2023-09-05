@@ -4,9 +4,9 @@ import { View, StatusBar, StyleSheet, Text } from 'react-native';
 
 import { papelDeParede } from '../colors/colors';
 
-import Header from '../componentes/Menu/Header';
-import QuadroInfo from '../componentes/Menu/QuadroInfo';
-import Opcao from './../componentes/Menu/Opcao';
+import Header from '../componentes/Home/Header';
+import QuadroInfo from '../componentes/Home/QuadroInfo';
+import Opcao from './../componentes/Home/Opcao';
 import Footer  from '../componentes/Footer';
 
 
@@ -17,6 +17,9 @@ export default function Home() {
       <Header/>
       <QuadroInfo/>
       <View style={styles.linha}/>
+      <Opcao nome='Procure eventos' icon='calendar-cursor'/>
+      <Opcao nome='Procure pessoas' icon='nature-people'/>
+      <Opcao nome='Procure estabelecimentos' icon='google-maps'/>
       <Footer />
     </View>
   )

@@ -24,7 +24,6 @@ export default function Cadastro() {
 
   const {
     setUsuarioInfo,
-    promptAsync
   } = useContext(UserContext);
 
 
@@ -35,7 +34,7 @@ export default function Cadastro() {
         <Text style={styles.titulo}>Cadastro</Text>
         <Text style={styles.subtitulo}>Crie uma conta</Text>
       </View>
-      <TouchableOpacity onPress={() => promptAsync()} style={[styles.google, { backgroundColor: color }]}>
+      <TouchableOpacity  style={[styles.google, { backgroundColor: color }]}>
         <AntDesign name="google" size={20} color="white" />
       </TouchableOpacity >
       <Text style={styles.info}>ou cadastre-se com e-mail </Text>
@@ -68,7 +67,7 @@ export default function Cadastro() {
                 'email': email,
                 'senha': senha
               });
-              navigation.navigate('MeusDados');
+              navigation.navigate('MeusDados', { screen: 'Cadastro' });
             }} 
             style={[styles.cadastrar, { backgroundColor: color }]}
         >

@@ -3,43 +3,40 @@ const UserService = require('./../services/UserService');
 
 module.exports = {
     
-    ConsultarUsuarios: async (req, res) => {
+    LogarUsuario: async (req, res) => {
         let json = {error:'', result:[]};
 
-        let usuarios = await UserService.ConsultarUsuarios();
+        let { email  } = req.body;
+        let { senha  } = req.body;
+        let { google } = req.body;
 
-        for(let i in usuarios){
-            json.result.push({
-                codigo: usuarios[i].codigo,
-                nome: usuarios[i].nome,
-                email: usuarios[i].email,
-                senha: usuarios[i].senha
-            });
-        }
+        let usuario = await UserService.ObterUsuarioConsumidor(email, senha);
 
-        res.json(json);
-    },
-
-    ConsultarUsuario: async (req, res) => {
-        let json = {error:'', result:{}};
-
-        let codigo = req.params.codigo; 
-        let usuario = await UserService.ConsultarUsuario(codigo);
-
+        // json.result.push(usuario === false || email != usuario.email, senha != usuario.senha);
+        
         if(usuario){
-            json.result = usuario; 
-        }
+            if (email == usuario.email && google === 'true') 
+                json.result.push(usuario);
 
+            else if(email == usuario.email && senha == usuario.senha && google === 'false') 
+                json.result.push(usuario);
+
+            else if(email != usuario.email) 
+                json.error = 'Conta não encontrada!';
+            
+            else if(senha != usuario.senha) 
+                json.error = ('Senha incorreta!');
+        } else {
+            json.error = 'Conta não encontrada!';
+        }
+    
         res.json(json);
     },
 
     CadastrarUsuario: async(req, res) => {
         let json = {error:'', result:{}};
 
-        let { foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade, cpf, peso, altura } = req.body
-        let fotoa = req.body.foto
-
-        console.log(req.body, 'iasmin', fotoa);
+        let { foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade, cpf, peso, altura } = req.body;
 
         if (nome && email && senha){
     
