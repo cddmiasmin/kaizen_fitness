@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 import { colorConsumidor } from "../colors/colors";
 
 export const ColorContext = createContext();
@@ -7,7 +7,6 @@ export const ColorContextProvider = ({ children }) => {
 
     const [color, setColor] = useState(colorConsumidor);
 
-    console.log('iasmin', color);
     return (
         <ColorContext.Provider
             value={{
@@ -21,12 +20,4 @@ export const ColorContextProvider = ({ children }) => {
 
 };
 
-export const useColorContext = () => {
-    return useContext(ColorContext);
-};
-
-  
-  
-  
-  
 

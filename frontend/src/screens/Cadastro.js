@@ -9,6 +9,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { papelDeParede } from '../colors/colors';
 
 import { ColorContext } from '../contexts/ColorContext';
+import { UserContext } from '../contexts/UserContext';
 
 
 export default function Cadastro() {
@@ -21,6 +22,13 @@ export default function Cadastro() {
     color
   } = useContext(ColorContext);
 
+  const {
+    usuarioInfo,
+    promptAsync
+  } = useContext(UserContext);
+
+  console.log('user', usuarioInfo);
+
   return (
     <View style={styles.container}>
        <StatusBar backgroundColor={papelDeParede} barStyle="light-content" />
@@ -28,7 +36,7 @@ export default function Cadastro() {
         <Text style={styles.titulo}>Cadastro</Text>
         <Text style={styles.subtitulo}>Crie uma conta</Text>
       </View>
-      <TouchableOpacity onPress={() => console.log('iasmin')} style={[styles.google, { backgroundColor: color }]}>
+      <TouchableOpacity onPress={() => promptAsync()} style={[styles.google, { backgroundColor: color }]}>
         <AntDesign name="google" size={20} color="white" />
       </TouchableOpacity >
       <Text style={styles.info}>ou cadastre-se com e-mail </Text>
@@ -39,7 +47,7 @@ export default function Cadastro() {
               style={styles.input}
               underlineColorAndroid="transparent"
               onChange={setEmail}
-              value={email}
+              value={usuarioInfo}
           />
         </View>
         <Text style={[styles.span, { color: color, marginTop: 20 }]}>Senha</Text>
@@ -53,7 +61,10 @@ export default function Cadastro() {
         </View>
       </KeyboardAvoidingView>
       <View style={styles.footer}>
-        <TouchableOpacity onPress={() => navigation.navigate('CadastroCompleto')} style={[styles.cadastrar, { backgroundColor: color }]}>
+        <TouchableOpacity 
+            onPress={() => navigation.navigate('CadastroCompleto')} 
+            style={[styles.cadastrar, { backgroundColor: color }]}
+        >
           <Text style={styles.tituloBotao}>Continuar cadastro</Text>
         </TouchableOpacity>
         <Text style={styles.termos}>
