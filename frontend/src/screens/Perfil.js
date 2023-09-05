@@ -14,10 +14,6 @@ export default function Perfil() {
     { 'id': 2, 'nome': 'Deletar minha conta', 'icon': 'trash-can'}
   ]
 
-  const {
-    color
-  } = useContext(ColorContext);
-
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={papelDeParede} barStyle="light-content"/>

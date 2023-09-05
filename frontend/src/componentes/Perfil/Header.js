@@ -1,14 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Avatar } from 'react-native-paper';
-import { papelDeParede } from '../../colors/colors';
-import { ColorContext } from '../../contexts/ColorContext';
 
 export default function Header() {
-
- const {
-    color
- } = useContext(ColorContext);
 
  return (
     <View style={styles.container}>

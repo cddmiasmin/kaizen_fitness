@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
       textMotivacional:{
         color: 'white',
         fontSize: 12,
-        
       }, 
       avatar: {
         width: '20%',

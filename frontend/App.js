@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './src/screens/Login';
 import Home from './src/screens/Home';
 import Cadastro from './src/screens/Cadastro';
-import CadastroCompleto from './src/screens/CadastroCompleto';
+import MeusDados from './src/screens/MeusDados';
 import Perfil from './src/screens/Perfil';
 import Agenda from './src/screens/Agenda';
 
@@ -17,11 +17,11 @@ export default function App() {
   return (
     <ColorContextProvider>
       <NavigationContainer>
-          <Stack.Navigator initialRouteName="Perfil">
+          <Stack.Navigator initialRouteName="MeusDados">
             <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
             <Stack.Screen name="Cadastro" component={Cadastro} options={{ headerShown: false }}/>
-            <Stack.Screen name="CadastroCompleto" component={CadastroCompleto} options={{ headerShown: false }}/>
+            <Stack.Screen name="MeusDados" component={MeusDados} options={{ headerShown: false }}/>
             <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }}/>
             <Stack.Screen name="Agenda" component={Agenda} options={{ headerShown: false }}/>
           </Stack.Navigator>

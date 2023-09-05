@@ -55,7 +55,7 @@ export default function Cadastro() {
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => navigation.navigate('CadastroCompleto')} style={[styles.cadastrar, { backgroundColor: color }]}>
           <Text style={styles.tituloBotao}>Continuar cadastro</Text>
-        </TouchableOpacity >
+        </TouchableOpacity>
         <Text style={styles.termos}>
           Ao continuar, confirme que você concorda com nossos termos e condições
         </Text>
