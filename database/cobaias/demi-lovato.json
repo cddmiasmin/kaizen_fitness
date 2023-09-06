@@ -1,0 +1,14 @@
+{
+    "foto": "https://i.pinimg.com/564x/b7/92/7e/b7927e76d8f8faff6ec0e42d29ff4b8c.jpg",
+    "nome": "Demi",
+    "sobrenome": "Lovato",
+    "dtNascimento": "1992-08-20",
+    "email": "demi.lovato@example.com",
+    "senha": "112",
+    "estado": "Califórnia",
+    "cidade": "Los Angeles",
+    "cpf": "123.456.789-00",
+    "peso": 65.5,
+    "altura": 1.61
+}
+  

@@ -18,8 +18,6 @@ const route = useRoute();
 
 const navigation = useNavigation();
 
-console.log(route.name);
-
 const { color } = useContext(ColorContext);
 
  return (

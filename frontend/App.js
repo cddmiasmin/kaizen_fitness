@@ -19,7 +19,7 @@ export default function App() {
     <UserContextProvider>
       <ColorContextProvider>
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Home">
+            <Stack.Navigator initialRouteName="Login">
               <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
               <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
               <Stack.Screen name="Cadastro" component={Cadastro} options={{ headerShown: false }}/>

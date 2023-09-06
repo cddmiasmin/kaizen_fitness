@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Avatar } from 'react-native-paper';
+import { UserContext } from '../../contexts/UserContext';
+import { ColorContext } from '../../contexts/ColorContext';
 
 export default function Header() {
+
+ const { usuarioInfo } = useContext(UserContext);
+
+ const { color } = useContext(ColorContext);
 
  return (
     <View style={styles.container}>
@@ -10,10 +16,15 @@ export default function Header() {
             <View style={styles.avatar}>
                 <Avatar.Image
                     size={110} 
-                    source={{uri : 'https://i.pinimg.com/564x/8e/07/e4/8e07e4eb005153a28db1bd25d176d2f2.jpg'}}
+                    source={
+                        !usuarioInfo.foto 
+                        ? require('../../../assets/icons/user-icon.png')
+                        : {uri:(usuarioInfo.foto)}
+                    }
+                    style={{backgroundColor: color}}
                 />
             </View>
-            <Text style={styles.nomeUsuario}>Florence Welch</Text>
+            <Text style={styles.nomeUsuario}>{usuarioInfo.nome + ' ' + usuarioInfo.sobrenome}</Text>
         </View>    
     </View>
   );

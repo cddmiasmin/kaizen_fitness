@@ -1,0 +1,13 @@
+{
+    "foto": "https://i.pinimg.com/564x/8e/34/60/8e3460e14a18e4831b70785c6baef93b.jpg",
+    "nome": "Florence",
+    "sobrenome": "Welch",
+    "dtNascimento": "1986-08-28",
+    "email": "florence.welch@example.com",
+    "senha": "senha_segura",
+    "estado": "Londres",
+    "cidade": "Londres",
+    "cpf": "123.456.789-00",
+    "peso": 63.5,
+    "altura": 1.75
+}

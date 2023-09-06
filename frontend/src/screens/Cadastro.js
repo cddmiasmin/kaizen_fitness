@@ -17,15 +17,16 @@ export default function Cadastro() {
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  
 
   const {
     color
   } = useContext(ColorContext);
 
   const {
+    usuarioInfo,
     setUsuarioInfo,
   } = useContext(UserContext);
-
 
   return (
     <View style={styles.container}>
@@ -62,10 +63,9 @@ export default function Cadastro() {
         <TouchableOpacity 
             onPress={() => {
               setUsuarioInfo({
-                'foto': '',
-                'nome': '',
-                'email': email,
-                'senha': senha
+                ...usuarioInfo,
+                "email": email,
+                "senha": senha,
               });
               navigation.navigate('MeusDados', { screen: 'Cadastro' });
             }} 

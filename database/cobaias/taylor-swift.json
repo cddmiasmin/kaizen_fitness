@@ -1,0 +1,13 @@
+{
+    "foto": "https://i.pinimg.com/564x/f6/4b/52/f64b529d5c5c5c33a149ce3e22f70709.jpg",
+    "nome": "Taylor",
+    "sobrenome": "Swift",
+    "dtNascimento": "1989-12-13",
+    "email": "taylor.swift@example.com",
+    "senha": "senha_secreta",
+    "estado": "Tennessee",
+    "cidade": "Nashville",
+    "cpf": "123.456.789-00",
+    "peso": 58.5,
+    "altura": 1.78
+  }

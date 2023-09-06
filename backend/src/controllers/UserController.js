@@ -36,19 +36,19 @@ module.exports = {
     CadastrarUsuario: async(req, res) => {
         let json = {error:'', result:{}};
 
-        let { foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade, cpf, peso, altura } = req.body;
+        let { foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade, cpf, peso, altura} = req.body;
 
-        if (nome && email && senha){
+        if (foto && nome && dtNascimento && email && senha && estado && cidade && cpf && peso && altura){
     
             let usuarioCodigo = await UserService.CadastrarUsuario(foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade);
-            await UserService.CadastrarConsumidor(cpf, peso, altura, usuarioCodigo);
+            let consumidorCodigo = await UserService.CadastrarConsumidor(cpf, peso, altura, usuarioCodigo);
 
             json.result = {
-                codigo: usuarioCodigo, foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade, cpf, peso, altura
+                idUsuario: usuarioCodigo, foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade, cpf, peso, altura, idConsumidor: consumidorCodigo
             };
 
         } else {
-            json.error = 'Campos não enviados';
+            json.error = {foto, nome, sobrenome, dtNascimento, email, senha, estado, cidade, cpf, peso, altura};
         }
         res.json(json);
     },
@@ -57,17 +57,17 @@ module.exports = {
         let json = {error:'', result:{}};
 
         let {codigo} = req.params;
-        let {nome} = req.body;
+
         let {email} = req.body;
         let {senha} = req.body;
+        let {estado} = req.body;
+        let {cidade} = req.body;
+        let {peso} = req.body;
+        let {altura} = req.body;
 
-        if (codigo && nome && email && senha){
-            await UserService.AlterarUsuario(codigo, nome, email, senha);
-            json.result = {
-                nome,
-                email,
-                senha
-            };
+        if (codigo && email && senha && estado && cidade && peso && altura){
+            let atualizacao = await UserService.AlterarUsuario(codigo, email, senha, estado, cidade, peso, altura);
+            json.result = atualizacao;
         } else {
             json.error = 'Campos não enviados';
         }

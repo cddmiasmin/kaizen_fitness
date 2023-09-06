@@ -10,10 +10,15 @@ import { papelDeParede } from '../colors/colors';
 
 import { ColorContext } from '../contexts/ColorContext';
 
+import { API_URL } from '@env';
+import { UserContext } from '../contexts/UserContext';
+
 
 export default function Cadastro() {
 
   const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [google, setGoogle] = useState('false');
 
   const navigation = useNavigation();
 
@@ -21,6 +26,55 @@ export default function Cadastro() {
     color
   } = useContext(ColorContext);
 
+  const {
+    usuarioInfo,
+    setUsuarioInfo
+  } = useContext(UserContext);
+
+  const logarUsuario = async () => {
+    try {
+      const response = await fetch(`${API_URL}/usuario/login`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: email,
+          senha: senha,
+          google: google
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Erro na solicitação');
+      }
+  
+      const json = await response.json();
+      setUsuarioInfo({
+        "idUsuario": json.result[0].idUsuario,
+        "idConsumidor": json.result[0].idConsumidor,
+        "foto": json.result[0].foto,
+        "nome": json.result[0].nome,
+        "sobrenome": json.result[0].sobrenome,
+        "dtNascimento": json.result[0].dtNascimento,
+        "email": json.result[0].email,
+        "senha": json.result[0].senha,
+        "estado": json.result[0].estado,
+        "cidade": json.result[0].cidade,
+        "cpf": json.result[0].cpf,
+        "peso": json.result[0].peso,
+        "altura": json.result[0].altura
+      });
+      console.log(json.result);
+      navigation.navigate('Home');
+      setEmail('');
+      setSenha('');
+      
+    } catch (error) {
+      console.error(error);
+    }
+  };
+ 
   return (
     <View style={styles.container}>
        <StatusBar backgroundColor={papelDeParede} barStyle="light-content" />
@@ -28,7 +82,7 @@ export default function Cadastro() {
         <Text style={styles.titulo}>Bem Vindo!</Text>
         <Text style={styles.subtitulo}>Acesse sua conta</Text>
       </View>
-      <TouchableOpacity onPress={() => console.log('iasmin')} style={[styles.google, { backgroundColor: color }]}>
+      <TouchableOpacity onPress={() => setGoogle('true')} style={[styles.google, { backgroundColor: color }]}>
         <AntDesign name="google" size={20} color="white" />
       </TouchableOpacity >
       <Text style={styles.info}>ou acesse através de seu e-mail </Text>
@@ -38,7 +92,7 @@ export default function Cadastro() {
           <TextInput
               style={styles.input}
               underlineColorAndroid="transparent"
-              onChange={setEmail}
+              onChangeText={(text) => setEmail(text)}
               value={email}
           />
         </View>
@@ -47,18 +101,21 @@ export default function Cadastro() {
           <TextInput
               style={styles.input}
               underlineColorAndroid="transparent"
-              onChange={setEmail}
-              value={email}
+              onChangeText={(text) => setSenha(text)}
+              value={senha}
           />
         </View>
       </KeyboardAvoidingView>
       <View style={styles.footer}>
-        <TouchableOpacity onPress={() => navigation.navigate('CadastroCompleto')} style={[styles.cadastrar, { backgroundColor: color }]}>
+        <TouchableOpacity onPress={() => logarUsuario()} style={[styles.login, { backgroundColor: color }]}>
           <Text style={styles.tituloBotao}>Acessar</Text>
         </TouchableOpacity>
-        <Text style={styles.termos}>
-          Não possui uma conta? - Clique aqui para se cadastrar
+        <Text style={styles.questao}>
+          Não possui uma conta? 
         </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Cadastro')} style={[styles.cadastrar, { backgroundColor: color }]}>
+          <Text style={styles.tituloBotao}>Cadastre-se</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -129,11 +186,20 @@ const styles = StyleSheet.create({
   footer: {
     position: 'absolute',
     bottom: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%'
   },
-  cadastrar: {
+  login: {
     width: '100%',
     height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15
+  },
+  cadastrar: {
+    width: 150,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 15
@@ -142,10 +208,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
-  termos: {
+  questao: {
     color: 'white',
     textAlign: 'center',
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 5
   }
-
 });
