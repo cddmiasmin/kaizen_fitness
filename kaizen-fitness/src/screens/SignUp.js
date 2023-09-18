@@ -1,49 +1,50 @@
 import { useContext, useState } from 'react';
+
 import { View, 
     StyleSheet, 
+    StatusBar, 
     Text, 
     TouchableOpacity, 
     TextInput,  
     KeyboardAvoidingView, 
-    ScrollView 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { StatusBar } from 'expo-status-bar';
 import { AntDesign } from '@expo/vector-icons';
 
 import { mainColor } from '../colors/colors';
+
 import { ColorContext } from '../contexts/ColorContext';
 import { UserContext } from '../contexts/UserContext';
 
 
-export default function SignIn() {
+export default function SignUp() {
+
+    const navigation = useNavigation();
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-  
-    const navigation = useNavigation();
-  
+    
     const {
       color
     } = useContext(ColorContext);
   
     const {
       usuarioInfo,
-      setUsuarioInfo
+      setUsuarioInfo,
     } = useContext(UserContext);
-   
+  
     return (
       <View style={styles.container}>
-        <StatusBar style="light" />
+        <StatusBar backgroundColor={mainColor} barStyle="light-content" />
         <View style={styles.caixaTextos}>
-          <Text style={styles.titulo}>Bem Vindo!</Text>
-          <Text style={styles.subtitulo}>Acesse sua conta</Text>
+          <Text style={styles.titulo}>Cadastro</Text>
+          <Text style={styles.subtitulo}>Crie uma conta</Text>
         </View>
-        <TouchableOpacity onPress={() => setGoogle('true')} style={[styles.google, { backgroundColor: color }]}>
+        <TouchableOpacity  style={[styles.google, { backgroundColor: color }]}>
           <AntDesign name="google" size={20} color="white" />
         </TouchableOpacity >
-        <Text style={styles.info}>ou acesse através de seu e-mail </Text>
+        <Text style={styles.info}>ou cadastre-se com e-mail </Text>
         <KeyboardAvoidingView style={styles.caixaInput}>
           <Text style={[styles.span, { color: color }]}>Email</Text>
           <View style={styles.inputNome}>
@@ -65,16 +66,25 @@ export default function SignIn() {
           </View>
         </KeyboardAvoidingView>
         <View style={styles.footer}>
-          <TouchableOpacity onPress={() => console.log('iasmin')} style={[styles.login, { backgroundColor: color }]}>
-            <Text style={styles.tituloBotao}>Acessar</Text>
+          <TouchableOpacity 
+              onPress={() => {
+                setUsuarioInfo({
+                  ...usuarioInfo,
+                  "email": email,
+                  "senha": senha,
+                });
+                navigation.navigate('MeusDados', { screen: 'Cadastro' });
+              }} 
+              style={[styles.cadastrar, { backgroundColor: color }]}
+          >
+            <Text style={styles.tituloBotao}>Continuar cadastro</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={styles.cadastrar}>
-            <Text style={{ color: 'white'}}> Não possui uma conta? </Text>
-            <Text style={{ color: 'white'}}>Cadastre-se</Text>
-          </TouchableOpacity>
+          <Text style={styles.termos}>
+            Ao continuar, confirme que você concorda com nossos termos e condições
+          </Text>
         </View>
       </View>
-    )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -104,12 +114,12 @@ const styles = StyleSheet.create({
       color: 'white'
     }, 
     google: {
-      marginTop: '15%',
-      width: 50,
-      height: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 50
+    marginTop: '15%',
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50
     },
     info: {
       color: 'white',
@@ -139,29 +149,26 @@ const styles = StyleSheet.create({
       marginBottom: 5
     },
     footer: {
-      marginTop: '65%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%'
+     marginTop: '60%',
+     justifyContent: 'center',
+     alignItems: 'center',
+     width: '100%'
     },
-    login: {
+    cadastrar: {
       width: '100%',
       height: 50,
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 15
     },
-    cadastrar: {
-      width: '100%',
-      flexDirection: 'row',
-      gap: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 15,
-      marginTop: 15,
-    },
     tituloBotao: {
       fontWeight: 'bold',
       color: 'white',
     },
-  });
+    termos: {
+      color: 'white',
+      textAlign: 'center',
+      marginTop: 20,
+      fontSize: 10
+    }
+});
