@@ -68,7 +68,7 @@ export default function SignIn() {
           <TouchableOpacity onPress={() => console.log('iasmin')} style={[styles.login, { backgroundColor: color }]}>
             <Text style={styles.tituloBotao}>Acessar</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={styles.cadastrar}>
+          <TouchableOpacity onPress={() => navigation.navigate('UserType')} style={styles.cadastrar}>
             <Text style={{ color: 'white'}}> Não possui uma conta? </Text>
             <Text style={{ color: 'white'}}>Cadastre-se</Text>
           </TouchableOpacity>
