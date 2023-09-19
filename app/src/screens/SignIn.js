@@ -8,7 +8,7 @@ import { View,
     ScrollView 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import auth from '@react-native-firebase/auth';
 import { StatusBar } from 'expo-status-bar';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -33,6 +33,20 @@ export default function SignIn() {
       setUsuarioInfo,
       onGoogleButtonPress
     } = useContext(UserContext);
+
+    const signInWithFirebase = () => {
+      auth()
+        .signInWithEmailAndPassword(email, senha)
+        .then(() => {
+          console.log('User account created & signed in!');
+        })
+        .catch(error => {
+
+          if (error.code === 'auth/invalid-login') console.log('Endereço de e-mail ou senha incorretos');
+          else console.log(error.code, error)
+  
+        });
+    }
    
     return (
       <View style={styles.container}>
@@ -66,7 +80,7 @@ export default function SignIn() {
           </View>
         </KeyboardAvoidingView>
         <View style={styles.footer}>
-          <TouchableOpacity onPress={() => console.log('iasmin')} style={[styles.login, { backgroundColor: color }]}>
+          <TouchableOpacity onPress={() => signInWithFirebase()} style={[styles.login, { backgroundColor: color }]}>
             <Text style={styles.tituloBotao}>Acessar</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('UserType')} style={styles.cadastrar}>
