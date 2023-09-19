@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "170670990246",
+    "project_id": "kaizenfitness-89e9e",
+    "storage_bucket": "kaizenfitness-89e9e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170670990246:android:3af8d47504056dfeb5e567",
+        "android_client_info": {
+          "package_name": "com.kf0.kaizenfitness"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170670990246-vd5o2crupkki48m7subusq1cs9cgdk9l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kf0.kaizenfitness",
+            "certificate_hash": "8096c910650d6646e5e18f6b3c7b14e24f8fe103"
+          }
+        },
+        {
+          "client_id": "170670990246-vscl9t5gf0ov97bq3jpa3gn758ir79go.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kf0.kaizenfitness",
+            "certificate_hash": "047fb895ab38c317049d073f4376d995df7ee706"
+          }
+        },
+        {
+          "client_id": "170670990246-fbo5pnlha5oc1ovrgrsgf9ng183q208p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIr3gXsfiL5rN5a_l72ntP2ibOQvK5Q8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170670990246-fbo5pnlha5oc1ovrgrsgf9ng183q208p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
