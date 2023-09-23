@@ -29,16 +29,16 @@ export default function SignIn() {
     } = useContext(ColorContext);
   
     const {
-      usuarioInfo,
-      setUsuarioInfo,
+      user,
+      setUser,
       onGoogleButtonPress
     } = useContext(UserContext);
 
     const signInWithFirebase = () => {
       auth()
         .signInWithEmailAndPassword(email, senha)
-        .then(() => {
-          console.log('User account created & signed in!');
+        .then((success) => {
+          console.log('User account created & signed in!', success);
         })
         .catch(error => {
 

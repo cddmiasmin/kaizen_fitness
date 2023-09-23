@@ -4,13 +4,13 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export const UserContext = createContext();
 
-export const UserContextProvider = ({ children }) => {
+export const UserContextProvider = ({ userAux , children }) => {
 
     GoogleSignin.configure({
         webClientId: '118581849503-b583ce4t9urtep9mftom8q1905cklmh6.apps.googleusercontent.com',
     });
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(userAux);
 
     const onGoogleButtonPress = async () => {
   
@@ -28,7 +28,9 @@ export const UserContextProvider = ({ children }) => {
         .catch((error) => {
           console.log(error)
         });
-      }
+    }
+
+    console.log('MENTIRA', user);
 
     return (
         <UserContext.Provider

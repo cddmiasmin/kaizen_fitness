@@ -1,3 +1,5 @@
+import React, { useState, useEffect, useContext } from 'react';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -6,7 +8,6 @@ import SignIn   from './src/screens/SignIn';
 import { UserContextProvider } from './src/contexts/UserContext';
 import { ColorContextProvider } from './src/contexts/ColorContext';
 
-import React, { useState, useEffect } from 'react';
 
 import 'expo-dev-client';
 
@@ -17,11 +18,10 @@ const Stack = createNativeStackNavigator();
 export default function App() {
 
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  const [userAux, setUserAux] = useState();
 
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
+  const onAuthStateChanged = (user) => {
+    setUserAux(user);
     if (initializing) setInitializing(false);
   }
 
@@ -33,7 +33,7 @@ export default function App() {
   if (initializing) return null;
   
   return (
-    <UserContextProvider>
+    <UserContextProvider userAux={userAux}>
       <ColorContextProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="SignIn">
