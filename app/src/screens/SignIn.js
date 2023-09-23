@@ -20,7 +20,7 @@ import { UserContext } from '../contexts/UserContext';
 export default function SignIn() {
 
     const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const [password, setPassword] = useState('');
   
     const navigation = useNavigation();
   
@@ -36,7 +36,7 @@ export default function SignIn() {
 
     const signInWithFirebase = () => {
       auth()
-        .signInWithEmailAndPassword(email, senha)
+        .signInWithEmailAndPassword(email, password)
         .then((success) => {
           console.log('User account created & signed in!', success);
         })
@@ -51,17 +51,17 @@ export default function SignIn() {
     return (
       <View style={styles.container}>
         <StatusBar style="light" />
-        <View style={styles.caixaTextos}>
-          <Text style={styles.titulo}>Bem Vindo!</Text>
-          <Text style={styles.subtitulo}>Acesse sua conta</Text>
+        <View style={styles.containerTexts}>
+          <Text style={styles.title}>Bem Vindo!</Text>
+          <Text style={styles.subtitle}>Acesse sua conta</Text>
         </View>
         <TouchableOpacity onPress={() => onGoogleButtonPress()} style={[styles.google, { backgroundColor: color }]}>
           <AntDesign name="google" size={20} color="white" />
         </TouchableOpacity >
-        <Text style={styles.info}>ou acesse através de seu e-mail </Text>
-        <KeyboardAvoidingView style={styles.caixaInput}>
+        <Text style={styles.info}>ou acesse através de seu e-mail</Text>
+        <KeyboardAvoidingView style={styles.containerInput}>
           <Text style={[styles.span, { color: color }]}>Email</Text>
-          <View style={styles.inputNome}>
+          <View style={styles.inputComponent}>
             <TextInput
                 style={styles.input}
                 underlineColorAndroid="transparent"
@@ -70,21 +70,21 @@ export default function SignIn() {
             />
           </View>
           <Text style={[styles.span, { color: color, marginTop: 20 }]}>Senha</Text>
-          <View style={styles.inputNome}>
+          <View style={styles.inputComponent}>
             <TextInput
                 style={styles.input}
                 underlineColorAndroid="transparent"
-                onChangeText={(text) => setSenha(text)}
-                value={senha}
+                onChangeText={(text) => setPassword(text)}
+                value={password}
             />
           </View>
         </KeyboardAvoidingView>
         <View style={styles.footer}>
           <TouchableOpacity onPress={() => signInWithFirebase()} style={[styles.login, { backgroundColor: color }]}>
-            <Text style={styles.tituloBotao}>Acessar</Text>
+            <Text style={styles.titleBotao}>Acessar</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('UserType')} style={styles.cadastrar}>
-            <Text style={{ color: 'white'}}> Não possui uma conta? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('UserType')} style={styles.register}>
+            <Text style={{ color: 'white'}}>Não possui uma conta? </Text>
             <Text style={{ color: 'white'}}>Cadastre-se</Text>
           </TouchableOpacity>
         </View>
@@ -102,19 +102,19 @@ const styles = StyleSheet.create({
       paddingRight: '8%',
       paddingTop: '5%',
     },
-    caixaTextos: {
+    containerTexts: {
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'column',
       gap: 4,
       marginTop: '10%',
     },
-    titulo: {
+    title: {
       color: 'white',
       fontSize: 32,
       fontWeight: 'bold'
     },
-    subtitulo: {
+    subtitle: {
       fontSize: 12,
       color: 'white'
     }, 
@@ -133,10 +133,10 @@ const styles = StyleSheet.create({
       marginBottom: '10%',
       textAlign: 'center'
     }, 
-    caixaInput: {
+    containerInput: {
       width: '100%'
     },
-    inputNome: {
+    inputComponent: {
       width: '100%',
       height: 45,
       backgroundColor: 'white',
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       borderRadius: 15
     },
-    cadastrar: {
+    register: {
       width: '100%',
       flexDirection: 'row',
       gap: 1,
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
       borderRadius: 15,
       marginTop: 15,
     },
-    tituloBotao: {
+    titleButton: {
       fontWeight: 'bold',
       color: 'white',
     },
