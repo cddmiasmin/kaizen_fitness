@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
 import { ColorContext } from '../../contexts/ColorContext';
 import { FontAwesome, Entypo } from '@expo/vector-icons'; 
 
-export default function Stages( { stepNum }) {
+export default function Stages({ stepNum }) {
 
  const { color } = useContext(ColorContext);
 
@@ -13,6 +13,8 @@ export default function Stages( { stepNum }) {
         <Entypo name="check" size={12} color={color} />
         <View style={[styles.progressLine, { backgroundColor: color}]}/>
         <FontAwesome name="circle" size={12} color={color} />
+        <View style={[styles.progressLine, { backgroundColor: color}]}/>
+        <FontAwesome name="circle-o" size={12} color={color} />
         <View style={[styles.progressLine, { backgroundColor: color}]}/>
         <FontAwesome name="circle-o" size={12} color={color} />
     </View>
@@ -32,12 +34,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        marginLeft: 25,
-        marginRight: 25,
         gap: 10
     },
     progressLine: {
-        width: 130,
+        width: 70,
         height: 3,
     }
 });

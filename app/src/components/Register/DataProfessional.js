@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import { mask, unMask } from 'remask';
 import { Chip } from 'react-native-paper';
 import { mainColor } from '../../colors/colors';
+import Buttons from './Buttons';
 
 export default function DataProfessional() {
 
@@ -36,61 +37,62 @@ export default function DataProfessional() {
   
  return (
   <View title="Accordions" style={styles.container}>
-    <Text style={[styles.title, { color: color}]}>Dados Profissionais</Text>
-    <Text style={styles.description}>Florence melhor do mundo {selectedValue}</Text>
+          <Text style={[styles.title, { color: color}]}>Dados Profissionais</Text>
+      <Text style={styles.description}>Florence melhor do mundo {selectedValue}</Text>
 
-    <View style={styles.typePerson}>
-      <Text style={[styles.titleInput, { color: color }]}>Pessoa:</Text>
-      <Picker
-        selectedValue={selectedValue}
-        onChange={(value) => setSelectedValue(value)}
-        onValueChange={(value) => {
-          setSelectedValue(value);
-          setDocument('');
-        }}
-        mode='dropdown'
-        dropdownIconColor={color}
-        dropdownIconRippleColor={color}
-        style={[styles.picker]}
-      >
-        <Picker.Item label="Pessoa Física" value="PF" />
-        <Picker.Item label="Pessoa Jurídica" value="PJ" />
-      </Picker>
-    </View>
-
-    <View style={styles.document}>
-      <Text style={[styles.titleInput, { color: color}]}>{selectedValue === 'PF' ? 'CPF:' : 'CNPJ:'}</Text>
-      <TextInput
-        style={styles.input}
-        underlineColorAndroid="transparent"
-        onChangeText={(text) => setDocument(mask(unMask(text), selectedValue === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'))}
-        value={document}
-      />
-    </View>
-
-    <View style={styles.service}>
-      <Text style={[styles.titleInput, { color: color}]}>Qual(is) serviço(s) você prestará?</Text>
-      <View style={styles.containerChipServices}>
-        {
-          services.map((service, key) => (
-              <Chip
-                key={`chip#${key}`}
-                mode='outlined' 
-                onPress={() => {
-                  if(servicesSelected[key] === undefined) 
-                  updateServiceSelected(key, service);
-                  else updateServiceSelected(key, undefined);
-                }}
-                style={[styles.chipService, { backgroundColor: mainColor }]}
-                selected={servicesSelected[key] === undefined ? false : true}
-                selectedColor={servicesSelected[key] === undefined ? 'white' : color}
-              >
-                {service}
-              </Chip>
-          ))
-        }
+      <View style={styles.typePerson}>
+        <Text style={[styles.titleInput, { color: color }]}>Pessoa:</Text>
+        <Picker
+          selectedValue={selectedValue}
+          onChange={(value) => setSelectedValue(value)}
+          onValueChange={(value) => {
+            setSelectedValue(value);
+            setDocument('');
+          }}
+          mode='dropdown'
+          dropdownIconColor={color}
+          dropdownIconRippleColor={color}
+          style={[styles.picker]}
+        >
+          <Picker.Item label="Pessoa Física" value="PF" />
+          <Picker.Item label="Pessoa Jurídica" value="PJ" />
+        </Picker>
       </View>
-    </View>
+
+      <View style={styles.document}>
+        <Text style={[styles.titleInput, { color: color}]}>{selectedValue === 'PF' ? 'CPF:' : 'CNPJ:'}</Text>
+        <TextInput
+          style={styles.input}
+          underlineColorAndroid="transparent"
+          onChangeText={(text) => setDocument(mask(unMask(text), selectedValue === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'))}
+          value={document}
+        />
+      </View>
+
+      <View style={styles.service}>
+        <Text style={[styles.titleInput, { color: color}]}>Qual(is) serviço(s) você prestará?</Text>
+        <View style={styles.containerChipServices}>
+          {
+            services.map((service, key) => (
+                <Chip
+                  key={`chip#${key}`}
+                  mode='outlined' 
+                  onPress={() => {
+                    if(servicesSelected[key] === undefined) 
+                    updateServiceSelected(key, service);
+                    else updateServiceSelected(key, undefined);
+                  }}
+                  style={[styles.chipService, { backgroundColor: mainColor }]}
+                  selected={servicesSelected[key] === undefined ? false : true}
+                  selectedColor={servicesSelected[key] === undefined ? 'white' : color}
+                >
+                  {service}
+                </Chip>
+            ))
+          }
+        </View>
+      </View>
+      {/* <Buttons/> */}
    </View>
   );
 }
@@ -98,19 +100,18 @@ export default function DataProfessional() {
 const styles = StyleSheet.create({
   container: {
       marginTop: 130,
-      marginLeft: 35,
-      marginRight: 35,
-      //backgroundColor: 'red'
-      alignItems: 'center'
+      alignItems: 'center',
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 22
+    fontSize: 22,
+    textAlign: 'center'
   },
   description: {
     color: 'white',
     marginTop: 15,
-    marginBottom: 30
+    marginBottom: 30,
+    textAlign: 'center'
   },
   titleInput:{
     fontWeight: 'bold',

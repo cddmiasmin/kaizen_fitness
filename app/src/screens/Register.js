@@ -7,6 +7,7 @@ import { Formik, FormikField, useFormik } from "formik";
 import * as yup from 'yup';
 import { Text, TextInput, Button } from "react-native";
 import DataProfessional from '../components/Register/DataProfessional';
+import Buttons from '../components/Register/Buttons';
 
 
 export default function Register() {
@@ -15,20 +16,25 @@ export default function Register() {
  
   
  return (
-   <SafeAreaView style={styles.container}>
+   <ScrollView style={styles.container}>
     <StatusBar style='light'/>
       <View style={styles.stepper}>
         <DataProfessional/>
         <Stages stepNum={stepNum}/>
       </View>
-   </SafeAreaView>
+      <Buttons/>
+   </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: mainColor
+        backgroundColor: mainColor,
+        paddingLeft: 35,
+        paddingRight: 35,
     },
-    
+    stepper: {
+
+    }
 });
