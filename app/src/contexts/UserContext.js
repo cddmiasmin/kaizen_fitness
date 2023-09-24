@@ -12,6 +12,7 @@ export const UserContextProvider = ({ userAux , children }) => {
     });
 
     const [user, setUser] = useState(userAux);
+    const [userType, setUserType] = useState('consumer');
 
     const onGoogleButtonPress = async () => {
   
@@ -38,6 +39,8 @@ export const UserContextProvider = ({ userAux , children }) => {
             value={{
                 user,
                 setUser,
+                userType,
+                setUserType,
                 onGoogleButtonPress
             }}
         >

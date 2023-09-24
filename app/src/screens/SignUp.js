@@ -2,7 +2,6 @@ import { useContext, useState } from 'react';
 
 import { View, 
     StyleSheet, 
-    StatusBar, 
     Text, 
     TouchableOpacity, 
     TextInput,  
@@ -17,6 +16,7 @@ import { mainColor } from '../colors/colors';
 
 import { ColorContext } from '../contexts/ColorContext';
 import { UserContext } from '../contexts/UserContext';
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function SignUp() {
@@ -31,18 +31,21 @@ export default function SignUp() {
     } = useContext(ColorContext);
   
     const {
-      usuarioInfo,
-      setUsuarioInfo,
+      user,
+      setUser,
+      onGoogleButtonPress
     } = useContext(UserContext);
   
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor={mainColor} barStyle="light-content" />
+        <StatusBar style='light' />
         <View style={styles.constainerTexts}>
           <Text style={styles.title}>Cadastro</Text>
           <Text style={styles.subtitle}>Crie uma conta</Text>
         </View>
-        <TouchableOpacity  style={[styles.google, { backgroundColor: color }]}>
+        <TouchableOpacity
+          onPress={() => onGoogleButtonPress()}
+          style={[styles.google, { backgroundColor: color }]}>
           <AntDesign name="google" size={20} color="white" />
         </TouchableOpacity >
         <Text style={styles.info}>ou cadastre-se com e-mail </Text>
@@ -69,12 +72,12 @@ export default function SignUp() {
         <View style={styles.footer}>
           <TouchableOpacity 
               onPress={() => {
-                setUsuarioInfo({
-                  ...usuarioInfo,
+                setUser({
+                  ...user,
                   "email": email,
                   "senha": senha,
                 });
-                navigation.navigate('MeusDados', { screen: 'Cadastro' });
+                navigation.navigate('', { screen: 'Cadastro' });
               }} 
               style={[styles.register, { backgroundColor: color }]}
           >

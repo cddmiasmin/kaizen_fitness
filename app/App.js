@@ -7,6 +7,8 @@ import Home     from './src/screens/Home';
 import SignIn   from './src/screens/SignIn';
 import SignUp   from './src/screens/SignUp';
 import UserType from './src/screens/UserType';
+import Register from './src/screens/Register';
+import EmailValidation from './src/screens/EmailValidation';
 
 import { UserContextProvider } from './src/contexts/UserContext';
 import { ColorContextProvider } from './src/contexts/ColorContext';
@@ -38,11 +40,13 @@ export default function App() {
     <UserContextProvider userAux={userAux}>
       <ColorContextProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="SignIn">
+          <Stack.Navigator initialRouteName="EmailValidation">
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
             <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
             <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
             <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
+            <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
+            <Stack.Screen name="EmailValidation" component={EmailValidation} options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
       </ColorContextProvider>
