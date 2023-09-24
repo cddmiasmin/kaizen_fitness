@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
-import { Image, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { mainColor } from '../colors/colors';
 import { UserContext } from '../contexts/UserContext';
 import { ColorContext } from '../contexts/ColorContext';
@@ -19,8 +19,10 @@ export default function Register() {
     <StatusBar style='light'/>
     <Image source={ilustrationImg} style={styles.ilustration}/>
     <Text style={[styles.title, { color: color}]}>Valide seu e-mail</Text>
-    <Text style={styles.description}>Para começar a usar sua conta Kaizen Fitness, você precisa confirmar seu endereço de e-mail.</Text>
-    <Text style={styles.resend}>Não recebeu o email? Clique aqui para reenviar</Text>
+    <Text style={styles.description}>Para começar a usar sua conta Kaizen Fitness, você precisa confirmar seu endereço de e-mail.</Text>
+    <TouchableOpacity style={[styles.resend, { backgroundColor: color}]}>
+        <Text style={[styles.resendTitle, { color: mainColor}]}>Reenviar e-mail</Text>
+    </TouchableOpacity>
    </SafeAreaView>
   );
 }
@@ -51,8 +53,13 @@ const styles = StyleSheet.create({
     resend: {
         position: 'absolute',
         bottom: 30,
-        textAlign: 'center',
-        color: 'white',
-        fontSize: 12,
+        width: 260,
+        height: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+    },
+    resendTitle: {
+        fontWeight: 'bold',
     }
 });
