@@ -7,7 +7,8 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ userAux , children }) => {
 
     GoogleSignin.configure({
-        webClientId: '118581849503-b583ce4t9urtep9mftom8q1905cklmh6.apps.googleusercontent.com',
+        webClientId: '118581849503-fu90sd5l1hd5as2vekqve80elqmdbuj0.apps.googleusercontent.com',
+        androidClientId: '118581849503-qgbng2uqq6ns7a8mui1jagnq87dh9naq.apps.googleusercontent.com'
     });
 
     const [user, setUser] = useState(userAux);
