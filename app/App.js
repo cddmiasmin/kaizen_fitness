@@ -40,7 +40,7 @@ export default function App() {
     <UserContextProvider userAux={userAux}>
       <ColorContextProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="EmailValidation">
+          <Stack.Navigator initialRouteName="Register">
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
             <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
             <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>

@@ -81,7 +81,7 @@ export default function SignUp() {
               }} 
               style={[styles.register, { backgroundColor: color }]}
           >
-            <Text style={styles.titleButton}>Continuar cadastro</Text>
+            <Text style={styles.titleButton}>Cadastrar</Text>
           </TouchableOpacity>
           <Text style={styles.terms}>
             Ao continuar, confirme que você concorda com nossos termos e condições
