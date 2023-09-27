@@ -3,9 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import "expo-dev-client";
 import { useEffect, useState } from 'react';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+
+import ProfessionalController from './src/controller/ProfessionalController';
+import UserModal from './src/model/UserModal';
 
 export default function App() {
+
+  const userModal = new UserModal();
+  const professionalController = new ProfessionalController();
 
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -39,16 +44,22 @@ export default function App() {
       //   console.log('User added!');
       // });
 
-      const uid = auth().currentUser.uid;
+      // const uid = auth().currentUser.uid;
 
-      // Cria um novo documento na coleção `UserProfessional`
-      const professional = {
-        // Outros campos do documento
-        id: uid,
-      };
+      // // Cria um novo documento na coleção `UserProfessional`
+      // const professional = {
+      //   // Outros campos do documento
+      //   id: uid,
+      // };
 
-      // Salva o documento
-      firestore().collection("UserProfessional").doc('Iasmin').set(professional);
+      // // Salva o documento
+      // firestore().collection("UserProfessional").doc('Iasmin').set(professional);
+
+      //professionalController.registerProfessional();
+      
+       const response = await userModal.hasFullResgistration();
+       console.log('data', response);
+
     })
     .catch(error => {
 
