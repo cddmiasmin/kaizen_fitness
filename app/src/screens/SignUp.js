@@ -77,7 +77,7 @@ export default function SignUp() {
                   "email": email,
                   "senha": senha,
                 });
-                navigation.navigate('', { screen: 'Cadastro' });
+                navigation.navigate('Register', { screen: 'Cadastro' });
               }} 
               style={[styles.register, { backgroundColor: color }]}
           >

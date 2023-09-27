@@ -81,7 +81,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.kf0.app.kaizenfitness'
+    namespace "com.app"
     defaultConfig {
         applicationId 'com.kf0.app.kaizenfitness'
         minSdkVersion rootProject.ext.minSdkVersion

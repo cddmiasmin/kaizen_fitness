@@ -1,29 +1,50 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import { mainColor } from '../colors/colors';
-import Stages from '../components/Register/Stages';
-import { Formik, FormikField, useFormik } from "formik";
-import * as yup from 'yup';
-import { Text, TextInput, Button } from "react-native";
-import DataProfessional from '../components/Register/DataProfessional';
-import Buttons from '../components/Register/Buttons';
+import { useContext, useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
+import { StatusBar } from 'expo-status-bar';
+
+import { mainColor } from '../colors/colors';
+
+import { UserContext } from './../contexts/UserContext';
+import { RegisterContextProvider } from './../contexts/RegisterContext';
+
+import Stages                from '../components/Register/Stages';
+import Services              from '../components/Register/Services';
+import LocationUser          from '../components/Register/LocationUser';
+import DataConsumer          from '../components/Register/DataConsumer';
+import DataProfessional      from '../components/Register/DataProfessional';
+import DataBasicPerson       from '../components/Register/DataBasicPerson';
+import DataBasicProfessional from '../components/Register/DataBasicProfessional';
 
 export default function Register() {
-
- const [stepNum, setStepNum] = useState(1);
  
-  
+ const { userType } = useContext(UserContext);
+ 
+ const [stepNum, setStepNum] = useState(5);
+
  return (
-   <ScrollView style={styles.container}>
-    <StatusBar style='light'/>
-      <View style={styles.stepper}>
-        <DataProfessional/>
-        <Stages stepNum={stepNum}/>
-      </View>
-      <Buttons/>
-   </ScrollView>
+    <RegisterContextProvider stepNum={stepNum} setStepNum={setStepNum}>
+      <ScrollView style={styles.container}>
+        <StatusBar style='light'/>
+          <View style={styles.stepper}>
+            <Stages/>
+            {
+              userType === 'professional' 
+              ?
+                stepNum === 1 && <DataProfessional/> 
+                  ||  stepNum === 2 && <DataBasicProfessional/> 
+                  ||  stepNum === 3 && <Services/> 
+                  ||  stepNum === 4 && <LocationUser/> 
+                  ||  stepNum === 5 && <LocationUser/> 
+              :
+                stepNum === 1 && <DataBasicPerson/> 
+                  ||  stepNum === 2 && <DataConsumer/> 
+                  ||  stepNum === 3 && <LocationUser/> 
+                  ||  stepNum === 4 || stepNum === 5 && <Services/> 
+            }
+          </View>
+      </ScrollView>
+    </RegisterContextProvider>
   );
 }
 
@@ -33,8 +54,5 @@ const styles = StyleSheet.create({
         backgroundColor: mainColor,
         paddingLeft: 35,
         paddingRight: 35,
-    },
-    stepper: {
-
     }
 });

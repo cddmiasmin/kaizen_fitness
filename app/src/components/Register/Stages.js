@@ -1,22 +1,80 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { ColorContext } from '../../contexts/ColorContext';
 import { FontAwesome, Entypo } from '@expo/vector-icons'; 
+import { RegisterContext } from '../../contexts/RegisterContext';
 
-export default function Stages({ stepNum }) {
+export default function Stages() {
+
+ const { stepNum } = useContext(RegisterContext);
 
  const { color } = useContext(ColorContext);
+
+ const colorGrey = '#bdbebd';
 
  return (
    <SafeAreaView style={styles.container}>
     <View style={styles.stage}>
-        <Entypo name="check" size={12} color={color} />
-        <View style={[styles.progressLine, { backgroundColor: color}]}/>
-        <FontAwesome name="circle" size={12} color={color} />
-        <View style={[styles.progressLine, { backgroundColor: color}]}/>
-        <FontAwesome name="circle-o" size={12} color={color} />
-        <View style={[styles.progressLine, { backgroundColor: color}]}/>
-        <FontAwesome name="circle-o" size={12} color={color} />
+        {
+            stepNum === 1 &&
+            <>
+                <FontAwesome name="circle" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: colorGrey}]}/>
+                <FontAwesome name="circle-o" size={12} color={colorGrey} />
+                <View style={[styles.progressLine, { backgroundColor: colorGrey}]}/>
+                <FontAwesome name="circle-o" size={12} color={colorGrey} />
+                <View style={[styles.progressLine, { backgroundColor: colorGrey}]}/>
+                <FontAwesome name="circle-o" size={12} color={colorGrey} />
+            </>
+        }
+        {
+            stepNum === 2 &&
+            <>
+                <Entypo name="check" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: color}]}/>
+                <FontAwesome name="circle" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: colorGrey}]}/>
+                <FontAwesome name="circle-o" size={12} color={colorGrey} />
+                <View style={[styles.progressLine, { backgroundColor: colorGrey}]}/>
+                <FontAwesome name="circle-o" size={12} color={colorGrey} />
+            </>
+        }
+        {
+            stepNum === 3 &&
+            <>
+                <Entypo name="check" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: color}]}/>
+                <Entypo name="check" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: color}]}/>
+                <FontAwesome name="circle" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: colorGrey}]}/>
+                <FontAwesome name="circle-o" size={12} color={colorGrey} />
+            </>
+        }
+        {
+            stepNum === 4 &&
+            <>
+                <Entypo name="check" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: color}]}/>
+                <Entypo name="check" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: color}]}/>
+                <Entypo name="check" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: color}]}/>
+                <FontAwesome name="circle" size={12} color={color} />
+            </>
+        }
+        {
+            stepNum === 5 &&
+            <>
+                <Entypo name="check" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: color}]}/>
+                <Entypo name="check" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: color}]}/>
+                <Entypo name="check" size={12} color={color} />
+                <View style={[styles.progressLine, { backgroundColor: color}]}/>
+                <Entypo name="check" size={12} color={color} />
+            </>
+        }
     </View>
    </SafeAreaView>
   );
@@ -24,11 +82,9 @@ export default function Stages({ stepNum }) {
 
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        top: 70,
+        marginTop: 70,
         width: '100%',
         height: 20,
-        flex: 1
     },
     stage: {
         justifyContent: 'center',
@@ -41,9 +97,3 @@ const styles = StyleSheet.create({
         height: 3,
     }
 });
-
-/*
-    <FontAwesome name="circle-o" size={24} color="black" /> //circulo
-    <FontAwesome name="circle" size={24} color="black" /> //bola preta
-    <Entypo name="check" size={24} color="black" /> //check
-*/

@@ -1,52 +1,40 @@
-import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput,  } from 'react-native';
-import { ColorContext } from '../../contexts/ColorContext';
+import React, { useContext } from 'react';
+import { StyleSheet, Text, View, TextInput  } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+
 import { mask, unMask } from 'remask';
-import { Chip } from 'react-native-paper';
-import { mainColor } from '../../colors/colors';
+
+import { ColorContext } from '../../contexts/ColorContext';
+import { RegisterContext } from '../../contexts/RegisterContext';
+
 import Buttons from './Buttons';
 
 export default function DataProfessional() {
-
-  const services = [
-    'florence welch',
-    'taylor swift',
-    'demimetria',
-    'iasmin',
-    'jessica',
-    'franklin',
-    'girl',
-    'ravena',
-    'hoo',
-    'flamengo'
-  ];
-
+  
+  const { 
+    kindOfPerson, setKindOfPerson,
+    document, setDocument,
+    stepNum, setStepNum,
+  } = useContext(RegisterContext);
 
   const { color } = useContext(ColorContext);
 
-  const [selectedValue, setSelectedValue] = useState("PF");
-  const [document, setDocument] = useState('');
-  const [servicesSelected, setServicesSelect] = useState(new Array(services.length));
-
-  const updateServiceSelected = (key, service) => {
-    const newServicesSelected = [...servicesSelected];
-    newServicesSelected[key] = service;
-    setServicesSelect(newServicesSelected);
-  };
+  function validateData() {
+    setStepNum(stepNum + 1)
+  }
   
  return (
   <View title="Accordions" style={styles.container}>
-          <Text style={[styles.title, { color: color}]}>Dados Profissionais</Text>
-      <Text style={styles.description}>Florence melhor do mundo {selectedValue}</Text>
+      <Text style={[styles.title, { color: color}]}>Dados Profissionais</Text>
+      <Text style={styles.description}>Florence melhor do mundo</Text>
 
       <View style={styles.typePerson}>
         <Text style={[styles.titleInput, { color: color }]}>Pessoa:</Text>
         <Picker
-          selectedValue={selectedValue}
-          onChange={(value) => setSelectedValue(value)}
+          selectedValue={kindOfPerson}
+          onChange={(value) => setKindOfPerson(value)}
           onValueChange={(value) => {
-            setSelectedValue(value);
+            setKindOfPerson(value);
             setDocument('');
           }}
           mode='dropdown'
@@ -60,46 +48,22 @@ export default function DataProfessional() {
       </View>
 
       <View style={styles.document}>
-        <Text style={[styles.titleInput, { color: color}]}>{selectedValue === 'PF' ? 'CPF:' : 'CNPJ:'}</Text>
+        <Text style={[styles.titleInput, { color: color}]}>{kindOfPerson === 'PF' ? 'CPF:' : 'CNPJ:'}</Text>
         <TextInput
           style={styles.input}
           underlineColorAndroid="transparent"
-          onChangeText={(text) => setDocument(mask(unMask(text), selectedValue === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'))}
+          onChangeText={(text) => setDocument(mask(unMask(text), kindOfPerson === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'))}
           value={document}
         />
       </View>
-
-      <View style={styles.service}>
-        <Text style={[styles.titleInput, { color: color}]}>Qual(is) serviço(s) você prestará?</Text>
-        <View style={styles.containerChipServices}>
-          {
-            services.map((service, key) => (
-                <Chip
-                  key={`chip#${key}`}
-                  mode='outlined' 
-                  onPress={() => {
-                    if(servicesSelected[key] === undefined) 
-                    updateServiceSelected(key, service);
-                    else updateServiceSelected(key, undefined);
-                  }}
-                  style={[styles.chipService, { backgroundColor: mainColor }]}
-                  selected={servicesSelected[key] === undefined ? false : true}
-                  selectedColor={servicesSelected[key] === undefined ? 'white' : color}
-                >
-                  {service}
-                </Chip>
-            ))
-          }
-        </View>
-      </View>
-      {/* <Buttons/> */}
+      <Buttons validateData={() => validateData()}/>
    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-      marginTop: 130,
+      marginTop: 30,
       alignItems: 'center',
   },
   title: {
@@ -147,7 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   chipService: {
     width: 'auto'

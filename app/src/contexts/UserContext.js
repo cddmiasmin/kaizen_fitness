@@ -12,7 +12,7 @@ export const UserContextProvider = ({ userAux , children }) => {
     });
 
     const [user, setUser] = useState(userAux);
-    const [userType, setUserType] = useState('consumer');
+    const [userType, setUserType] = useState('professional');
 
     const onGoogleButtonPress = async () => {
   

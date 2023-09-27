@@ -1,22 +1,27 @@
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ColorContext } from '../../contexts/ColorContext';
+import { RegisterContext } from '../../contexts/RegisterContext';
 
-export default function Buttons() {
+export default function Buttons({ validateData }) {
+
+ const { stepNum, setStepNum } = useContext(RegisterContext);
 
  const { color } = useContext(ColorContext);
 
- const teste = false
-
  return (
-   <View style={[styles.container, teste ? { justifyContent: 'space-between'} : { justifyContent: 'flex-end'}]}>
-        { teste &&
-            <TouchableOpacity style={[styles.button, styles.buttonBack, { backgroundColor: color}]}>
+   <View style={[styles.container, stepNum !== 1 ? { justifyContent: 'space-between'} : { justifyContent: 'flex-end'}]}>
+        { stepNum !== 1 &&
+            <TouchableOpacity
+                onPress={() => setStepNum(stepNum - 1)} 
+                style={[styles.button, styles.buttonBack, { backgroundColor: color}]}>
                 <Text style={styles.title}>Retornar</Text>
             </TouchableOpacity>
         }
-        <TouchableOpacity style={[styles.button, styles.buttonNext, { backgroundColor: color}]}>
-            <Text style={styles.title}>Prossegrir</Text>
+        <TouchableOpacity
+            onPress={() => validateData()} 
+            style={[styles.button, styles.buttonNext, { backgroundColor: color}]}>
+            <Text style={styles.title}>{stepNum === 4 ? 'Concluir' : 'Prosseguir'}</Text>
         </TouchableOpacity>
    </View>
   );
@@ -39,6 +44,6 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 14
+        fontSize: 12
     }
 });
