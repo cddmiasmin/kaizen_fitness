@@ -4,10 +4,8 @@ class ProfessionalController {
 
     professionalModal = new ProfessionalModal();
 
-    registerProfessional = () => {
-        this.professionalModal.registerProfessional({
-            "nome": "Thiago"
-        });
+    registerProfessional = (professional) => {
+        this.professionalModal.registerProfessional(professional);
     }
 
     getProfessional = async (idUser) => {

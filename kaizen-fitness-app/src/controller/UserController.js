@@ -5,7 +5,7 @@ class UserController {
     userModal = new UserModal();
 
     hasFullResgistration = async () => {
-        return await userModal.hasFullResgistration();
+        return await this.userModal.hasFullResgistration();
     }
 
     signIn = (email, password) => this.userModal.signIn(email, password);

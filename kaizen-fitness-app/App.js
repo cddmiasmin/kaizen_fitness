@@ -1,24 +1,51 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import "expo-dev-client";
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import Home     from './src/view/screens/Home';
+import Profile  from './src/view/screens/Profile';
+import SignIn   from './src/view/screens/SignIn';
+import SignUp   from './src/view/screens/SignUp';
+import UserType from './src/view/screens/UserType';
+import Register from './src/view/screens/Register';
+import EmailValidation from './src/view/screens/EmailValidation';
+
+import { UserContextProvider } from './src/contexts/UserContext';
+import { ColorContextProvider } from './src/contexts/ColorContext';
+
 import auth from '@react-native-firebase/auth';
 
-import ProfessionalController from './src/controller/ProfessionalController';
-import UserModal from './src/model/UserModal';
+import 'expo-dev-client';
+import UserController from './src/controller/UserController';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const userModal = new UserModal();
-  const professionalController = new ProfessionalController();
+  const userController = new UserController();
 
+  const [route, setRoute] = useState('Home');
+  const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  const [userAux, setUserAux] = useState();
 
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
+  const onAuthStateChanged = (user) => {
+
     if (initializing) setInitializing(false);
+
+    if(user !== null) {
+
+      const getUser = async () => {
+         var response = await userController.hasFullResgistration();
+         if(response !== false){
+          setUserAux(response);
+         }
+      }
+
+      getUser();
+
+    } 
   }
 
   useEffect(() => {
@@ -26,62 +53,22 @@ export default function App() {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  useEffect(() => {
-    auth()
-    .signInWithEmailAndPassword('taylorswift@hotmail.com', '131313')
-    .then(async (success)  => {
-      console.log('User account created & signed in!', success);
-      //  const users = await firestore().collection('UserProfessional').doc('Iasmin');
-      // console.log("FIRESTORE", users)
-
-      // firestore()
-      // .collection('UserProfessional')
-      // .add({
-      //   name: 'Ada Lovelace',
-      //   age: 30,
-      // })
-      // .then(() => {
-      //   console.log('User added!');
-      // });
-
-      // const uid = auth().currentUser.uid;
-
-      // // Cria um novo documento na coleção `UserProfessional`
-      // const professional = {
-      //   // Outros campos do documento
-      //   id: uid,
-      // };
-
-      // // Salva o documento
-      // firestore().collection("UserProfessional").doc('Iasmin').set(professional);
-
-      //professionalController.registerProfessional();
-      
-       const response = await userModal.hasFullResgistration();
-       console.log('data', response);
-
-    })
-    .catch(error => {
-
-      console.error(error);
-    });
-  }, [user]);
-
   if (initializing) return null;
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <UserContextProvider userAux={userAux}>
+      <ColorContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName={route}>
+            <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
+            <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
+            <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+            <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
+            <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
+            <Stack.Screen name="EmailValidation" component={EmailValidation} options={{ headerShown: false }}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ColorContextProvider>
+    </UserContextProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

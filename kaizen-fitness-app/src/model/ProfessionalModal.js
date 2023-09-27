@@ -6,14 +6,19 @@ class ProfessionalModal {
     registerProfessional = async ( professional ) => {
 
         const idUser = await auth().currentUser.uid;
-        console.log("id", idUser)
+        const emailUser = await auth().currentUser.email;
+        const emailVerified = await auth().currentUser.emailVerified;
 
         firestore()
             .collection("UserProfessional")
             .doc(idUser)
-            .set(professional)
-            .then((success) => {
-                console.log('User added!', success);
+            .set({
+                professional,
+                email: emailUser,
+                emailVerified: emailVerified
+            })
+            .then(() => {
+                console.log('User added!');
             })
             .catch((error) => {
                 console.log('Error', error);

@@ -15,10 +15,10 @@ class UserModal {
         const consumer = await firestore().collection('UserConsumer').doc(idUser).get();
 
         if(professional.data() !== undefined) 
-            return professional.data();
+            return {"userType": "professional", "data": professional.data()};
 
         if(consumer.data() !== undefined) 
-            return consumer.data();
+            return {"userType": "consumer", "data": consumer.data()};
 
         return false;
     
