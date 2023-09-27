@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Home     from './src/view/screens/Home';
 import Profile  from './src/view/screens/Profile';
+import MyData   from './src/view/screens/MyData';
+import Services from './src/view/screens/Services';
 import SignIn   from './src/view/screens/SignIn';
 import SignUp   from './src/view/screens/SignUp';
 import UserType from './src/view/screens/UserType';
@@ -63,6 +65,9 @@ export default function App() {
             <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
             <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+            <Stack.Screen name="MyData" component={MyData} options={{ headerShown: false }}/>
+            <Stack.Screen name="Services" component={Services} options={{ headerShown: false }}/>
+            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
             <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
             <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
             <Stack.Screen name="EmailValidation" component={EmailValidation} options={{ headerShown: false }}/>

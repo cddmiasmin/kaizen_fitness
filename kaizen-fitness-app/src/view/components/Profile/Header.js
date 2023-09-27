@@ -7,9 +7,11 @@ import { ColorContext } from '../../../contexts/ColorContext';
 
 export default function Header() {
 
- const { user } = useContext(UserContext);
+ const { user, userType } = useContext(UserContext);
 
  const { color } = useContext(ColorContext);
+
+ const nome = userType === 'consumer' || user.kindOfPerson === 'PF' ? user.name + ' ' + user.familyName : user.name;
 
  return (
     <View style={styles.container}>
@@ -18,14 +20,14 @@ export default function Header() {
                 <Avatar.Image
                     size={110} 
                     source={
-                        !user.photo 
+                        !user
                         ? {uri:('https://i.pinimg.com/564x/6a/27/ab/6a27ab62c11c4bb972fedb8307bc8a25.jpg')}
                         : {uri:(user.photo)}
                     }
                     style={{backgroundColor: color}}
                 />
             </View>
-            <Text style={styles.nomeUsuario}>{usuarioInfo.nome + ' ' + usuarioInfo.sobrenome}</Text>
+            <Text style={styles.nomeUsuario}>{nome}</Text>
         </View>    
     </View>
   );
