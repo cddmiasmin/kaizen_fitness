@@ -8,13 +8,6 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
     const professionalController = new ProfessionalController();
 
-    const availableServices = [
-        "Nutrição e Dieta", "Treinamento", "Atividade Física", "Esporte", 
-        "Fisioterapia", "Reabilitação", "Massagem", "Coaching", "Psicologia", 
-        "Yoga", "Meditação", "Quiropraxia", "Manipulação Corporal", "Terapia Ocupacional", 
-        "Acupuntura", "Medicina Alternativa", "Estética"
-    ];
-
     const [data, setData] = useState('');
 
     const [name, setName] = useState('Taylor');

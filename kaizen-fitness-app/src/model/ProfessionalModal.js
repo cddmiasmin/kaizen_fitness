@@ -31,6 +31,20 @@ class ProfessionalModal {
 
         return professional;
     }
+
+    deleteProfessional = async () => {
+        const idUser = await auth().currentUser.uid;
+
+        await auth().deleteUser(idUser);
+
+        await firestore()
+        .collection('UserProfessional')
+        .doc(idUser)
+        .delete()
+        .then(() => {
+          return 'Usuário deletado!'
+        });
+    }
 }
 
 export default ProfessionalModal;

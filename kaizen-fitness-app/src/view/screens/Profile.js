@@ -12,6 +12,8 @@ import { UserContext } from '../../contexts/UserContext';
 
 import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import { Dialog, Button } from 'react-native-paper';
+import ProfessionalController from '../../controller/ProfessionalController';
+import UserController from '../../controller/UserController';
 
 
 export default function Perfil() {
@@ -24,7 +26,7 @@ export default function Perfil() {
 
   const { color } = useContext(ColorContext);
 
-  const { setUser, user } = useContext(UserContext);
+  const { userType } = useContext(UserContext);
 
   const opcoes = [
     { 'id': 1, 'nome': 'Meus dados', 'icon': 'account'},
@@ -34,11 +36,21 @@ export default function Perfil() {
 
   const ativarConfirmacao = async () => {
 
-    if (dialogTitle === 'Deletar minha conta'){
+    var response;
 
+    if (dialogTitle === 'Deletar minha conta'){
+      if(userType === 'professional') {
+        professionalController = new ProfessionalController();
+
+        response = await professionalController.deleteProfessional();
+      }
     } else {
-      
+      const userController = new UserController();
+
+      response = await userController.signOut(); 
     }
+    console.log(response);
+    navigation.navigate('SignIn');
   }
 
   const ativarOpcao = (key) => {

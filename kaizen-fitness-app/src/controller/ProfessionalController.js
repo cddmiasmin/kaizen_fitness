@@ -12,6 +12,10 @@ class ProfessionalController {
         return this.professionalModal.getProfessional(idUser);
     }
 
+    deleteProfessional = async () => {
+        return this.professionalModal.deleteProfessional();
+    }
+
 }
 
 export default ProfessionalController;

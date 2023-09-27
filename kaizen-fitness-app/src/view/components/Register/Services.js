@@ -11,11 +11,12 @@ import { mainColor } from '../../../colors/colors';
 
 import Buttons from './Buttons';
 
+import { availableServices } from '../../../services/availableServices';
+
 export default function Services() {
 
   const {
     stepNum, setStepNum,
-    availableServices
   } = useContext(DataContext);
 
   const [servicesSelected, setServicesSelect] = useState(new Array(availableServices.length));

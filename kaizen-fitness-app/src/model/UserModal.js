@@ -29,6 +29,7 @@ class UserModal {
         .signInWithEmailAndPassword(email, password)
         .then((success) => {
           console.log('User account created & signed in!', success);
+          return true;
         })
         .catch(error => {
 
