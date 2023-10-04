@@ -16,6 +16,10 @@ class ProfessionalController {
         return this.professionalModal.deleteProfessional();
     }
 
+    updateProfessional = async ( professional ) => {
+        await this.professionalModal.updateProfessional(professional);
+    }
+
 }
 
 export default ProfessionalController;

@@ -9,13 +9,17 @@ class ProfessionalModal {
         const emailUser = await auth().currentUser.email;
         const emailVerified = await auth().currentUser.emailVerified;
 
+        console.log('IASMIN A', professional);
+
         professional.emailUser = emailUser;
         professional.emailVerified = emailVerified;
+
+        console.log('IASMIN B',professional);
 
         firestore()
             .collection('UserProfessional')
             .doc(idUser)
-            .set({professional})
+            .set(professional)
             .then(() => {
                 console.log('User added!');
             })
@@ -43,6 +47,22 @@ class ProfessionalModal {
         .then(() => {
           return 'Usuário deletado!'
         });
+    }
+
+    updateProfessional = async ( professional ) => {
+
+        const idUser = await auth().currentUser.uid;
+
+        firestore()
+            .collection('UserProfessional')
+            .doc(idUser)
+            .update(professional)
+            .then(() => {
+                console.log('User update!');
+            })
+            .catch((error) => {
+                console.log('Error', error);
+            })
     }
 }
 

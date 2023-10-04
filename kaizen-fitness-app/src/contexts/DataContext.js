@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 
 import ProfessionalController from './../controller/ProfessionalController';
+import { createJsonObject } from "../utils/createJsonObject";
 
 export const DataContext = createContext();
 
@@ -8,7 +9,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
     const professionalController = new ProfessionalController();
 
-    const [data, setData] = useState('');
+    const [data, setData] = useState({});
 
     const [name, setName] = useState('Florence');
     const [familyName, setFamilyName] = useState('Welch');
@@ -27,11 +28,11 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
     useEffect(() => {
 
-        const registerUser = () => {
+        const registerUser = async () => {
 
             if(kindOfPerson === 'PF') {
 
-                setData({
+                await setData({
                     "name": name,
                     "familyName": familyName,
                     "photo": photo,
@@ -50,7 +51,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 // setFamilyName(''); setDataOfBirth('');
 
             }
-            else setData({
+            else await setData({
                 "name": name,
                 "photo": photo,
                 "state": state,
@@ -66,13 +67,18 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
             // setName(''); setPhoto(''); setState(''); setCity(''); 
             // setDocument(''); setKindOfPerson(''); setServices([]); 
-            
-            professionalController.registerProfessional(data);
         }
 
         if(stepNum === 5) registerUser();
 
     }, [stepNum]);
+
+    useEffect(() => {
+        if(Object.keys(data).length > 0) {
+            console.log("Register", data, typeof data);
+            professionalController.registerProfessional(data);
+        }
+    }, [data]);
 
     return (
         <DataContext.Provider
