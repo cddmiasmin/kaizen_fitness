@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, StatusBar, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import { mainColor } from '../../colors/colors';
 
@@ -8,12 +8,13 @@ import Header from '../components/Home/Header';
 import QuadroInfo from '../components/Home/QuadroInfo';
 import Opcao from '../components/Home/Opcao';
 import Footer  from '../components/Footer';
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function Home() {
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={mainColor} barStyle="light-content" />
+      <StatusBar backgroundColor={mainColor} style="light" />
       <Header/>
       <QuadroInfo/>
       <View style={styles.linha}/>
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: '8%',
     paddingRight: '8%',
-    paddingTop: '5%',
+    paddingTop: '15%',
     marginTop: StatusBar.length
   },
   linha: {

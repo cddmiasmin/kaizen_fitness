@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'column',
         gap: 15,
-        marginTop: 40
+        marginTop: 5
     },
     nomeUsuario: {
         color: 'white',

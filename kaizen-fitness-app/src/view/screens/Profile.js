@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { mainColor } from '../../colors/colors';
@@ -14,6 +14,7 @@ import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import { Dialog, Button } from 'react-native-paper';
 import ProfessionalController from '../../controller/ProfessionalController';
 import UserController from '../../controller/UserController';
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function Perfil() {
@@ -73,7 +74,7 @@ export default function Perfil() {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={mainColor} barStyle="light-content"/>
+      <StatusBar backgroundColor={mainColor} style="light" />
       <Header/>
       <View style={styles.linha}/>
       {opcoes.map((opcao, key) => (
@@ -108,14 +109,14 @@ const styles = StyleSheet.create({
     paddingLeft: '8%',
     paddingRight: '8%',
     paddingTop: '5%',
-    marginTop: StatusBar.length
+    marginTop: '15%'
   },
   linha: {
     width: '100%',
     height: '0.5%',
     backgroundColor: 'white',
     borderRadius: 50,
-    marginTop: 200,
+    marginTop: 160,
     marginBottom: '10%'
   },
   opcao: {
