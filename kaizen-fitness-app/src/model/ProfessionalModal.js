@@ -15,9 +15,7 @@ class ProfessionalModal {
         firestore()
             .collection('UserProfessional')
             .doc(idUser)
-            .set({
-                professional
-            })
+            .set({professional})
             .then(() => {
                 console.log('User added!');
             })

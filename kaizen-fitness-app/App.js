@@ -21,6 +21,7 @@ import auth from '@react-native-firebase/auth';
 import 'expo-dev-client';
 import UserController from './src/controller/UserController';
 import Test from './src/view/screens/Test';
+import { DataContextProvider } from './src/contexts/DataContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,10 +29,11 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('SignIn');
+  const [route, setRoute] = useState('MyData');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState();
+  const [stepNum, setStepNum] = useState(1);
 
   const onAuthStateChanged = (user) => {
 
@@ -61,20 +63,22 @@ export default function App() {
   return (
     <UserContextProvider userAux={userAux}>
       <ColorContextProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName={route}>
-            <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
-            <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
-            <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-            <Stack.Screen name="MyData" component={MyData} options={{ headerShown: false }}/>
-            <Stack.Screen name="Services" component={Services} options={{ headerShown: false }}/>
-            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
-            <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
-            <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
-            <Stack.Screen name="EmailValidation" component={EmailValidation} options={{ headerShown: false }}/>
-            <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/>
-          </Stack.Navigator>
-        </NavigationContainer>
+        <DataContextProvider stepNum={stepNum} setStepNum={setStepNum}>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName={route}>
+              <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
+              <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
+              <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+              <Stack.Screen name="MyData" component={MyData} options={{ headerShown: false }}/>
+              <Stack.Screen name="Services" component={Services} options={{ headerShown: false }}/>
+              <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
+              <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
+              <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
+              <Stack.Screen name="EmailValidation" component={EmailValidation} options={{ headerShown: false }}/>
+              <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/>
+            </Stack.Navigator>
+          </NavigationContainer>
+        </DataContextProvider>
       </ColorContextProvider>
     </UserContextProvider>
   );

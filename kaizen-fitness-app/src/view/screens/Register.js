@@ -6,7 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { mainColor } from '../../colors/colors';
 
 import { UserContext } from './../../contexts/UserContext';
-import { DataContextProvider } from './../../contexts/DataContext';
+import { DataContext, DataContextProvider } from './../../contexts/DataContext';
 
 import Stages                from '../components/Register/Stages';
 import Services              from '../components/Register/Services';
@@ -19,11 +19,11 @@ import DataBasicProfessional from '../components/Register/DataBasicProfessional'
 export default function Register() {
  
  const { userType } = useContext(UserContext);
- 
- const [stepNum, setStepNum] = useState(4);
+
+ const { stepNum } = useContext(DataContext);
 
  return (
-    <DataContextProvider stepNum={stepNum} setStepNum={setStepNum}>
+  
       <ScrollView style={styles.container}>
         <StatusBar style='light'/>
           <View style={styles.stepper}>
@@ -44,7 +44,6 @@ export default function Register() {
             }
           </View>
       </ScrollView>
-    </DataContextProvider>
   );
 }
 
