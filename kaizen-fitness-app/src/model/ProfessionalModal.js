@@ -9,13 +9,14 @@ class ProfessionalModal {
         const emailUser = await auth().currentUser.email;
         const emailVerified = await auth().currentUser.emailVerified;
 
+        professional.emailUser = emailUser;
+        professional.emailVerified = emailVerified;
+
         firestore()
-            .collection("UserProfessional")
+            .collection('UserProfessional')
             .doc(idUser)
             .set({
-                professional,
-                email: emailUser,
-                emailVerified: emailVerified
+                professional
             })
             .then(() => {
                 console.log('User added!');

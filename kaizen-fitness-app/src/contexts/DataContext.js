@@ -10,19 +10,19 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
     const [data, setData] = useState('');
 
-    const [name, setName] = useState('Taylor');
-    const [familyName, setFamilyName] = useState('Swift');
-    const [photo, setPhoto] = useState('https://i.pinimg.com/564x/f6/4b/52/f64b529d5c5c5c33a149ce3e22f70709.jpg');
-    const [dataOfBirth, setDataOfBirth] = useState('13/12/1989');
+    const [name, setName] = useState('Florence');
+    const [familyName, setFamilyName] = useState('Welch');
+    const [photo, setPhoto] = useState('https://i.pinimg.com/564x/e5/40/87/e5408786edbaf21937f2caa40c0173ac.jpg');
+    const [dataOfBirth, setDataOfBirth] = useState('28/08/1986');
     const [document, setDocument] = useState('123.456.789-00');
-    const [city, setCity] = useState('SP');
+    const [city, setCity] = useState('England');
     const [county, setCounty] = useState('');
-    const [state, setState] = useState('SP');
+    const [state, setState] = useState('London');
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
     const [height, setHeight] = useState('');
     const [weight, setWeight] = useState('');
-    const [services, setServices] = useState([]);
+    const [services, setServices] = useState(['Treinamento']);
     const [kindOfPerson, setKindOfPerson] = useState('PF');
 
     useEffect(() => {
@@ -84,7 +84,6 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 dataOfBirth, setDataOfBirth,
                 document, setDocument,
                 kindOfPerson, setKindOfPerson,
-                availableServices,
                 services, setServices,
                 latitude, setLatitude,
                 longitude, setLongitude,

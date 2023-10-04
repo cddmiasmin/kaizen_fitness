@@ -19,8 +19,8 @@ import UserController from '../../controller/UserController';
 
 export default function SignIn() {
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('florence.welch@hotmail.com');
+    const [password, setPassword] = useState('123456');
   
     const navigation = useNavigation();
 
@@ -64,8 +64,8 @@ export default function SignIn() {
         </KeyboardAvoidingView>
         <View style={styles.footer}>
           <TouchableOpacity onPress={async () => {
-            //await userController.signIn(email, password);
-            navigation.navigate('Home')
+            await userController.signIn(email, password);
+            navigation.navigate('Register')
 
           }} style={[styles.login, { backgroundColor: color }]}>
             <Text style={styles.titleBotao}>Acessar</Text>

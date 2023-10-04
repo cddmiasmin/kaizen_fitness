@@ -20,7 +20,7 @@ export default function Register() {
  
  const { userType } = useContext(UserContext);
  
- const [stepNum, setStepNum] = useState(1);
+ const [stepNum, setStepNum] = useState(4);
 
  return (
     <DataContextProvider stepNum={stepNum} setStepNum={setStepNum}>

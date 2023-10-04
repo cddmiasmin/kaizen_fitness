@@ -20,6 +20,7 @@ import auth from '@react-native-firebase/auth';
 
 import 'expo-dev-client';
 import UserController from './src/controller/UserController';
+import Test from './src/view/screens/Test';
 
 const Stack = createNativeStackNavigator();
 
@@ -71,6 +72,7 @@ export default function App() {
             <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
             <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
             <Stack.Screen name="EmailValidation" component={EmailValidation} options={{ headerShown: false }}/>
+            <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
       </ColorContextProvider>
