@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import Test     from './src/view/screens/Test';
 import Home     from './src/view/screens/Home';
 import Profile  from './src/view/screens/Profile';
 import MyData   from './src/view/screens/MyData';
@@ -15,13 +16,13 @@ import EmailValidation from './src/view/screens/EmailValidation';
 
 import { UserContextProvider } from './src/contexts/UserContext';
 import { ColorContextProvider } from './src/contexts/ColorContext';
+import { DataContextProvider } from './src/contexts/DataContext';
+
+import UserController from './src/controller/UserController';
 
 import auth from '@react-native-firebase/auth';
 
 import 'expo-dev-client';
-import UserController from './src/controller/UserController';
-import Test from './src/view/screens/Test';
-import { DataContextProvider } from './src/contexts/DataContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,7 +30,7 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('Test');
+  const [route, setRoute] = useState('MyData');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState();

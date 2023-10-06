@@ -1,17 +1,20 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
 import ProfessionalController from './../controller/ProfessionalController';
 import { createJsonObject } from "../utils/createJsonObject";
+import { UserContext } from "./UserContext";
 
 export const DataContext = createContext();
 
 export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
+    const { user, userType } = useContext(UserContext);
+
     const professionalController = new ProfessionalController();
 
     const [data, setData] = useState({});
 
-    const [name, setName] = useState('Florence');
+    const [name, setName] = useState('');
     const [familyName, setFamilyName] = useState('Welch');
     const [photo, setPhoto] = useState('https://i.pinimg.com/564x/e5/40/87/e5408786edbaf21937f2caa40c0173ac.jpg');
     const [dataOfBirth, setDataOfBirth] = useState('28/08/1986');
@@ -23,8 +26,47 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const [longitude, setLongitude] = useState('');
     const [height, setHeight] = useState('');
     const [weight, setWeight] = useState('');
-    const [services, setServices] = useState(['Treinamento']);
+    const [topics, setTopics] = useState(['Treinamento']);
     const [kindOfPerson, setKindOfPerson] = useState('PF');
+
+    const clearData = () => {
+        // setData({});
+        // setName('');
+        // setFamilyName('');
+        // setPhoto('');
+        // setDataOfBirth('');
+        // setDocument('');
+        // setCity('');
+        // setCounty('');
+        // setState('');
+        // setLatitude('');
+        // setLongitude('');
+        // setHeight('');
+        // setWeight('');
+        // setTopics([]);
+        // setKindOfPerson('');
+        console.log('oi');
+    };
+
+    const myData = () => {
+        if(userType === 'consumer' || user.kindOfPerson === 'PF') {
+            setFamilyName(user.familyName);
+            setDataOfBirth(user.dataOfBirth);
+        }
+
+        if(userType === 'consumer') {
+            setHeight(user.height);
+            setWeight(user.weight);
+        }
+
+        if(userType === 'professional') setKindOfPerson(user.kindOfPerson);
+
+        setName(user.name);
+        setPhoto(user.photo);
+        setDocument(user.document);
+
+        console.log('oio');
+    }
 
     useEffect(() => {
 
@@ -43,12 +85,10 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                     "longitude": longitude,
                     "cpf": document,
                     "kindOfPerson": kindOfPerson,
-                    "services": services,
+                    "topics": topics,
                     "mediaSocial": [],
                     "calendar": []
                 });
-
-                // setFamilyName(''); setDataOfBirth('');
 
             }
             else await setData({
@@ -60,13 +100,11 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 "longitude": longitude,
                 "cnpj": document,
                 "kindOfPerson": kindOfPerson,
-                "services": services,
+                "topics": topics,
                 "mediaSocial": [],
                 "calendar": []
             });
 
-            // setName(''); setPhoto(''); setState(''); setCity(''); 
-            // setDocument(''); setKindOfPerson(''); setServices([]); 
         }
 
         if(stepNum === 5) registerUser();
@@ -83,6 +121,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     return (
         <DataContext.Provider
             value={{
+                data, clearData, myData,
                 stepNum, setStepNum,
                 name, setName,
                 familyName, setFamilyName,
@@ -90,11 +129,13 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 dataOfBirth, setDataOfBirth,
                 document, setDocument,
                 kindOfPerson, setKindOfPerson,
-                services, setServices,
+                topics, setTopics,
                 latitude, setLatitude,
                 longitude, setLongitude,
                 city, setCity,
-                state, setState
+                state, setState,
+                height, setHeight,
+                weight, setWeight
             }}
         >
             {children}

@@ -109,14 +109,14 @@ const styles = StyleSheet.create({
     paddingLeft: '8%',
     paddingRight: '8%',
     paddingTop: '5%',
-    marginTop: '15%'
+    marginTop: '10%'
   },
   linha: {
     width: '100%',
     height: '0.5%',
     backgroundColor: 'white',
     borderRadius: 50,
-    marginTop: 160,
+    marginTop: 30,
     marginBottom: '10%'
   },
   opcao: {

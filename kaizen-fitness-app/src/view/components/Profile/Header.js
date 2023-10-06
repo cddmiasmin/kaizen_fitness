@@ -11,23 +11,25 @@ export default function Header() {
 
  const { color } = useContext(ColorContext);
 
- const nome = userType === 'consumer' || user.kindOfPerson === 'PF' ? user.name + ' ' + user.familyName : user.name;
+ const name = userType === 'consumer' || user.kindOfPerson === 'PF' 
+                ? user.name + ' ' + user.familyName 
+                : user.name;
+
+ const photo = user 
+                ? {uri:(user.photo)} 
+                : {uri:('https://i.pinimg.com/564x/6a/27/ab/6a27ab62c11c4bb972fedb8307bc8a25.jpg')};
 
  return (
     <View style={styles.container}>
-        <View style={styles.inicio}>
+        <View style={styles.started}>
             <View style={styles.avatar}>
                 <Avatar.Image
                     size={110} 
-                    source={
-                        !user
-                        ? {uri:('https://i.pinimg.com/564x/6a/27/ab/6a27ab62c11c4bb972fedb8307bc8a25.jpg')}
-                        : {uri:(user.photo)}
-                    }
+                    source={photo}
                     style={{backgroundColor: color}}
                 />
             </View>
-            <Text style={styles.nomeUsuario}>{nome}</Text>
+            <Text style={styles.username}>{name}</Text>
         </View>    
     </View>
   );
@@ -38,19 +40,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
     },
-    inicio: {
+    started: {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
         gap: 15,
         marginTop: 5
     },
-    nomeUsuario: {
+    username: {
         color: 'white',
         fontSize: 16,
         fontWeight: 'bold'
