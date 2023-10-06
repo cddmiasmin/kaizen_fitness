@@ -29,7 +29,7 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('MyData');
+  const [route, setRoute] = useState('Test');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState();
