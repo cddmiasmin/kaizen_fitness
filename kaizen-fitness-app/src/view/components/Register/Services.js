@@ -33,7 +33,7 @@ export default function Services() {
     const newServicesSelected = [...servicesSelected];
     newServicesSelected[key] = service;
     setServicesSelect(newServicesSelected);
-    };
+  };
 
   return (
     <View style={styles.container}>
@@ -42,7 +42,7 @@ export default function Services() {
           Escolha a área ou categoria de serviço que melhor representa sua atuação
         </Text>
 
-              <View style={styles.service}>
+        <View style={styles.service}>
         
         <View style={styles.containerChipServices}>
           {

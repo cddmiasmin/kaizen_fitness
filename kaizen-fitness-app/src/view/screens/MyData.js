@@ -87,7 +87,7 @@ export default function MyData() {
           />
 
           {
-            user.kindOfPerson === 'PF' &&
+            (userType === 'consumer' || user.kindOfPerson === 'PF') &&
             <TextInput
               mode='outlined'
               label="Sobrenome"
@@ -104,20 +104,23 @@ export default function MyData() {
             />
           }
 
-          <TextInput
-            mode='outlined'
-            label="Data de nascimento"
-            value={user.dataOfBirth}
-            outlineColor={'white'}
-            textColor={color}
-            style={{ backgroundColor: mainColor }}
-            theme={{
-              colors: {
-                  onSurfaceVariant: 'white'
-              }
-            }}
-            editable={false}
-          />
+          {
+            (userType === 'consumer' || user.kindOfPerson === 'PF') &&
+              <TextInput
+              mode='outlined'
+              label="Data de nascimento"
+              value={user.dataOfBirth}
+              outlineColor={'white'}
+              textColor={color}
+              style={{ backgroundColor: mainColor }}
+              theme={{
+                colors: {
+                    onSurfaceVariant: 'white'
+                }
+              }}
+              editable={false}
+            />
+          }
 
           <TextInput
             mode='outlined'
@@ -192,11 +195,11 @@ const styles = StyleSheet.create({
     paddingRight: '8%',
   },
   header: {
-      marginTop: 60,
+      marginTop: 45,
       justifyContent: 'flex-start',
       alignItems: 'center',
       flexDirection: 'row',
-      marginBottom: 30,
+      marginBottom: 15,
   },
   containerPhoto: {
      width: '100%',

@@ -12,16 +12,16 @@ export const UserContextProvider = ({ userAux , children }) => {
         emailUser: "Florence.welch@hotmail.com",
         emailVerified: false,
         familyName: "Welch",
-        kindOfPerson: "PF",
+        kindOfPerson: "PJ",
         latitude: "",
         longitude: "",
         mediaSocial: [],
         name: "Florence",
         photo: "https://i.pinimg.com/564x/e5/40/87/e5408786edbaf21937f2caa40c0173ac.jpg",
-        services: ["Treinamento"],
+        topics: ["Treinamento","Medicina Alternativa"],
         state: "London",
       });
-    const [userType, setUserType] = useState('professional');
+    const [userType, setUserType] = useState('consumer');
 
     console.log('User - I', user, userType);
 
