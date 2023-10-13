@@ -21,7 +21,7 @@ export const UserContextProvider = ({ userAux , children }) => {
         topics: ["Treinamento","Medicina Alternativa"],
         state: "London",
       });
-    const [userType, setUserType] = useState('consumer');
+    const [userType, setUserType] = useState('professional');
 
     console.log('User - I', user, userType);
 
