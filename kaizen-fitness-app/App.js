@@ -15,6 +15,7 @@ import UserType  from './src/view/screens/UserType';
 import Register  from './src/view/screens/Register';
 import MyAccount from './src/view/screens/MyAccount';
 import KindOfEvent     from './src/view/screens/KindOfEvent';
+import RegisterEvent   from './src/view/screens/RegisterEvent';
 import EmailValidation from './src/view/screens/EmailValidation';
 
 import { UserContextProvider } from './src/contexts/UserContext';
@@ -33,7 +34,7 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('KindOfEvent');
+  const [route, setRoute] = useState('RegisterEvent');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState();
@@ -83,6 +84,7 @@ export default function App() {
               <Stack.Screen name="EmailValidation" component={EmailValidation} options={{ headerShown: false }}/>
               <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/>
               <Stack.Screen name="Topics" component={Topics} options={{ headerShown: false }}/>
+              <Stack.Screen name="RegisterEvent" component={RegisterEvent} options={{ headerShown: false }}/>
             </Stack.Navigator>
           </NavigationContainer>
         </DataContextProvider>
