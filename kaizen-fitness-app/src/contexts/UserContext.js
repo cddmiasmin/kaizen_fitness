@@ -12,7 +12,7 @@ export const UserContextProvider = ({ userAux , children }) => {
         emailUser: "Florence.welch@hotmail.com",
         emailVerified: false,
         familyName: "Welch",
-        kindOfPerson: "PJ",
+        kindOfPerson: "PF",
         latitude: "",
         longitude: "",
         mediaSocial: [],
