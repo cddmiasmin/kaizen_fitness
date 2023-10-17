@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     paddingLeft: '8%',
     paddingRight: '8%',
     paddingTop: '15%',
-    marginTop: StatusBar.length
+    marginTop: 5
   },
   linha: {
     width: '100%',

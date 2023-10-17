@@ -2,53 +2,82 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 class EventModel {
+    
+    addEvent = async (event, professional) => {
+        const idUser = await auth().currentUser.uid;
 
-    addEvent = async () => {
-        firestore()
-        .collection('professionalEvent')
-        .add({
-            "id": 1234567890,
-            "nome": "Palestra sobre JavaScript",
-            "descricao": "Uma palestra sobre os fundamentos da linguagem JavaScript",
-            "data": "2023-10-04T03:06:03-03:00",
-            "hora": "19:00",
-            "local": "São Paulo, Brasil",
-            "organizador": "Bard",
-            "participantes": [
-              {
-                "nome": "Fulano de Tal",
-                "email": "fulano@email.com"
-              },
-              {
-                "nome": "Beltrano de Tal",
-                "email": "beltrano@email.com"
-              }
-            ]
-        })
-        .then(() => {
-            console.log('User added!');
-        });
+        professional.idUser = idUser;
+      
+        event.professional = professional;
+      
+        const response = await firestore()
+                                .collection('ProfessionalEvent')
+                                .add(event)
+                                .then(() => {
+                                    return { result: true, message: 'Evento cadastrado com sucesso!'}
+                                })
+                                .catch((error) => {
+                                    return { result: false, message: error }
+                                })
+      
+        return response;
     }
 
-    deleteProfessionalEvent = async () => {
+    updateEvent = async (event, doc) => {
+
+        const response = await firestore()
+                                .collection('ProfessionalEvent')
+                                .doc(doc)
+                                .update(event)
+                                .then(() => {
+                                    return { result: true, message: 'Evento atualizado com sucesso!'}
+                                })
+                                .catch((error) => {
+                                    return { result: false, message: error }
+                                })
+
+        return response;
+    }
+
+    deleteEvent = async (doc) => {
+        const response = await firestore()
+                                .collection('ProfessionalEvent')
+                                .doc(doc)
+                                .delete()
+                                .then(() => { 
+                                    return { result: true, message: 'Evento removido com sucesso!'}
+                                })
+                                .catch((error) => {
+                                    return { result: false, message: error }
+                                });
+        return response;
+    }
+
+    deleteProfessionalEvents = async () => {
         const idUser = await auth().currentUser.uid;
         const batch = firestore().batch();
        
-            firestore()
-            .collection('professionalEvent')
-            .where('idUser', '==', idUser)
-            .get()
-            .then((querySnapshot) => {
-              querySnapshot.forEach((doc) => {
-                batch.delete(doc.ref);
-              });
-        
-              batch.commit().then(() => {
-                console.log('All users deleted!');
-              });
-        });
-
+        const response = await firestore()
+                                  .collection('ProfessionalEvent')
+                                  .where("professional.idUser", "==", idUser)
+                                  .get()
+                                  .then((querySnapshot) => {
+                                        querySnapshot.forEach((doc) => {
+                                            batch.delete(doc.ref);
+                                        });
+                                
+                                        batch.commit()
+                                            .then(() => {
+                                                return { result: true};
+                                            })
+                                            .catch((error) => { 
+                                                return { result: false};
+                                            })
+                                  });
+        return response;
     }
+
+
 }
 
 export default EventModel;

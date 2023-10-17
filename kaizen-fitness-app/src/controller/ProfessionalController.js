@@ -4,20 +4,20 @@ class ProfessionalController {
 
     professionalModal = new ProfessionalModal();
 
-    registerProfessional = (professional) => {
-        this.professionalModal.registerProfessional(professional);
+    registerProfessional = async (professional) => {
+        return await this.professionalModal.registerProfessional(professional);
     }
 
     getProfessional = async (idUser) => {
-        return this.professionalModal.getProfessional(idUser);
+         return await this.professionalModal.getProfessional(idUser);
     }
 
     deleteProfessional = async () => {
-        return this.professionalModal.deleteProfessional();
+         return await this.professionalModal.deleteProfessional();
     }
 
     updateProfessional = async ( professional ) => {
-        await this.professionalModal.updateProfessional(professional);
+        return await this.professionalModal.updateProfessional(professional);
     }
 
 }

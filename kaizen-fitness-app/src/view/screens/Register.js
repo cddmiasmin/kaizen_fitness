@@ -40,7 +40,8 @@ export default function Register() {
                 stepNum === 1 && <DataBasicPerson/> 
                   ||  stepNum === 2 && <DataConsumer/> 
                   ||  stepNum === 3 && <LocationUser/> 
-                  ||  stepNum === 4 || stepNum === 5 && <Services/> 
+                  ||  stepNum === 4 && <Services/> 
+                  ||  stepNum === 5 && <Services/> 
             }
           </View>
       </ScrollView>

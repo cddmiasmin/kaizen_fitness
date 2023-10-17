@@ -34,11 +34,11 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('RegisterEvent');
+  const [route, setRoute] = useState('Test');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState();
-  const [stepNum, setStepNum] = useState(4);
+  const [stepNum, setStepNum] = useState(3);
 
   const onAuthStateChanged = (user) => {
 

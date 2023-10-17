@@ -12,7 +12,6 @@ class UserController {
         return await this.userModal.signIn(email, password);
     }
     
-
     signUp = (email, password) => this.userModal.signUp(email, password);
     
 

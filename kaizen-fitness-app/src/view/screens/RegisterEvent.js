@@ -22,6 +22,7 @@ import ModalEventTopics from '../components/RegisterEvent/ModalEventTopics';
 import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
+import ModalEventWallpaper from '../components/RegisterEvent/ModalEventWallpaper';
 
 export default function RegisterEvent() {
 
@@ -33,33 +34,22 @@ export default function RegisterEvent() {
     const [eventWallpaper, setEventWallpaper] = useState('');
     const [eventTopics, setEventTopics] = useState([]);
     const [eventName, setEventName] = useState('');
-    const [eventDate, setEventDate] = useState(new Date(Date.now()));
-    const [eventTime, setEventTime] = useState(new Date(Date.now()));
+    const [eventDateTime, setEventDateTime] = useState(new Date(Date.now()));
     const [eventAbout, setEventAbout] = useState('');
     const [eventOnlinePlataform, setEventOnlinePlataform] = useState({});
     const [eventLink, setEventLink] = useState('');
 
     const [styleStatusBar, setStyleStatusBar] = useState('light');
+    const [dateTimePickerMode, setDateTimePickerMode] = useState('date');
 
-    const [isDatePickerActive, setDatePicker] = useState(false);
-    const [isTimePickerActive, setTimePicker] = useState(false);
+    const [isDateTimePickerActive, setDateTimePicker] = useState(false);
 
-    const isEventWallpaperIsDark = () => {
-    }
-
-    const onChangeDate = (event, date) => {
-        setEventDate(date);
-        setDatePicker(false);
+    const onChange = (event, datetime) => {
+        setEventDateTime(datetime);
+        setDateTimePicker(false);
     };
 
-    const onChangeTime = (event, time) => {
-        setEventTime(time);
-        setTimePicker(false);
-    };
-
-    //useEffect(() => isEventWallpaperIsDark, []);
-
-    const [ísModalEventWallpaperActive, setModalEventWallpaper] = useState(false);
+    const [isModalEventWallpaperActive, setModalEventWallpaper] = useState(true);
     const [isModalEventTopicsActive, setModalEventTopics] = useState(false);
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
 
@@ -150,51 +140,59 @@ export default function RegisterEvent() {
                                 {
                                      <TouchableOpacity 
                                         style={styles.datetime}
-                                        onPress={() => setDatePicker(true)}
+                                        onPress={() => {
+                                            setDateTimePickerMode('date');
+                                            setDateTimePicker(true);
+                                        }}
                                      >
                                         <Icon 
                                             name= 'calendar-range'
                                             size={18} color={color} 
                                         />
                                         <Text style={{color: 'white', fontSize: 14}}>
-                                            {eventDate.toLocaleDateString('pt-BR')}
+                                            {eventDateTime.toLocaleDateString('pt-BR')}
                                         </Text>
                                     </TouchableOpacity>
                                 }
 
-                                {isDatePickerActive && (
+                                {isDateTimePickerActive && dateTimePickerMode === 'date' && (
                                     <DateTimePicker
-                                    value={eventDate}
-                                    mode={'date'}
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                    value={eventDateTime}
+                                    mode={dateTimePickerMode}
+                                    display={'default'}
                                     is24Hour={true}
-                                    onChange={onChangeDate}
+                                    onChange={onChange}
                                     style={styles.datePicker}
                                     />
                                 )}
+
                                 <TouchableOpacity 
                                     style={styles.datetime}
-                                    onPress={() => setTimePicker(true)}
+                                    onPress={() => {
+                                        setDateTimePickerMode('time');
+                                        setDateTimePicker(true);
+                                    }}
                                 >
                                     <Icon 
                                         name= 'timer'
                                         size={18} color={color} 
                                     />
                                     <Text style={{color: 'white', fontSize: 14}}>
-                                        {eventTime.getHours() + 'h' + eventTime.getMinutes()}
+                                        {eventDateTime.getHours() + 'h' + eventDateTime.getMinutes()}
                                     </Text>
                                 </TouchableOpacity>
 
-                                {isTimePickerActive && (
+                                {isDateTimePickerActive && dateTimePickerMode === 'time' && (
                                     <DateTimePicker
-                                    value={eventTime}
-                                    mode={'time'}
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                    value={eventDateTime}
+                                    mode={dateTimePickerMode}
+                                    display={'default'}
                                     is24Hour={true}
-                                    onChange={onChangeTime}
+                                    onChange={onChange}
                                     style={styles.datePicker}
                                     />
                                 )}
+
                             </View>
                         </View>
                         <View style={styles.participants}>
@@ -310,6 +308,7 @@ export default function RegisterEvent() {
                     </View>
                 </View>
             </ScrollView>
+            <ModalEventWallpaper active={isModalEventWallpaperActive} changeMyStatus={setModalEventWallpaper} chooseWallpaper={setEventWallpaper}/>
             <ModalEventTopics active={isModalEventTopicsActive} changeMyStatus={setModalEventTopics} changeTopics={setEventTopics}/>
             <ModalOnlinePlataforms active={isModalOnlinePlataformsActive} changeMyStatus={setModalOnlinePlataforms} choosePlatform={setEventOnlinePlataform}/>
         </SafeAreaView >

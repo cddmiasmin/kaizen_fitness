@@ -9,60 +9,60 @@ class ProfessionalModal {
         const emailUser = await auth().currentUser.email;
         const emailVerified = await auth().currentUser.emailVerified;
 
-        console.log('IASMIN A', professional);
-
         professional.emailUser = emailUser;
         professional.emailVerified = emailVerified;
 
-        console.log('IASMIN B',professional);
+        const response = await firestore()
+                                    .collection('UserProfessional')
+                                    .doc(idUser)
+                                    .set(professional)
+                                    .then(() => {
+                                        return { result: true, message: 'Dados salvos com sucesso!'}
+                                    })
+                                    .catch((error) => {
+                                        return { result: false, message: error }
+                                    })
 
-        firestore()
-            .collection('UserProfessional')
-            .doc(idUser)
-            .set(professional)
-            .then(() => {
-                console.log('User added!');
-            })
-            .catch((error) => {
-                console.log('Error', error);
-            })
+        return response;
     }
 
     getProfessional = async ( idUser ) => {
-
         const professional = await firestore().collection('UserProfessional').doc(idUser).get();
-
         return professional;
     }
 
     deleteProfessional = async () => {
         const idUser = await auth().currentUser.uid;
 
-        await auth().deleteUser(idUser);
-
-        await firestore()
-        .collection('UserProfessional')
-        .doc(idUser)
-        .delete()
-        .then(() => {
-          return 'Usuário deletado!'
-        });
+        const response = await firestore()
+                                .collection('UserProfessional')
+                                .doc(idUser)
+                                .delete()
+                                .then(() => {
+                                    return { result: true, message: 'Conta removida!'}
+                                })
+                                .catch((error) => {
+                                    return { result: false, message: error }
+                                });
+        
+        return response;
     }
 
-    updateProfessional = async ( professional ) => {
+    updateProfessional = async (professional) => {
 
         const idUser = await auth().currentUser.uid;
 
-        firestore()
-            .collection('UserProfessional')
-            .doc(idUser)
-            .update(professional)
-            .then(() => {
-                console.log('User update!');
-            })
-            .catch((error) => {
-                console.log('Error', error);
-            })
+        const response = await firestore()
+                                    .collection('UserProfessional')
+                                    .doc(idUser)
+                                    .update(professional)
+                                    .then(() => {
+                                        return { result: true, message: 'Dados atualizados com sucesso!'}
+                                    })
+                                    .catch((error) => {
+                                        return { result: false, message: error }
+                                    });
+        return response;
     }
 }
 
