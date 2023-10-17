@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Avatar, Chip, IconButton, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ImageBackground, 
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {
     StyleSheet, 
     ScrollView, 
     View, Text, 
@@ -12,16 +13,14 @@ import { ImageBackground,
 
 import { StatusBar } from 'expo-status-bar';
 
-import { participantsColors } from '../../services/participantsColors';
 import { mainColor } from '../../colors/colors';
+import { participantsColors } from '../../services/participantsColors';
 
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
 
 import ModalEventTopics from '../components/RegisterEvent/ModalEventTopics';
 import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
-
-import DateTimePicker from '@react-native-community/datetimepicker';
 import ModalEventWallpaper from '../components/RegisterEvent/ModalEventWallpaper';
 
 export default function RegisterEvent() {
@@ -31,7 +30,7 @@ export default function RegisterEvent() {
     const { user } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
-    const [eventWallpaper, setEventWallpaper] = useState('https://images.unsplash.com/photo-1697369975788-4c330f46b0da?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MTYzMTZ8MHwxfGFsbHw0fHx8fHx8Mnx8MTY5NzU0Njk5M3w&ixlib=rb-4.0.3&q=85');
+    const [eventWallpaper, setEventWallpaper] = useState('');
     const [eventTopics, setEventTopics] = useState([]);
     const [eventName, setEventName] = useState('');
     const [eventDateTime, setEventDateTime] = useState(new Date(Date.now()));
@@ -52,8 +51,6 @@ export default function RegisterEvent() {
     const [isModalEventWallpaperActive, setModalEventWallpaper] = useState(false);
     const [isModalEventTopicsActive, setModalEventTopics] = useState(false);
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
-
-    useEffect(() => console.log('wall', eventWallpaper), [eventWallpaper]);
 
     return (
         <SafeAreaView  style={styles.container}>
@@ -244,7 +241,7 @@ export default function RegisterEvent() {
                             outlineColor={'white'}
                             activeOutlineColor={color}
                             textColor={'white'}
-                            style={{ backgroundColor: mainColor, height: 180 }}
+                            style={{ backgroundColor: mainColor, height: 120 }}
                             theme={{
                                 colors: {
                                     onSurfaceVariant: 'white'
@@ -267,7 +264,7 @@ export default function RegisterEvent() {
                                     {user.kindOfPerson === 'PF' ? 'Pessoa Física' : 'Pessoa Jurídica'}
                                 </Text>
                             </View>
-                            <Icon name="web" size={25} color={color}/>
+                            {/* <Icon name="web" size={25} color={color}/> */}
                         </View>
                     </View>
                     <View style={styles.location}>
@@ -324,13 +321,13 @@ export default function RegisterEvent() {
                                 </>           
                         }
                     </View>
+                    <TouchableOpacity 
+                        style={[styles.register, { backgroundColor: color}]}
+                        onPress={() => ''}
+                    >
+                        <Text style={{color: 'white', fontWeight: 'bold'}}>Cadastrar evento</Text>
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity 
-                    style={[styles.register, { backgroundColor: color}]}
-                    onPress={() => ''}
-                >
-                    <Text style={{color: 'white', fontWeight: 'bold'}}>Cadastrar evento</Text>
-                </TouchableOpacity>
             </ScrollView>
             <ModalEventWallpaper active={isModalEventWallpaperActive} changeMyStatus={setModalEventWallpaper} chooseWallpaper={setEventWallpaper} colorStatusBar={setStyleStatusBar}/>
             <ModalEventTopics active={isModalEventTopicsActive} changeMyStatus={setModalEventTopics} changeTopics={setEventTopics}/>
@@ -422,11 +419,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 8,
-        justifyContent: 'space-between'
+        justifyContent: 'flex-start'
     },
     professionalData: {
         flexDirection: 'column',
-        marginLeft: -50,
+        marginLeft: 20,
         justifyContent: 'flex-start',
         width: '50%'
     },
@@ -445,6 +442,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         height: 40,
         borderRadius: 50,
-        marginBottom: 50
+        marginBottom: 10,
+        marginTop: 20
     }
 });

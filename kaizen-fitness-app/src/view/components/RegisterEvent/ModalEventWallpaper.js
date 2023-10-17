@@ -23,11 +23,6 @@ export default function ModalEventWallpaper({ active, changeMyStatus, chooseWall
                                     return data;
                                 })
                                 .catch((error) => console.log(error))
-
-        data.results.forEach((element, key) => {
-            console.log(key, element.urls.full)
-        });
-
         setPhotos(data.results);
     }
     
