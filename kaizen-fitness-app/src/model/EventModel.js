@@ -8,7 +8,7 @@ class EventModel {
 
         professional.idUser = idUser;
       
-        event.professional = professional;
+        event.organizer = professional;
       
         const response = await firestore()
                                 .collection('ProfessionalEvent')
@@ -59,7 +59,7 @@ class EventModel {
        
         const response = await firestore()
                                   .collection('ProfessionalEvent')
-                                  .where("professional.idUser", "==", idUser)
+                                  .where("organizer.idUser", "==", idUser)
                                   .get()
                                   .then((querySnapshot) => {
                                         querySnapshot.forEach((doc) => {
@@ -77,6 +77,85 @@ class EventModel {
         return response;
     }
 
+    getSearch = async ( search ) => {
+
+        const response = await firestore()
+        .collection("ProfessionalEvent")
+        .where(
+          firestore.Filter.or(
+            firestore.Filter('name', '==', search),
+            firestore.Filter('modality', '==', search),
+            firestore.Filter('organizer.name', '==', search),
+            firestore.Filter('organizer.familyName', '==', search)
+          )
+        )
+        .get({
+          limit: 10,
+        })
+
+        return response;
+    }
+
+    getCategory = async (category) => {
+
+        const response = await firestore()
+        .collection("ProfessionalEvent")
+        .where('topics', 'array-contains', category)
+        .get({
+          limit: 10,
+        })
+
+        return response;
+    }
+
+    getUpcomingEvents = async () => {
+
+        var nowDate = new Date(Date.now());
+        nowDate.setHours(0);
+        nowDate.setMinutes(0);
+        nowDate.setMilliseconds(0);
+      
+        var date = new Date();
+        date.setDate(nowDate.getDate() + 14);
+        date.setHours(23);
+        date.setMinutes(59);
+        date.setMilliseconds(0);
+      
+        const response = await firestore()
+                                .collection("ProfessionalEvent")
+                                .where(          
+                                  firestore.Filter.and(
+                                    firestore.Filter('datetime', '>=', nowDate),
+                                    firestore.Filter('datetime', '<=', date),
+                                  )
+                                )
+                                .get({
+                                  limit: 10,
+                                })
+
+        return response;
+    }
+
+    getNearbyEvents = async () => {
+
+        var nowDate = new Date(Date.now());
+
+        var date = new Date();
+        date.setDate(nowDate.getDate() + 15);
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setMilliseconds(0);
+      
+        const response = await firestore()
+                                .collection("ProfessionalEvent")
+                                .where(          
+                                    firestore.Filter('datetime', '>=', date), 
+                                )
+                                .get({
+                                  limit: 10,
+                                })
+        return response;
+    }
 
 }
 

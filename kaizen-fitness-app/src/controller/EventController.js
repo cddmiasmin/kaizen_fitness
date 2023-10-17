@@ -20,6 +20,22 @@ class EventController {
         return await this.eventModel.deleteProfessionalEvents;
     }
 
+    getSearch = async ( search ) => {
+        return await this.eventModel.getSearch(search);
+    }
+
+    getCategory = async (category) => {
+        return await this.eventModel.getCategory(category);
+    }
+
+    getUpcomingEvents = async () => {
+        return await this.eventModel.getUpcomingEvents();
+    }
+
+    getNearbyEvents = async () => {
+        return await this.eventModel.getNearbyEvents();
+    }
+
 }
 
 export default EventController;

@@ -10,13 +10,6 @@ import firestore from '@react-native-firebase/firestore';
 import { UserContext } from '../../contexts/UserContext';
 
 export default function Test() {
-
- const [response, setResponse] = useState({});
-
- useEffect(() => {
-    console.log('response', response)
- }, [response])
-
  const { user } = useContext(UserContext);
 
  const event = new EventController();
@@ -47,66 +40,71 @@ export default function Test() {
     about: 'Aconselha a comer de forma variada e equilibrada, com foco em alimentos frescos e nutritivos. Também recomenda a prática regular de exercícios físicos'
    }
 
-   professional.registerProfessional(data);
+   return await professional.registerProfessional(data);
  }
 
 
  const registerEvent = async () => {
 
-  const idUser = await auth().currentUser.uid;
-  const batch = firestore().batch();
- 
-  const response = await firestore()
-                            .collection('ProfessionalEvent')
-                            .where("professional.idUser", "==", idUser)
-                            .get()
-                            .then((querySnapshot) => {
-                              querySnapshot.forEach((doc) => {
-                                batch.delete(doc.ref);
-                              });
-                        
-                              batch.commit()
-                              .then(() => {
-                                return { result: true, message: 'Evento removido com sucesso!'};
-                              })
-                              .catch((error) => { 
-                                return { result: false, message: error};
-                              })
-                            });
-
   // const data = {
-  //   eventName: "Treinamento Funcional para Iniciantes",
-  //   eventDate: new Date("2023-10-20"),
-  //   eventTime: new Date("19:00"),
-  //   eventLocation: "Academia X",
-  //   eventAbout: "Neste evento, você aprenderá os fundamentos do treinamento funcional para iniciantes. Se você está procurando uma maneira de melhorar sua saúde e condicionamento físico, este evento é para você!",
-  //   eventOnlinePlatform: false,
-  //   eventLink: "https://www.academiax.com.br/eventos/treinamento-funcional-para-iniciantes",
-  //   eventWallpaper: "https://i.imgur.com/x8637vD.jpg",
-  //   eventTopics: ["Treinamento Funcional", "Iniciantes"],
-  // };
+  //   "name": "Treinamento de corrida para iniciantes",
+  //   "datetime": new Date(2023, 9, 26, 10, 0),
+  //   "topics": ["Atividade Física", "Esporte"],
+  //   "modality": "presencial",
+  //   "address": "Parque Ibirapuera, São Paulo",
+  //   "latitude": -23.555555,
+  //   "longitude": -46.666667,
+  //   "about": "Este treinamento é ideal para quem quer começar a correr. Você aprenderá as técnicas básicas de corrida, como postura, respiração e alongamento.",
+  // }
 
-  // const a = await addEvent(data, user);
-  // console.log('A', a);
+  // return await event.addEvent(data, user);
 
-  // const a = event.addEvent(data, user);
-  // console.log('a', a)
 
-  console.log(response);
+  const search = "Florence Welch";
+  var nowDate = new Date(Date.now());
+
+  var date = new Date();
+  date.setDate(nowDate.getDate() + 15);
+  date.setHours(0);
+  date.setMinutes(0);
+  date.setMilliseconds(0);
+
+  console.log('now', nowDate.toLocaleString('pt-BR'));
+  console.log('date', date.toLocaleString('pt-BR'));
+
+  const response = await firestore()
+                          .collection("ProfessionalEvent")
+                          .where(          
+                              firestore.Filter('datetime', '>=', date), 
+                          )
+                          .get({
+                            limit: 10,
+                          })
+
+  console.log(response.docs);
+
+  response.docs.forEach((doc) => (
+    console.log(doc.data().name)
+  ))
+
  }
+
+
  
 
  return (
     <View style={styles.container}>
         <Text
             onPress={async () => {
-              registerEvent();
+              const a = await registerEvent();
+              //console.log('Event', a)
               
             }}
         >Event</Text>
         <Text
             onPress={async () => {
-              console.log(register());
+              const a = await register();
+              console.log('A', a)
               
             }}
         >Professional</Text>
