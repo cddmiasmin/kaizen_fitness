@@ -14,9 +14,11 @@ import SignUp    from './src/view/screens/SignUp';
 import UserType  from './src/view/screens/UserType';
 import Register  from './src/view/screens/Register';
 import MyAccount from './src/view/screens/MyAccount';
-import KindOfEvent     from './src/view/screens/KindOfEvent';
-import RegisterEvent   from './src/view/screens/RegisterEvent';
-import EmailValidation from './src/view/screens/EmailValidation';
+import DisplayEvent     from './src/view/screens/DisplayEvent';
+import KindOfEvent      from './src/view/screens/KindOfEvent';
+import RegisterEvent    from './src/view/screens/RegisterEvent';
+import EmailValidation  from './src/view/screens/EmailValidation';
+import LookingForEvents from './src/view/screens/LookingForEvents';
 
 import { UserContextProvider } from './src/contexts/UserContext';
 import { ColorContextProvider } from './src/contexts/ColorContext';
@@ -34,7 +36,7 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('RegisterEvent');
+  const [route, setRoute] = useState('DisplayEvent');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState('');
@@ -85,6 +87,8 @@ export default function App() {
               <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/>
               <Stack.Screen name="Topics" component={Topics} options={{ headerShown: false }}/>
               <Stack.Screen name="RegisterEvent" component={RegisterEvent} options={{ headerShown: false }}/>
+              <Stack.Screen name="LookingForEvents" component={LookingForEvents} options={{ headerShown: false }}/>
+              <Stack.Screen name="DisplayEvent" component={DisplayEvent} options={{ headerShown: false }}/>
             </Stack.Navigator>
           </NavigationContainer>
         </DataContextProvider>
