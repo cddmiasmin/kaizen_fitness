@@ -1,50 +1,68 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, ScrollView, View } from 'react-native';
+import { StyleSheet, Text, ScrollView, View, TouchableOpacity, Image } from 'react-native';
 import { Modal, TextInput } from 'react-native-paper';
 
 import { mainColor } from '../../../colors/colors';
 
 import { ColorContext } from '../../../contexts/ColorContext';
-import { Image } from 'react-native';
 
-export default function ModalEventWallpaper({ active, changeMyStatus, chooseWallpaper }) {
+import { getColors } from 'react-native-image-colors'
+
+export default function ModalEventWallpaper({ active, changeMyStatus, chooseWallpaper, colorStatusBar }) {
     
     const { color } = useContext(ColorContext);
     
-    const [search, setSearch] = useState('dog');
+    const [search, setSearch] = useState('');
     const [photos, setPhotos] = useState({});
 
     const searchImages = async () => {
 
+        const data = await fetch(`https://api.unsplash.com/search/photos/?query=${search}&orientation=landscape&client_id=5ccP1Jh52xo-HewiKJVRqUB2TFKMTj_Xj9YK3rhYZW4`)
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    return data;
+                                })
+                                .catch((error) => console.log(error))
 
+        data.results.forEach((element, key) => {
+            console.log(key, element.urls.full)
+        });
+
+        setPhotos(data.results);
     }
     
     useEffect(() => {
-        fetch(`https://api.unsplash.com/photos?per_page=14`, {
-            headers: {
-                Authorization: "Client-ID 5ccP1Jh52xo-HewiKJVRqUB2TFKMTj_Xj9YK3rhYZW4"
-            },
-        })
-        .then((response) => response.json())
-        .then((data) => setPhotos(data))
-        .catch((error) => console.log(error))
+        fetch(`https://api.unsplash.com/photos?client_id=5ccP1Jh52xo-HewiKJVRqUB2TFKMTj_Xj9YK3rhYZW4`)
+            .then((response) => response.json())
+            .then((data) => setPhotos(data))
+            .catch((error) => console.log(error))
     }, []);
 
-    useEffect(() => {
-        if(Object.keys(photos).length === 0) {
-            setPhotos(async () => {
-                const response = await fetch(`https://api.unsplash.com/photos?page=1?pper_page=10?query=${search}`, {
-                    headers: {
-                        Authorization: "Client-ID 5ccP1Jh52xo-HewiKJVRqUB2TFKMTj_Xj9YK3rhYZW4"
-                    },
-                });
-                const data = await response.json();
-                return response.json();
-        
-            })
-        }
-        console.log('AAAAAAAAAAAAAAAA', Object.keys(photos).length, Object.keys(photos).length !== 0, photos);
-    }, [photos])
+    const isEventWallpaperIsDark = (Img) => {
+
+        getColors(Img, {
+          fallback: "#000000",
+          cache: true,
+          key: Img,
+        })
+        .then((result) => {
+
+            function isColorDark(hexColor) {
+                hexColor = hexColor.replace('#', '');
+            
+                const r = parseInt(hexColor.slice(0, 2), 16);
+                const g = parseInt(hexColor.slice(2, 4), 16);
+                const b = parseInt(hexColor.slice(4, 6), 16);
+            
+                const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+            
+                return luminance < 128 ? 'light' : 'dark';
+            }
+
+            colorStatusBar(isColorDark(result.average));
+        })
+        .catch((error) => console.log(error))
+    }
 
     return (
         <Modal
@@ -74,24 +92,34 @@ export default function ModalEventWallpaper({ active, changeMyStatus, chooseWall
                     <TextInput.Icon 
                         icon="magnify" 
                         color={color} 
-                        onPress={() => setPhotos({})}/>
+                        onPress={() => searchImages()}/>
                 }
             />
             <ScrollView>
                 <View style={styles.images}>
-                    {/* {
+                    {
                         Object.keys(photos).length !== 0
                         ?
                             photos.map((photo, key) => (
-                                <Image
+                                <TouchableOpacity 
                                     key={`image#${key}`} 
-                                    style={{ width: 140, height: 100 }} 
-                                    source={{ uri: photo.urls.full }}
-                                />
+                                    onPress={() => {
+                                        chooseWallpaper(photo.urls.full);
+                                        isEventWallpaperIsDark(photo.urls.full);
+                                        setSearch('');
+                                        changeMyStatus(false);
+                                    }}
+                                >
+                                    <Image
+                                        key={`image#${key}`} 
+                                        style={{ width: 140, height: 100 }} 
+                                        source={{ uri: photo.urls.full }}
+                                    />
+                                </TouchableOpacity>
                             ))
                         : 
                             <Text>iasmin</Text>
-                    } */}
+                    }
                 </View>
             </ScrollView>
         </Modal>
@@ -107,7 +135,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        height: 700
+        height: 410
     },
     message: {
         width:'100%',

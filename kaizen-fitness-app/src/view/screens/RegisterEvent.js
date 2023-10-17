@@ -31,7 +31,7 @@ export default function RegisterEvent() {
     const { user } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
-    const [eventWallpaper, setEventWallpaper] = useState('');
+    const [eventWallpaper, setEventWallpaper] = useState('https://images.unsplash.com/photo-1697369975788-4c330f46b0da?crop=entropy&cs=srgb&fm=jpg&ixid=M3w1MTYzMTZ8MHwxfGFsbHw0fHx8fHx8Mnx8MTY5NzU0Njk5M3w&ixlib=rb-4.0.3&q=85');
     const [eventTopics, setEventTopics] = useState([]);
     const [eventName, setEventName] = useState('');
     const [eventDateTime, setEventDateTime] = useState(new Date(Date.now()));
@@ -49,24 +49,42 @@ export default function RegisterEvent() {
         setDateTimePicker(false);
     };
 
-    const [isModalEventWallpaperActive, setModalEventWallpaper] = useState(true);
+    const [isModalEventWallpaperActive, setModalEventWallpaper] = useState(false);
     const [isModalEventTopicsActive, setModalEventTopics] = useState(false);
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
+
+    useEffect(() => console.log('wall', eventWallpaper), [eventWallpaper]);
 
     return (
         <SafeAreaView  style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <StatusBar style={styleStatusBar}/>
-                <View style={[styles.header, { backgroundColor: color}]}>
+                <View style={styles.header}>
                     {
                         eventWallpaper 
-                        ? 
-                            <ImageBackground source={{uri: eventWallpaper}} resizeMode="cover" style={{flex: 1}}/>
+                        ?
+                            <View style={{width: '100%', height: '100%'}}>
+                                <TouchableOpacity onPress={() => setModalEventWallpaper(true)}>
+                                    <Image source={{ uri: eventWallpaper}} resizeMode="cover" style={{width: '100%', height: '100%'}}/>
+                                    <View 
+                                        style={[StyleSheet.absoluteFillObject, 
+                                                styles.eventWallpaperIcon, 
+                                                { backgroundColor: color, borderColor: mainColor}
+                                        ]}
+                                    >
+                                        <Icon 
+                                            name="image-edit" 
+                                            size={18} 
+                                            color={mainColor} 
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         : 
-                            <TouchableOpacity onPress={() => setModalEventWallpaper(true)}>
+                            <TouchableOpacity style={[styles.eventWallpaperButton, { backgroundColor: color }]} onPress={() => setModalEventWallpaper(true)}>
                                 <Icon name="image-plus" size={40} color="white" />
                             </TouchableOpacity>
-                    }
+                    }                  
                 </View>
                 <View style={styles.body}>
                     <View style={styles.containerTopics}>
@@ -307,8 +325,14 @@ export default function RegisterEvent() {
                         }
                     </View>
                 </View>
+                <TouchableOpacity 
+                    style={[styles.register, { backgroundColor: color}]}
+                    onPress={() => ''}
+                >
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>Cadastrar evento</Text>
+                </TouchableOpacity>
             </ScrollView>
-            <ModalEventWallpaper active={isModalEventWallpaperActive} changeMyStatus={setModalEventWallpaper} chooseWallpaper={setEventWallpaper}/>
+            <ModalEventWallpaper active={isModalEventWallpaperActive} changeMyStatus={setModalEventWallpaper} chooseWallpaper={setEventWallpaper} colorStatusBar={setStyleStatusBar}/>
             <ModalEventTopics active={isModalEventTopicsActive} changeMyStatus={setModalEventTopics} changeTopics={setEventTopics}/>
             <ModalOnlinePlataforms active={isModalOnlinePlataformsActive} changeMyStatus={setModalOnlinePlataforms} choosePlatform={setEventOnlinePlataform}/>
         </SafeAreaView >
@@ -325,6 +349,22 @@ const styles = StyleSheet.create({
         height: 260,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    eventWallpaperButton: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    eventWallpaperIcon: {
+        marginLeft: 335,
+        marginTop: 175,
+        width: 35,
+        height: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 50,
+        borderWidth: 2
     },
     body: {
         backgroundColor: mainColor,
@@ -398,4 +438,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 95,
     },
+    register: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '80%',
+        alignSelf: 'center',
+        height: 40,
+        borderRadius: 50,
+        marginBottom: 50
+    }
 });

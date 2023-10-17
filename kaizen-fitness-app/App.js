@@ -34,36 +34,36 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('Test');
+  const [route, setRoute] = useState('RegisterEvent');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
-  const [userAux, setUserAux] = useState();
+  const [userAux, setUserAux] = useState('');
   const [stepNum, setStepNum] = useState(3);
 
-  const onAuthStateChanged = (user) => {
+  // const onAuthStateChanged = (user) => {
 
-    if (initializing) setInitializing(false);
+  //   if (initializing) setInitializing(false);
 
-    if(user !== null) {
+  //   if(user !== null) {
 
-      const getUser = async () => {
-         var response = await userController.hasFullResgistration();
-         if(response !== false){
-          setUserAux(response);
-         }
-      }
+  //     const getUser = async () => {
+  //        var response = await userController.hasFullResgistration();
+  //        if(response !== false){
+  //         setUserAux(response);
+  //        }
+  //     }
 
-      getUser();
+  //     getUser();
 
-    } 
-  }
+  //   } 
+  // }
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
+  // useEffect(() => {
+  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+  //   return subscriber; // unsubscribe on unmount
+  // }, []);
 
-  if (initializing) return null;
+  // if (initializing) return null;
 
   return (
     <UserContextProvider userAux={userAux}>
