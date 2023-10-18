@@ -12,9 +12,6 @@ import {
     Image
 } from 'react-native';
 
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-
 import { StatusBar } from 'expo-status-bar';
 
 import { mainColor } from '../../colors/colors';
@@ -29,12 +26,10 @@ import ModalEventTopics from '../components/RegisterEvent/ModalEventTopics';
 import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
 import ModalEventWallpaper from '../components/RegisterEvent/ModalEventWallpaper';
 import { onlinePlataforms } from '../../services/onlinePlataforms';
-import ProfessionalController from '../../controller/ProfessionalController';
 
 export default function RegisterEvent() {
 
     const eventController = new EventController();
-    const professionalController = new ProfessionalController();
 
     const route = useRoute()
     const modality = route.params === undefined ? 'Online' : route.params.modality
@@ -73,9 +68,11 @@ export default function RegisterEvent() {
         }); 
     },[eventOnlinePlataform]);
 
-    const completedRegistration = async () => {
+    const registerEvent = async (data) => {
+        return await eventController.addEvent(data, user)
+    }
 
-        console.log('oio')
+    const completedRegistration = async () => {
 
         const data = {
             styleStatusBar: styleStatusBar,
@@ -90,52 +87,9 @@ export default function RegisterEvent() {
             participants: []
         }
 
-        // //user.calendar.push(data);
+        const response = await registerEvent(data);
 
-        // // const aux = {
-        // //     calendar: user.calendar
-        // // }
-
-        const professional = user;
-        const idUser = await auth().currentUser.uid;
-
-        professional.idUser = idUser;
-      
-        data.organizer = professional;
-      
-        const event = await firestore()
-                                .collection('ProfessionalEvent')
-                                .add(data)
-                                .then((sucesso) => {
-                                    console.log(sucesso)
-                                    return { result: true, message: 'Evento cadastrado com sucesso!'}
-                                })
-                                .catch((error) => {
-                                    return { result: false, message: error }
-                                })
-
-        if(event.result){
-            user.calendar.push(data);
-
-            const aux = {
-                calendar: user.calendar
-            }
-
-            const response = await firestore()
-            .collection('UserProfessional')
-            .doc(idUser)
-            .update(aux)
-            .then(() => {
-                return { result: true, message: 'Dados atualizados com sucesso!'}
-            })
-            .catch((error) => {
-                return { result: false, message: error }
-            });
-
-            console.log('response',response)
-        }
-
-        console.log('event',event);
+        console.log(response);
     }
 
     return (

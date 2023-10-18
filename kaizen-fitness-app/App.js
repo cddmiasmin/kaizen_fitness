@@ -15,6 +15,7 @@ import UserType   from './src/view/screens/UserType';
 import Register   from './src/view/screens/Register';
 import MyAccount  from './src/view/screens/MyAccount';
 import Categories from './src/view/screens/Categories';
+import UpdateEvent    from './src/view/screens/UpdateEvent';
 import DisplayEvent     from './src/view/screens/DisplayEvent';
 import KindOfEvent      from './src/view/screens/KindOfEvent';
 import RegisterEvent    from './src/view/screens/RegisterEvent';
@@ -37,36 +38,36 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('LookingForEvents');
+  const [route, setRoute] = useState('SignIn');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState('');
   const [stepNum, setStepNum] = useState(3);
 
-  // const onAuthStateChanged = (user) => {
+  const onAuthStateChanged = (user) => {
 
-  //   if (initializing) setInitializing(false);
+    if (initializing) setInitializing(false);
 
-  //   if(user !== null) {
+    if(user !== null) {
 
-  //     const getUser = async () => {
-  //        var response = await userController.hasFullResgistration();
-  //        if(response !== false){
-  //         setUserAux(response);
-  //        }
-  //     }
+      const getUser = async () => {
+         var response = await userController.hasFullResgistration();
+         if(response !== false){
+          setUserAux(response);
+         }
+      }
 
-  //     getUser();
+      getUser();
 
-  //   } 
-  // }
+    } 
+  }
 
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
-  // if (initializing) return null;
+  if (initializing) return null;
 
   return (
     <UserContextProvider userAux={userAux}>
@@ -88,6 +89,7 @@ export default function App() {
               <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/>
               <Stack.Screen name="Topics" component={Topics} options={{ headerShown: false }}/>
               <Stack.Screen name="RegisterEvent" component={RegisterEvent} options={{ headerShown: false }}/>
+              <Stack.Screen name="UpdateEvent" component={UpdateEvent} options={{ headerShown: false }}/>
               <Stack.Screen name="LookingForEvents" component={LookingForEvents} options={{ headerShown: false }}/>
               <Stack.Screen name="DisplayEvent" component={DisplayEvent} options={{ headerShown: false }}/>
               <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>

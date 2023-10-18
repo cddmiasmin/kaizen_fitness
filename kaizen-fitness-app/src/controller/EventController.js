@@ -5,6 +5,7 @@ class EventController {
     eventModel = new EventModel();
 
     addEvent = async (event, professional) => {
+        console.log('oi')
         return await this.eventModel.addEvent(event, professional);
     }
 

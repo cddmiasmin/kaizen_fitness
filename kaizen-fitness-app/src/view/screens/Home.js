@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { View, StyleSheet } from 'react-native';
 
@@ -9,18 +9,33 @@ import QuadroInfo from '../components/Home/QuadroInfo';
 import Opcao from '../components/Home/Opcao';
 import Footer  from '../components/Footer';
 import { StatusBar } from 'expo-status-bar';
+import { UserContext } from '../../contexts/UserContext';
 
 
 export default function Home() {
+
+  const { userType } = useContext(UserContext);
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={mainColor} style="light" />
       <Header/>
       <QuadroInfo/>
       <View style={styles.linha}/>
-      <Opcao nome='Procure eventos' icon='calendar-cursor'/>
-      <Opcao nome='Procure pessoas' icon='nature-people'/>
-      <Opcao nome='Procure estabelecimentos' icon='google-maps'/>
+      {
+        userType === 'consumer' &&
+        <>
+          <Opcao nome='Procure eventos' icon='calendar-cursor' route=''/>
+          <Opcao nome='Procure pessoas' icon='nature-people' route=''/>
+          <Opcao nome='Procure estabelecimentos' icon='google-maps' route=''/>
+        </>
+      }
+      {
+        userType === 'professional' &&
+        <>
+          <Opcao nome='Criar um novo evento' icon='nature-people' route='KindOfEvent'/>
+        </>
+      }
       <Footer />
     </View>
   )

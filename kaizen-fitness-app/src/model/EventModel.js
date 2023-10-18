@@ -13,7 +13,8 @@ class EventModel {
         const response = await firestore()
                                 .collection('ProfessionalEvent')
                                 .add(event)
-                                .then(() => {
+                                .then((sucesso) => {
+                                    console.log(sucesso)
                                     return { result: true, message: 'Evento cadastrado com sucesso!'}
                                 })
                                 .catch((error) => {

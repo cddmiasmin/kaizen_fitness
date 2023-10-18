@@ -30,7 +30,7 @@ export default function KindOfEvent() {
    <View style={styles.container}>
         <StatusBar style='light'/>
         <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.navigate('SignIn')} >
+            <TouchableOpacity onPress={() => navigation.navigate('Home')} >
                 <AntDesign name="left" size={20} color="white" />
             </TouchableOpacity>
             <Text style={styles.screen}>Modalidade do Evento</Text>
@@ -56,11 +56,6 @@ export default function KindOfEvent() {
                     </>
                 }
                 <Text style={styles.title}>Online</Text>
-                <View style={styles.details}>
-                    <Text style={styles.detail}>Sell Goods</Text>
-                    <Text style={styles.detail}>Followers</Text>
-                    <Text style={styles.detail}>Feature</Text>
-                </View>
             </TouchableOpacity>
             <TouchableOpacity 
                 style={[styles.option, buttonSelected !== 'inPerson' ? styles.optionOutOfFocus : '', styles.professionalOption]} 
@@ -79,14 +74,9 @@ export default function KindOfEvent() {
                         </>
                     }
                 <Text style={styles.title}>Presencial</Text>
-                <View style={styles.details}>
-                    <Text style={styles.detail}>Sell Goods</Text>
-                    <Text style={styles.detail}>Followers</Text>
-                    <Text style={styles.detail}>Feature</Text>
-                </View>
             </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp', { UserType: buttonSelected})} style={[styles.buttonContinue, { backgroundColor: color }]}>
+        <TouchableOpacity onPress={() => navigation.navigate('RegisterEvent', { modality: buttonSelected})} style={[styles.buttonContinue, { backgroundColor: color }]}>
             <Text style={{ color: 'white', fontWeight: 'bold'}}> Prosseguir </Text>
         </TouchableOpacity>
    </View>
@@ -131,7 +121,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         backgroundColor: 'black',
         overflow: 'hidden',
-        backgroundColor: mainColor
+        backgroundColor: mainColor,
     },
     optionOutOfFocus: {
         borderColor: 'white', 
@@ -145,17 +135,8 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         marginLeft: 25,
-        fontSize: 16
-    },
-    details: {
-        marginLeft: 25,
-        marginBottom: 30,
-        marginTop: 10,
-        gap: 2
-    },
-    detail: {
-        color: 'white',
-        fontSize: 12
+        fontSize: 16,
+        marginBottom: 20
     },
     buttonContinue: {
         position: 'absolute',

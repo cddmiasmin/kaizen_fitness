@@ -21,7 +21,7 @@ export default function Test() {
  }
 
  const register = async () => {
-   const data = {
+   const data = [{
     name: "Florence Welch",
     familyName: "Welch",
     photo: "https://i.pinimg.com/564x/d3/07/90/d3079067600690197995318a82994358.jpg",
@@ -38,16 +38,25 @@ export default function Test() {
     topics: ["Treinamento"],
     kindOfPerson: "PF",
     about: 'Aconselha a comer de forma variada e equilibrada, com foco em alimentos frescos e nutritivos. Também recomenda a prática regular de exercícios físicos'
-   }
+   }]
 
-   return await professional.registerProfessional(data);
+   data.push({
+    nome: 'iasmin'
+   })
+   
+      console.log(data)
+
+   const newOnlinePlataforms = data.filter(platform => platform.name !== 'Florence Welch');
+
+    console.log(newOnlinePlataforms);
+  //  return await professional.registerProfessional(data);
  }
 
 
  const registerEvent = async () => {
 
   // const data = {
-  //   "name": "Treinamento de corrida para iniciantes",
+  //   "name": "IASMIN Treinamento de corrida para iniciantes",
   //   "datetime": new Date(2023, 9, 26, 10, 0),
   //   "topics": ["Atividade Física", "Esporte"],
   //   "modality": "presencial",
@@ -57,47 +66,37 @@ export default function Test() {
   //   "about": "Este treinamento é ideal para quem quer começar a correr. Você aprenderá as técnicas básicas de corrida, como postura, respiração e alongamento.",
   // }
 
-  // return await event.addEvent(data, user);
+  // const response = await firestore()
+  // .collection('ProfessionalEvent')
+  // .add(data)
+  // .then((sucesso) => {
+  //     console.log(sucesso.docs, sucesso)
 
+  //     const string = sucesso.path;
 
-  const search = "Florence Welch";
-  var nowDate = new Date(Date.now());
+  //     const afterSlash = string.split(\)[1];
+    
+  //     console.log(afterSlash)
+  //     return { result: true, message: 'Evento cadastrado com sucesso!', eventPath: sucesso.path}
+  // })
+  // .catch((error) => {
+  //     return { result: false, message: error }
+  // })
 
-  var date = new Date();
-  date.setDate(nowDate.getDate() + 15);
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setMilliseconds(0);
+  // return response;
 
-  console.log('now', nowDate.toLocaleString('pt-BR'));
-  console.log('date', date.toLocaleString('pt-BR'));
-
-  const response = await firestore()
-                          .collection("ProfessionalEvent")
-                          .where(          
-                              firestore.Filter('datetime', '>=', date), 
-                          )
-                          .get({
-                            limit: 10,
-                          })
-
-  console.log(response.docs);
-
-  response.docs.forEach((doc) => (
-    console.log(doc.data().name)
-  ))
+  return await event.deleteProfessionalEvents();
 
  }
 
 
- 
 
  return (
     <View style={styles.container}>
         <Text
             onPress={async () => {
               const a = await registerEvent();
-              //console.log('Event', a)
+              console.log('Event', a)
               
             }}
         >Event</Text>
@@ -108,6 +107,13 @@ export default function Test() {
               
             }}
         >Professional</Text>
+        <Text
+            onPress={async () => {
+              const a = await login();
+              console.log('A', a)
+              
+            }}
+        >User</Text>
     </View>
   );
 }

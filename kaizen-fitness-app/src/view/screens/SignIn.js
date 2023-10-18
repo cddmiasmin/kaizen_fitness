@@ -64,8 +64,8 @@ export default function SignIn() {
         </KeyboardAvoidingView>
         <View style={styles.footer}>
           <TouchableOpacity onPress={async () => {
-            //await userController.signIn(email, password);
-            navigation.navigate('Register')
+            await userController.signIn(email, password);
+            navigation.navigate('Home');
 
           }} style={[styles.login, { backgroundColor: color }]}>
             <Text style={styles.titleBotao}>Acessar</Text>

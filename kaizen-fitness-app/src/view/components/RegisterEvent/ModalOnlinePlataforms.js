@@ -38,7 +38,7 @@ export default function ModalOnlinePlataforms({ active, changeMyStatus, choosePl
                                 style={styles.plataform} 
                                 key={`plataform#${key}`}
                                 onPress={() => {
-                                    setPlataformSelected(plataform);
+                                    setPlataformSelected(plataform.value);
                                 }}
                             >
                                 <Image 
