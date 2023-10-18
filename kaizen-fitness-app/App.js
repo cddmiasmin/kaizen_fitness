@@ -3,17 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Test      from './src/view/screens/Test';
-import Home      from './src/view/screens/Home';
-import Profile   from './src/view/screens/Profile';
-import Topics    from './src/view/screens/Topics';
-import MyData    from './src/view/screens/MyData';
-import Services  from './src/view/screens/Services';
-import SignIn    from './src/view/screens/SignIn';
-import SignUp    from './src/view/screens/SignUp';
-import UserType  from './src/view/screens/UserType';
-import Register  from './src/view/screens/Register';
-import MyAccount from './src/view/screens/MyAccount';
+import Test       from './src/view/screens/Test';
+import Home       from './src/view/screens/Home';
+import Profile    from './src/view/screens/Profile';
+import Topics     from './src/view/screens/Topics';
+import MyData     from './src/view/screens/MyData';
+import Services   from './src/view/screens/Services';
+import SignIn     from './src/view/screens/SignIn';
+import SignUp     from './src/view/screens/SignUp';
+import UserType   from './src/view/screens/UserType';
+import Register   from './src/view/screens/Register';
+import MyAccount  from './src/view/screens/MyAccount';
+import Categories from './src/view/screens/Categories';
 import DisplayEvent     from './src/view/screens/DisplayEvent';
 import KindOfEvent      from './src/view/screens/KindOfEvent';
 import RegisterEvent    from './src/view/screens/RegisterEvent';
@@ -36,7 +37,7 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('DisplayEvent');
+  const [route, setRoute] = useState('LookingForEvents');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState('');
@@ -89,6 +90,7 @@ export default function App() {
               <Stack.Screen name="RegisterEvent" component={RegisterEvent} options={{ headerShown: false }}/>
               <Stack.Screen name="LookingForEvents" component={LookingForEvents} options={{ headerShown: false }}/>
               <Stack.Screen name="DisplayEvent" component={DisplayEvent} options={{ headerShown: false }}/>
+              <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
             </Stack.Navigator>
           </NavigationContainer>
         </DataContextProvider>
