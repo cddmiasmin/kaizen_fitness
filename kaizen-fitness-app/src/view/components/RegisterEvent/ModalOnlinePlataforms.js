@@ -44,8 +44,8 @@ export default function ModalOnlinePlataforms({ active, changeMyStatus, choosePl
                                 <Image 
                                     style={[
                                         {width: 75, height: 75}, 
-                                        plataformSelected.value === plataform.value ? styles.plataformSelected : '',
-                                        plataformSelected.value === plataform.value ? { borderColor: color } : ''
+                                        plataformSelected === plataform.value ? styles.plataformSelected : '',
+                                        plataformSelected === plataform.value ? { borderColor: color } : ''
                                     ]} 
                                     source={plataform.icon}/>
                                 <Text 

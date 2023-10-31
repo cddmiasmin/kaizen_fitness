@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Avatar, Chip, IconButton, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -37,18 +37,43 @@ export default function RegisterEvent() {
     const professionalController = new ProfessionalController();
 
     const route = useRoute()
-    const modality = route.params === undefined ? 'Online' : route.params.modality
+    const modality = route.params === undefined ? 'inPerson' : route.params.modality;
+
+    const navigation = useNavigation();
+
+    const inPersonData = {
+        styleStatusBar: 'light',
+        wallpaper: '',
+        topics: [],
+        name: 'Reabilitação online para AVC',
+        about: 'Este evento fornecerá informações e dicas sobre reabilitação online para pessoas que sofreram um AVC. Os participantes aprenderão sobre os diferentes tipos de reabilitação online disponíveis, como escolher o programa certo para suas necessidades e como aproveitar ao máximo o programa de reabilitação.',
+        datetime: new Date(2023,8,19,19,0),
+        address: "Parque Ibirapuera, São Paulo",
+        modality: 'online',
+        participants: []
+    }
+
+    const onlineData = {
+        styleStatusBar: 'light',
+        wallpaper: 'https://images.unsplash.com/photo-1603102859961-64b17d43580d?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1932',
+        name: "Treinamento de corrida para iniciantes",
+        datetime: new Date(2023, 9, 26, 10, 0),
+        topics: ["Atividade Física", "Esporte"],
+        modality: 'presencial',
+        about: "Este treinamento é ideal para quem quer começar a correr. Você aprenderá as técnicas básicas de corrida, como postura, respiração e alongamento.",
+    }
 
     const { user } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
-    const [eventWallpaper, setEventWallpaper] = useState('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1931');
-    const [eventTopics, setEventTopics] = useState(["Reabilitação"]);
-    const [eventName, setEventName] = useState('Reabilitação online para AVC');
-    const [eventDateTime, setEventDateTime] = useState(new Date(2023,8,19,19,0));
-    const [eventAbout, setEventAbout] = useState('Este evento fornecerá informações e dicas sobre reabilitação online para pessoas que sofreram um AVC. Os participantes aprenderão sobre os diferentes tipos de reabilitação online disponíveis, como escolher o programa certo para suas necessidades e como aproveitar ao máximo o programa de reabilitação.');
-    const [eventOnlinePlataform, setEventOnlinePlataform] = useState('zoom');
+    const [eventWallpaper, setEventWallpaper] = useState(modality === 'online' ? onlineData.wallpaper : inPersonData.wallpaper);
+    const [eventTopics, setEventTopics] = useState(modality === 'online' ? onlineData.topics : inPersonData.topics);
+    const [eventName, setEventName] = useState(modality === 'online' ? onlineData.name : inPersonData.name);
+    const [eventDateTime, setEventDateTime] = useState(modality === 'online' ? onlineData.datetime : inPersonData.datetime);
+    const [eventAbout, setEventAbout] = useState(modality === 'online' ? onlineData.about : inPersonData.about);
+    const [eventOnlinePlataform, setEventOnlinePlataform] = useState('');
     const [eventLink, setEventLink] = useState('https://florenceandthemachine.net/home/');
+    const [eventAddress, setEventAddress] = useState(inPersonData.address);
 
     const [styleStatusBar, setStyleStatusBar] = useState('light');
     const [dateTimePickerMode, setDateTimePickerMode] = useState('date');
@@ -83,18 +108,15 @@ export default function RegisterEvent() {
             topics: eventTopics,
             name: eventName ,
             about: eventAbout,
-            plataform: eventOnlinePlataform,
-            meetingLink: eventLink,
             datatime: eventDateTime,
             modality: modality,
             participants: []
         }
 
-        // //user.calendar.push(data);
-
-        // // const aux = {
-        // //     calendar: user.calendar
-        // // }
+        if(modality === 'Online') {
+            data.plataform = eventOnlinePlataform;
+            data.meetingLink = eventLink;
+        } else data.address = eventAddress;
 
         const professional = user;
         const idUser = await auth().currentUser.uid;
@@ -106,36 +128,15 @@ export default function RegisterEvent() {
         const event = await firestore()
                                 .collection('ProfessionalEvent')
                                 .add(data)
-                                .then((sucesso) => {
-                                    console.log(sucesso)
+                                .then(() => {
                                     return { result: true, message: 'Evento cadastrado com sucesso!'}
                                 })
                                 .catch((error) => {
                                     return { result: false, message: error }
                                 })
 
-        if(event.result){
-            user.calendar.push(data);
-
-            const aux = {
-                calendar: user.calendar
-            }
-
-            const response = await firestore()
-            .collection('UserProfessional')
-            .doc(idUser)
-            .update(aux)
-            .then(() => {
-                return { result: true, message: 'Dados atualizados com sucesso!'}
-            })
-            .catch((error) => {
-                return { result: false, message: error }
-            });
-
-            console.log('response',response)
-        }
-
         console.log('event',event);
+        navigation.navigate('Home');
     }
 
     return (
@@ -358,53 +359,75 @@ export default function RegisterEvent() {
                             Local
                         </Text>
                         {
-                            !Object.keys(eventOnlinePlataform).length 
+                            modality === 'online' 
                             ?
-                                <TouchableOpacity onPress={() => setModalOnlinePlataforms(true)}>
-                                        <Chip
-                                            icon={() => (
-                                                <Icon name="plus-circle" size={16} color="white" />
-                                            )}
-                                            style={{ backgroundColor: 'rgba(57, 138, 172, 0.2)', marginTop: 5}}
-                                            selectedColor='white'
-                                        >
-                                            Adicionar plataforma 
-                                        </Chip>
-                                </TouchableOpacity>
-                            : 
                                 <>
-                                    <View style={styles.plataform}>
-                                    <Image 
-                                        style={{width: 75, height: 75}} 
-                                        source={onlinePlataforms[plataformIndex].icon}
-                                    />
-                                    <Text 
-                                        style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginTop: 2}}
-                                    >
-                                        {onlinePlataforms[plataformIndex].name} 
-                                    </Text>
-                                    </View>
-                                    <TextInput
-                                        mode='outlined'
-                                        label='Link do evento'
-                                        value={eventLink}
-                                        onChangeText={(text) => setEventLink(text)}
-                                        outlineColor={'white'}
-                                        activeOutlineColor={color}
-                                        textColor={'white'}
-                                        style={{ backgroundColor: mainColor, marginBottom: 8 }}
-                                        theme={{
-                                            colors: {
-                                                onSurfaceVariant: 'white'
-                                            }
-                                        }}
-                                    />
-                                    <Text
-                                        style={{ color: color, fontWeight: 'bold', textAlign: 'center'}}
-                                    >
-                                        O link será liberado para os participantes 1h antes do evento
-                                    </Text>
-                                </>           
+                                    {
+                                        !Object.keys(eventOnlinePlataform).length 
+                                        ?
+                                            <TouchableOpacity onPress={() => setModalOnlinePlataforms(true)}>
+                                                    <Chip
+                                                        icon={() => (
+                                                            <Icon name="plus-circle" size={16} color="white" />
+                                                        )}
+                                                        style={{ backgroundColor: 'rgba(57, 138, 172, 0.2)', marginTop: 5}}
+                                                        selectedColor='white'
+                                                    >
+                                                        Adicionar plataforma 
+                                                    </Chip>
+                                            </TouchableOpacity>
+                                        : 
+                                            <>
+                                                <View style={styles.plataform}>
+                                                <Image 
+                                                    style={{width: 75, height: 75}} 
+                                                    source={onlinePlataforms[plataformIndex].icon}
+                                                />
+                                                <Text 
+                                                    style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginTop: 2}}
+                                                >
+                                                    {onlinePlataforms[plataformIndex].name} 
+                                                </Text>
+                                                </View>
+                                                <TextInput
+                                                    mode='outlined'
+                                                    label='Link do evento'
+                                                    value={eventLink}
+                                                    onChangeText={(text) => setEventLink(text)}
+                                                    outlineColor={'white'}
+                                                    activeOutlineColor={color}
+                                                    textColor={'white'}
+                                                    style={{ backgroundColor: mainColor, marginBottom: 8 }}
+                                                    theme={{
+                                                        colors: {
+                                                            onSurfaceVariant: 'white'
+                                                        }
+                                                    }}
+                                                />
+                                                <Text
+                                                    style={{ color: color, fontWeight: 'bold', textAlign: 'center'}}
+                                                >
+                                                    O link será liberado para os participantes 1h antes do evento
+                                                </Text>
+                                            </>           
+                                    }
+                                </>
+                            : 
+                                <TextInput
+                                    mode='outlined'
+                                    label='Endereço do evento'
+                                    value={eventAddress}
+                                    onChangeText={(text) => setEventAddress(text)}
+                                    outlineColor={'white'}
+                                    activeOutlineColor={color}
+                                    textColor={'white'}
+                                    style={{ backgroundColor: mainColor, marginBottom: 8, marginTop: 10 }}
+                                    theme={{
+                                        colors: {
+                                            onSurfaceVariant: 'white'
+                                        }
+                                    }}
+                                />
                         }
                     </View>
                     <TouchableOpacity 

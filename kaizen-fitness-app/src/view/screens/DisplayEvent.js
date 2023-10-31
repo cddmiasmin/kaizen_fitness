@@ -205,47 +205,68 @@ export default function DisplayEvent({ data }) {
                         <Text style={{color: color, fontWeight: 'bold', fontSize: 14}}>
                             Local
                         </Text>
-                        <View style={styles.plataform}>
-                            <Image 
-                                style={{width: 75, height: 75}} 
-                                source={onlinePlataforms[plataformIndex].icon}
-                            />
-                            <Text 
-                                style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginTop: 2}}
-                            >
-                                {onlinePlataforms[plataformIndex].name} 
-                            </Text>
-                        </View>
-                        {
-                            canTheMeetingLinkBeReleased() &&
-                            <>
-                                <TouchableOpacity
-                                    onPress={() => { 
-                                        Linking.openURL(event.meetingLink); 
+                        { event.modality === 'online'
+                            ?
+                                <>
+                                    <View style={styles.plataform}>
+                                        <Image 
+                                            style={{width: 75, height: 75}} 
+                                            source={onlinePlataforms[plataformIndex].icon}
+                                        />
+                                        <Text 
+                                            style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginTop: 2}}
+                                        >
+                                            {onlinePlataforms[plataformIndex].name} 
+                                        </Text>
+                                    </View>
+                                    {
+                                        canTheMeetingLinkBeReleased() &&
+                                        <>
+                                            <TouchableOpacity
+                                                onPress={() => { 
+                                                    Linking.openURL(event.meetingLink); 
+                                                }}
+                                            >
+                                                <TextInput
+                                                        mode='outlined'
+                                                        label="Link do evento"
+                                                        value={event.meetingLink}
+                                                        outlineColor={'white'}
+                                                        textColor={'white'}
+                                                        style={{ backgroundColor: mainColor }}
+                                                        theme={{
+                                                            colors: {
+                                                                onSurfaceVariant: 'white'
+                                                            }
+                                                        }}
+                                                        editable={false}
+                                                        multiline={true}
+                                                />
+                                            </TouchableOpacity>
+                                            <Text
+                                                style={{ color: color, fontWeight: 'bold', textAlign: 'center', marginTop: 10}}
+                                            >
+                                                Clique no link para ser redirecionado ao evento
+                                            </Text>
+                                        </>
+                                    } 
+                                </>
+                            :
+                                <TextInput
+                                    mode='outlined'
+                                    label="Endereço do evento"
+                                    value={event.address}
+                                    outlineColor={'white'}
+                                    textColor={'white'}
+                                    style={{ backgroundColor: mainColor }}
+                                    theme={{
+                                        colors: {
+                                            onSurfaceVariant: 'white'
+                                        }
                                     }}
-                                >
-                                    <TextInput
-                                            mode='outlined'
-                                            label="Link do evento"
-                                            value={event.meetingLink}
-                                            outlineColor={'white'}
-                                            textColor={'white'}
-                                            style={{ backgroundColor: mainColor }}
-                                            theme={{
-                                                colors: {
-                                                    onSurfaceVariant: 'white'
-                                                }
-                                            }}
-                                            editable={false}
-                                            multiline={true}
-                                    />
-                                </TouchableOpacity>
-                                <Text
-                                    style={{ color: color, fontWeight: 'bold', textAlign: 'center', marginTop: 10}}
-                                >
-                                    Clique no link para ser redirecionado ao evento
-                                </Text>
-                            </>
+                                    editable={false}
+                                    multiline={true}
+                                />
                         } 
                     </View>
                 </View>
