@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
-import { Ionicons } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { ColorContext } from '../../contexts/ColorContext';
+import { mainColor } from '../../colors/colors';
 
 export default function Footer() {
 
@@ -16,30 +15,39 @@ const navigation = useNavigation();
 
 const { color } = useContext(ColorContext);
 
- return (
-   <View style={styles.footer}>
-    <View style={styles.container}>      
-        <Ionicons 
-            name="calendar" 
-            size={route.name == 'Calendar' ? 35 : 25} 
-            color={route.name == 'Calendar' ? color : 'white'} 
-            onPress={() => navigation.navigate('Calendar')}
-        />
-        <MaterialIcons 
-            name="home-filled" 
-            size={route.name == 'Home' ? 35 : 25} 
-            color={route.name == 'Home' ? color : 'white'} 
-            onPress={() => navigation.navigate('Home')}
-        />
-        <Ionicons 
-            name="ios-person-circle" 
-            size={route.name == 'Profile' ? 35 : 25} 
-            color={route.name == 'Profile' ? color : 'white'} 
-            onPress={() => navigation.navigate('Profile')}
-        />
+    const bottomTaps = [
+        {key: 'home', route: 'Home', title: 'Home', focusedIcon: 'home-variant', unfocusedIcon: 'home-variant-outline', color: 'black'},
+        {key: 'people', route: 'People', title: 'Pessoas', focusedIcon: 'account-group', unfocusedIcon: 'account-group-outline', color: 'blue'},
+        {key: 'place', route: 'Place', title: 'Locais', focusedIcon: 'store', unfocusedIcon: 'store-outline', color: 'green'},
+        {key: 'calendar', route: 'Calendar', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline', color: 'purple'},
+        {key: 'profile', route: 'Profile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline', color: 'grey'}
+    ];
+
+    return (
+    <View style={styles.footer}>
+        {
+            bottomTaps.map((tap) => (
+                <TouchableOpacity
+                    key={`button#${tap.key}`}
+                    style={[styles.bottomTaps]}
+                    onPress={() => navigation.navigate(tap.route)}
+                >
+                    <Icon 
+                        name={route.name === tap.route ? tap.focusedIcon : tap.unfocusedIcon} 
+                        size={22} 
+                        color={route.name === tap.route ? color : 'white'} 
+                    />
+                    <Text
+                        style={{ color: route.name === tap.route ? color : '#aeaeae',
+                                     fontSize: 10}}
+                    >
+                        {tap.title}
+                    </Text>
+                </TouchableOpacity>
+            ))
+        }
     </View>
-   </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
@@ -48,13 +56,17 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-    },
-    container: {
+        backgroundColor: '#2c2c2c',
+        height: 60,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+    },
+    bottomTaps: {
+        flexDirection: 'column',
         alignItems: 'center',
-        paddingLeft: '8%',
-        paddingRight: '8%',
-        paddingBottom: '5%'
-    }
+        justifyContent: 'center',
+        height: '100%',
+        width: '20%'
+    },
 });
