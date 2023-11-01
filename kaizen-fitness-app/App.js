@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Test       from './src/view/screens/Test';
-import Home       from './src/view/screens/Home';
+import Home1       from './src/view/screens/Home1';
 import Profile    from './src/view/screens/Profile';
 import Topics     from './src/view/screens/Topics';
 import MyData     from './src/view/screens/MyData';
@@ -20,7 +20,7 @@ import DisplayEvent     from './src/view/screens/DisplayEvent';
 import KindOfEvent      from './src/view/screens/KindOfEvent';
 import RegisterEvent    from './src/view/screens/RegisterEvent';
 import EmailValidation  from './src/view/screens/EmailValidation';
-import LookingForEvents from './src/view/screens/LookingForEvents';
+import Home from './src/view/screens/Home';
 
 import { UserContextProvider } from './src/contexts/UserContext';
 import { ColorContextProvider } from './src/contexts/ColorContext';
@@ -38,7 +38,7 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('Home');
+  const [route, setRoute] = useState('Categories');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState('');
@@ -77,7 +77,7 @@ export default function App() {
             <Stack.Navigator initialRouteName={route}>
               <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
               <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
-              <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+              <Stack.Screen name="Home1" component={Home1} options={{ headerShown: false }}/>
               <Stack.Screen name="MyData" component={MyData} options={{ headerShown: false }}/>
               <Stack.Screen name="MyAccount" component={MyAccount} options={{ headerShown: false }}/>
               <Stack.Screen name="Services" component={Services} options={{ headerShown: false }}/>
@@ -90,7 +90,7 @@ export default function App() {
               <Stack.Screen name="Topics" component={Topics} options={{ headerShown: false }}/>
               <Stack.Screen name="RegisterEvent" component={RegisterEvent} options={{ headerShown: false }}/>
               <Stack.Screen name="UpdateEvent" component={UpdateEvent} options={{ headerShown: false }}/>
-              <Stack.Screen name="LookingForEvents" component={LookingForEvents} options={{ headerShown: false }}/>
+              <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
               <Stack.Screen name="DisplayEvent" component={DisplayEvent} options={{ headerShown: false }}/>
               <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
             </Stack.Navigator>

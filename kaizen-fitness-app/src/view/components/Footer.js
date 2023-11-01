@@ -5,7 +5,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { ColorContext } from '../../contexts/ColorContext';
-import { mainColor } from '../../colors/colors';
 
 export default function Footer() {
 

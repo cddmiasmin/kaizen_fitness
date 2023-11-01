@@ -1,74 +1,156 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, 
+  Text, View,
+  TouchableOpacity,
+  ScrollView
+} from 'react-native';
+import { TextInput } from 'react-native-paper';
+
+import { StatusBar } from 'expo-status-bar';
 
 import { mainColor } from '../../colors/colors';
+import { categories } from '../../services/availableServices';
 
-import Header from '../components/Home/Header';
-import QuadroInfo from '../components/Home/QuadroInfo';
-import Opcao from '../components/Home/Opcao';
-import Footer  from '../components/Footer';
-import { StatusBar } from 'expo-status-bar';
-import { UserContext } from '../../contexts/UserContext';
-
+import { ColorContext } from '../../contexts/ColorContext';
+import Category from '../components/Categories/Category';
+import { useNavigation } from '@react-navigation/native';
+import EventCard from '../components/EventCard';
+import Footer from '../components/Footer';
 
 export default function Home() {
 
-  const { userType } = useContext(UserContext);
+  const navigation = useNavigation();
+
+  const { color } = useContext(ColorContext);
+
+  const [search, setSearch] = useState('');
+  const [colorTextSearch, setColorTextSearch] = useState(color);
 
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor={mainColor} style="light" />
-      <Header/>
-      <QuadroInfo/>
-      <View style={styles.linha}/>
-      {
-        userType === 'consumer' &&
-        <>
-          <Opcao nome='Procure eventos' icon='calendar-cursor' route=''/>
-          <Opcao nome='Procure pessoas' icon='nature-people' route=''/>
-          <Opcao nome='Procure estabelecimentos' icon='google-maps' route=''/>
-        </>
-      }
-      {
-        userType === 'professional' &&
-        <>
-          <Opcao nome='Criar um novo evento' icon='nature-people' route='KindOfEvent'/>
-        </>
-      }
-      <Footer />
-    </View>
-  )
+      <View style={styles.container}>
+        <StatusBar style='light'/>
+        <ScrollView>
+          <TextInput
+            mode='outlined'
+            label={''}
+            value={search}
+            placeholder='Pesquise Eventos, Organizadores'
+            placeholderTextColor={color}
+            onChangeText={(text) => setSearch(text)}
+            outlineColor={'white'}
+            activeOutlineColor={color}
+            textColor={colorTextSearch}
+            style={{ backgroundColor: mainColor, marginTop: 55 }}
+            theme={{
+              colors: {
+                  onSurfaceVariant: 'white'
+              }
+            }}
+            editable={true}
+            onFocus={() => setColorTextSearch('white')}
+            onBlur={() => setColorTextSearch(color)}
+            left={<TextInput.Icon icon="magnify" color={colorTextSearch}/>}
+          />
+          <View style={styles.home}>
+            <View style={styles.categories}>
+              <View style={styles.categoriesHeader}>
+                <Text style={{color: color, fontWeight: 'bold', fontSize: 18}}>
+                  Categorias
+                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Categories')} >
+                  <Text style={{color: color, fontSize: 12}}>
+                    Mostrar tudo
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.categoriesContainer}>
+                {
+                  categories.map((category, key) => (
+                    key < 4
+                    ?
+                      <Category key={`category#${key}`} category={category} selected={false}/>
+                    : 
+                    ''
+                  ))
+                }
+              </View>
+            </View>
+            <View style={styles.upcoming}>
+                <Text style={{color: color, fontWeight: 'bold', fontSize: 18}}>
+                  Próximos eventos
+                </Text>
+                <ScrollView horizontal={true}>
+                  <View style={styles.cardContainerUpcoming}>
+                      <EventCard data={search}/>
+                      <EventCard data={search}/>
+                      <EventCard data={search}/>
+                  </View>
+                </ScrollView>
+            </View>
+            <View style={styles.nearby}>
+                <Text style={{color: color, fontWeight: 'bold', fontSize: 18}}>
+                  Eventos Futuros
+                </Text>       
+                <View style={styles.cardContainerNearby}>
+                    <EventCard data={search}/>
+                    <EventCard data={search}/>
+                    <EventCard data={search}/>
+                </View>
+            </View>
+          </View>
+        </ScrollView>
+        <Footer />
+      </View>
+  );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: mainColor,
-    justifyContent: 'star',
-    alignItems: 'center',
-    paddingLeft: '8%',
-    paddingRight: '8%',
-    paddingTop: '15%',
-    marginTop: 5
-  },
-  linha: {
-    width: '100%',
-    height: '0.5%',
-    backgroundColor: 'white',
-    borderRadius: 50,
-    marginTop: '10%',
-    marginBottom: '10%'
-  },
-  opcoes: {
-    width: '100%',
-    height: '55%',
-    backgroundColor: 'red',
-    flexWrap: 'wrap',
-    position: 'absolute',
-    bottom: 85,
-    gap: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
+const styles =  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: mainColor,
+      paddingLeft: '8%',
+      paddingRight: '8%',
+    },
+    home: {
+      flexDirection: 'column',
+      width: '100%',
+      gap: 10
+    },
+    categories: {
+      marginTop: 20
+    },
+    categoriesContainer: {
+      marginTop: 8,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexDirection: 'row',
+      gap: 4
+    },
+    categoriesHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    upcoming: {
+      marginTop: 10,
+      flexDirection: 'column'
+    },
+    cardContainerUpcoming: {
+      flexDirection: 'row',
+      gap: 15,
+      marginTop: 10
+    },
+    nearby: {
+      marginTop: 10,
+      flexDirection: 'column'
+    },
+    cardContainerNearby: {
+      flexDirection: 'column',
+      gap: 15,
+      marginTop: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 80
+    }
 });
