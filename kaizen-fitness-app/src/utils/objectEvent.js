@@ -1,5 +1,5 @@
 // estrutura do evento na modalidade presencial
-const onlineEvent = {
+const inPersonEvent  = {
     "name": "Evento de Alimentação",
     "datetime": "25/10/2023",
     "topics": ["alimentação"],
@@ -11,7 +11,7 @@ const onlineEvent = {
 }
 
 // estrutura do evento na modalidade on-line 
-const inPersonEvent = {
+const onlineEvent = {
     "name": "Evento de Alimentação",
     "datetime": '25/10/2023',
     "topics": ["alimentação"],
