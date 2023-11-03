@@ -33,13 +33,13 @@ export default function Home() {
     topics: ["Nutrição","Saúde pública",],
     name: 'Palestra sobre alimentação saudável' ,
     about: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-    plataform: 'meetup',
+    plataform: 'microsoft-teams',
     meetingLink: 'https://florenceandthemachine.net/home/',
     organizer: {
         kindOfPerson: 'PF',
         name: 'Florence',
         familyName: 'Welch',
-        photo: 'user.photo'
+        photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
     },
     datatime: new Date(2023, 9, 25, 19, 30),
     modality: 'Online',
@@ -48,14 +48,6 @@ export default function Home() {
         { photo: 'https://i.pinimg.com/564x/68/4b/c3/684bc340f3b189650bfbc7994f0f4261.jpg'},
         { photo: 'https://i.pinimg.com/564x/d1/e1/3b/d1e13b7cebfbb1b90ddf1d4243efd317.jpg'},
         { photo: 'https://i.pinimg.com/564x/17/54/b8/1754b8ff13cbbb0d7fefbae61a0bbc49.jpg'},
-        { photo: 'https://i.pinimg.com/564x/f7/a6/bc/f7a6bc0999bae0e3148ff8f3d660358e.jpg'},
-        { photo: ''},
-        { photo: ''},
-        { photo: ''},
-        { photo: ''},
-        { photo: ''},
-        { photo: ''},
-        { photo: ''}
     ]
   };
 
@@ -71,7 +63,34 @@ export default function Home() {
     state: "SP",
     latitude: -22.90956,
     longitude: -43.17632,
-    about: "Participe deste workshop informativo sobre atividade física, saúde e nutrição para melhorar sua qualidade de vida."
+    organizer: {
+      kindOfPerson: 'PJ',
+      name: 'Florence',
+      familyName: 'Welch',
+      photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
+    },
+    about: "Participe da Semana da Saúde Feminina, um evento dedicado à promoção da saúde da mulher. Teremos palestras, workshops e consultas gratuitas.",
+    participants: [
+      { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
+      { photo: 'https://i.pinimg.com/564x/68/4b/c3/684bc340f3b189650bfbc7994f0f4261.jpg'},
+      { photo: 'https://i.pinimg.com/564x/d1/e1/3b/d1e13b7cebfbb1b90ddf1d4243efd317.jpg'},
+      { photo: 'https://i.pinimg.com/564x/17/54/b8/1754b8ff13cbbb0d7fefbae61a0bbc49.jpg'},
+      { photo: 'https://i.pinimg.com/564x/f7/a6/bc/f7a6bc0999bae0e3148ff8f3d660358e.jpg'},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+      { photo: ''},
+  ]
   }
 
   return (
@@ -114,7 +133,7 @@ export default function Home() {
               <View style={styles.categoriesContainer}>
                 {
                   topics.map((category, key) => (
-                    key < 4
+                    key < 3
                     ?
                       <Category key={`category#${key}`} category={category} selected={false}/>
                     : 

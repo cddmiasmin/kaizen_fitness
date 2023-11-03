@@ -1,15 +1,21 @@
-import React, { useContext } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { Surface } from 'react-native-paper';
+import { useContext, useMemo, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { ColorContext } from '../../contexts/ColorContext';
-import { mainColor } from '../../colors/colors';
-import { Chip } from 'react-native-paper';
+
 import { monthsOfTheYear } from '../../services/monthsOfTheYear';
 import { onlinePlataforms } from '../../services/onlinePlataforms';
+import { grayText } from '../../colors/colors';
 
 export default function EventCard({ data }) {
+
+    const navigation = useNavigation();
+
+    navigation.setOptions({
+        persistedState: false,
+    });
 
     const { color } = useContext(ColorContext);
 
@@ -28,7 +34,10 @@ export default function EventCard({ data }) {
     }
 
     return (
-        <View style={[styles.container]}>
+        <TouchableOpacity 
+            style={[styles.container]}
+            onPress={() => navigation.navigate('DisplayEvent', { data: data })}
+        >
             <View style={styles.wallpaper}>
                 <View style={[{ backgroundColor: data.styleStatusBar === 'dark' ? 'white' : 'black' }, , StyleSheet.absoluteFill]}>
                     <Image source={{ uri: data.wallpaper }} style={[{width: '100%', height: '100%', opacity: 0.8}]}/>
@@ -57,11 +66,11 @@ export default function EventCard({ data }) {
                 <View style={styles.information}>
                     <View style={styles.info}>
                         <Icon 
-                            name={ data.modality === 'Online' ? 'monitor-shimmer' : 'account-multiple'} 
+                            name={data.modality === 'Online' ? 'monitor-shimmer' : 'account-group'} 
                             size={18} 
                             color={color} 
                         />
-                        <Text style={{ color: '#aeaeae'}}>{data.modality}</Text>
+                        <Text style={{ color: grayText }}>{data.modality}</Text>
                     </View>
                     <View style={styles.info}>
                         <Icon 
@@ -69,7 +78,7 @@ export default function EventCard({ data }) {
                             size={18} 
                             color={color} 
                         />
-                        <Text style={{ color: '#aeaeae'}}>
+                        <Text style={{ color: grayText }}>
                             {
                                 data.datatime.getDate() + ' ' + monthsOfTheYear[data.datatime.getMonth()] + ' ' + (data.datatime.getFullYear() === nowDate.getFullYear() ? '' : data.datatime.getFullYear())
                                 + ' - '
@@ -83,7 +92,7 @@ export default function EventCard({ data }) {
                             size={18} 
                             color={color} 
                         />
-                        <Text style={{ color: '#aeaeae'}}>
+                        <Text style={{ color: grayText}}>
                             {
                                 data.modality === 'Online'
                                     ? whatIsTheOnlinePlatform(data.plataform)
@@ -93,7 +102,7 @@ export default function EventCard({ data }) {
                     </View>
                 </View>
             </View>
-        </View >
+        </TouchableOpacity>
     );
 }
 

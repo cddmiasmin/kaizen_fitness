@@ -5,6 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { ColorContext } from '../../contexts/ColorContext';
+import { grayText } from '../../colors/colors';
 
 export default function Footer() {
 
@@ -37,7 +38,7 @@ const { color } = useContext(ColorContext);
                         color={route.name === tap.route ? color : 'white'} 
                     />
                     <Text
-                        style={{ color: route.name === tap.route ? color : '#aeaeae',
+                        style={{ color: route.name === tap.route ? color : grayText,
                                      fontSize: 10}}
                     >
                         {tap.title}

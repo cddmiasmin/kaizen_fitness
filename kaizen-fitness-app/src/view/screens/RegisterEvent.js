@@ -230,7 +230,7 @@ export default function RegisterEvent() {
                         <View style={styles.infos}>
                             <View style={styles.modality}>
                                 <Icon 
-                                    name= {modality === 'inPerson' ? 'account-group' : 'laptop'} 
+                                    name= {modality === 'inPerson' ? 'account-group' : 'monitor-shimmer'} 
                                     size={20} color={color} 
                                 />
                                 <Text style={{color: 'white', fontSize: 14}}>

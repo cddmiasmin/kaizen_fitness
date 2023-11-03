@@ -1,68 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useEffect, useState } from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Avatar, Chip, TextInput } from 'react-native-paper';
-import { SafeAreaView, 
+import { 
+    SafeAreaView, 
     ScrollView, 
     StyleSheet, 
     Text, View,
     TouchableOpacity,
-    Image 
+    Image, Linking 
 } from 'react-native';
+import { Avatar, Chip, TextInput } from 'react-native-paper';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { UserContext } from '../../contexts/UserContext';
+import { StatusBar } from 'expo-status-bar';
+
 import { ColorContext } from '../../contexts/ColorContext';
 
-import { mainColor } from '../../colors/colors';
+import { grayText, mainColor } from '../../colors/colors';
 
 import { monthsOfTheYear } from '../../services/monthsOfTheYear';
 import { onlinePlataforms } from '../../services/onlinePlataforms';
-import { Linking } from 'react-native';
 
-export default function DisplayEvent({ data }) {
 
-    const { user } = useContext(UserContext);
+export default function DisplayEvent() {
+
+    const route = useRoute();
+    const data = route.params.data;
+
+    const navigation = useNavigation();
+
     const { color } = useContext(ColorContext);
 
-    const nowDateTime = new Date(2023, 9, 26, 18, 0);
+    const nowDateTime = new Date();
 
     const [plataformIndex, setPlataformIndex] = useState(0);
     
-    const event = {
-        styleStatusBar: 'dark',
-        wallpaper: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1978',
-        topics: ["Alimentação"],
-        name: 'Palestra sobre alimentação saudável' ,
-        about: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-        plataform: 'meetup',
-        meetingLink: 'https://florenceandthemachine.net/home/',
-        organizer: {
-            kindOfPerson: 'PF',
-            name: 'Florence',
-            familyName: 'Welch',
-            photo: user.photo
-        },
-        datatime: new Date(2023, 9, 25, 19, 0),
-        modality: 'Online',
-        participants: [
-            { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
-            { photo: 'https://i.pinimg.com/564x/68/4b/c3/684bc340f3b189650bfbc7994f0f4261.jpg'},
-            { photo: 'https://i.pinimg.com/564x/d1/e1/3b/d1e13b7cebfbb1b90ddf1d4243efd317.jpg'},
-            { photo: 'https://i.pinimg.com/564x/17/54/b8/1754b8ff13cbbb0d7fefbae61a0bbc49.jpg'},
-            { photo: 'https://i.pinimg.com/564x/f7/a6/bc/f7a6bc0999bae0e3148ff8f3d660358e.jpg'},
-            { photo: ''},
-            { photo: ''},
-            { photo: ''},
-            { photo: ''},
-            { photo: ''},
-            { photo: ''},
-            { photo: ''}
-        ]
-    };
-    
     useEffect(() => {
         onlinePlataforms.forEach((plataform) => {
-            if (plataform.value === event.plataform) {
+            if (plataform.value === data.plataform) {
                 setPlataformIndex(onlinePlataforms.indexOf(plataform))
             }
         }); 
@@ -70,12 +44,12 @@ export default function DisplayEvent({ data }) {
 
     const canTheMeetingLinkBeReleased = () => {
 
-        if(nowDateTime.getDate() != event.datatime.getDate()) return false;
+        if(nowDateTime.getDate() != data.datatime.getDate()) return false;
 
         const datetime = new Date(nowDateTime);
         datetime.setHours(datetime.getHours() + 1);
 
-        if(datetime.getTime() >= event.datatime.getTime()) return(true);
+        if(datetime.getTime() >= data.datatime.getTime()) return(true);
 
         return false;
     }
@@ -83,15 +57,29 @@ export default function DisplayEvent({ data }) {
     return (
         <SafeAreaView  style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <StatusBar style={event.styleStatusBar}/>
-                <View style={styles.header}>
-                    <Image source={{ uri: event.wallpaper}} resizeMode="cover" style={{width: '100%', height: '100%'}}/>                 
+                <StatusBar style={data.styleStatusBar}/>
+                <View style={[styles.header, { backgroundColor: data.styleStatusBar === 'dark' ? 'white' : 'black' }]}>
+                    <Image source={{ uri: data.wallpaper}} resizeMode="cover" style={{ width: '100%', height: '100%', opacity: 0.7}}/>
+                    <View style={[styles.buttons, StyleSheet.absoluteFillObject]}>
+                        <TouchableOpacity 
+                            style={[styles.button, { backgroundColor: data.styleStatusBar === 'dark' ? 'black' : 'white' }]}
+                            onPress={() => navigation.navigate('Home')}
+                        >
+                            <Icon name= {'chevron-left'} size={20} color={color} />
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={[styles.button, { backgroundColor: data.styleStatusBar === 'dark' ? 'black' : 'white' }]}
+                            onPress={() => console.log('amém')}
+                        >
+                            <Icon name= {'calendar-plus'} size={18} color={color} />
+                        </TouchableOpacity>
+                    </View>                 
                 </View>
                 <View style={styles.body}>
                     <View style={styles.containerTopics}>
                         <View style={styles.topics}>
                             {
-                                event.topics.map((topic, key) => (        
+                                data.topics.map((topic, key) => (        
                                     <Chip
                                         key={`chip#${key}`}
                                         style={{ backgroundColor: 'rgba(57, 138, 172, 0.2)'}}
@@ -104,15 +92,15 @@ export default function DisplayEvent({ data }) {
                         </View> 
                     </View>
                     <View style={styles.information}>
-                        <Text style={[styles.eventName, {color: color}]}>{event.name}</Text>
+                        <Text style={[styles.eventName, { color: color }]}>{data.name}</Text>
                         <View style={styles.infos}>
                             <View style={styles.modality}>
                                     <Icon 
-                                        name= {event.modality === 'Presencial' ? 'account-group' : 'laptop'} 
+                                        name= {data.modality === 'Presencial' ? 'account-group' : 'monitor-shimmer'} 
                                         size={20} color={color} 
                                     />
-                                    <Text style={{color: 'white', fontSize: 14}}>
-                                        {event.modality}
+                                    <Text style={{color: grayText, fontSize: 14}}>
+                                        {data.modality}
                                     </Text>
                             </View>
                             <View style={styles.datetime}>
@@ -120,15 +108,15 @@ export default function DisplayEvent({ data }) {
                                     name= 'calendar-range'
                                     size={18} color={color} 
                                 />
-                                <Text style={{color: 'white', fontSize: 14}}>
-                                    {event.datatime.getDate() 
-                                        + '/' 
-                                        + monthsOfTheYear[event.datatime.getMonth()]
-                                        + (nowDateTime.getFullYear() !== event.datatime.getFullYear() ? '/' + event.datatime.getFullYear() : '')
+                                <Text style={{color: grayText, fontSize: 14}}>
+                                    {data.datatime.getDate() 
+                                        + ' ' 
+                                        + monthsOfTheYear[data.datatime.getMonth()]
+                                        + (nowDateTime.getFullYear() !== data.datatime.getFullYear() ? ' ' + data.datatime.getFullYear() : '')
                                         + ' - '
-                                        + event.datatime.getHours()
+                                        + data.datatime.getHours()
                                         + 'h'
-                                        + (event.datatime.getMinutes() === 0 ? '' : event.datatime.getMinutes())
+                                        + (data.datatime.getMinutes() === 0 ? '' : data.datatime.getMinutes())
                                     }
                                 </Text>
                             </View>
@@ -136,9 +124,9 @@ export default function DisplayEvent({ data }) {
                     </View>
                     <View style={styles.participants}>
                         {
-                            event.participants.length !== 0
+                            data.participants.length !== 0
                             ?
-                                event.participants.map((participant, key) => (
+                                data.participants.map((participant, key) => (
                                     key < 5 
                                     ? 
                                         <View
@@ -171,18 +159,18 @@ export default function DisplayEvent({ data }) {
                         }
                         <Text style={{color: 'white', fontSize: 14, marginLeft: 5}}>
                             {
-                                event.participants.length === 0
+                                data.participants.length === 0
                                 ?
                                     'Nenhum participante'
                                 :
-                                event.participants.length + ' ' + (event.participants.length == 1 ? 'participante' : 'participantes')
+                                data.participants.length + ' ' + (data.participants.length == 1 ? 'participante' : 'participantes')
                             } 
                         </Text>          
                     </View>
                     <View style={styles.aboutEvent}>
                         <Text style={{color: color, fontWeight: 'bold'}}>Sobre o evento</Text>
-                        <Text style={{color: 'white', textAlign: 'justify'}}>
-                            {event.about}
+                        <Text style={{color: grayText, textAlign: 'justify'}}>
+                            {data.about}
                         </Text>
                     </View>
                     <View style={styles.organizer}>
@@ -190,13 +178,13 @@ export default function DisplayEvent({ data }) {
                             Organizador
                         </Text>
                         <View style={styles.professional}>
-                            <Avatar.Image size={60} source={{ uri: event.organizer.photo }} />
+                            <Avatar.Image size={60} source={{ uri: data.organizer.photo }} />
                             <View style={styles.professionalData}>
                                 <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
-                                    {event.organizer.name}{event.organizer.kindOfPerson === 'PF' ? ' ' + event.organizer.familyName : ''}
+                                    {data.organizer.name}{data.organizer.kindOfPerson === 'PF' ? ' ' + data.organizer.familyName : ''}
                                 </Text>
-                                <Text style={{color: 'white', fontSize: 10}}>
-                                    {event.organizer.kindOfPerson === 'PF' ? 'Pessoa Física' : 'Pessoa Jurídica'}
+                                <Text style={{color: grayText, fontSize: 10}}>
+                                    {data.organizer.kindOfPerson === 'PF' ? 'Pessoa Física' : 'Pessoa Jurídica'}
                                 </Text>
                             </View>
                         </View>
@@ -205,7 +193,7 @@ export default function DisplayEvent({ data }) {
                         <Text style={{color: color, fontWeight: 'bold', fontSize: 14}}>
                             Local
                         </Text>
-                        { event.modality === 'online'
+                        { data.modality === 'Online'
                             ?
                                 <>
                                     <View style={styles.plataform}>
@@ -224,13 +212,13 @@ export default function DisplayEvent({ data }) {
                                         <>
                                             <TouchableOpacity
                                                 onPress={() => { 
-                                                    Linking.openURL(event.meetingLink); 
+                                                    Linking.openURL(data.meetingLink); 
                                                 }}
                                             >
                                                 <TextInput
                                                         mode='outlined'
                                                         label="Link do evento"
-                                                        value={event.meetingLink}
+                                                        value={data.meetingLink}
                                                         outlineColor={'white'}
                                                         textColor={'white'}
                                                         style={{ backgroundColor: mainColor }}
@@ -255,10 +243,10 @@ export default function DisplayEvent({ data }) {
                                 <TextInput
                                     mode='outlined'
                                     label="Endereço do evento"
-                                    value={event.address}
+                                    value={data.address}
                                     outlineColor={'white'}
-                                    textColor={'white'}
-                                    style={{ backgroundColor: mainColor }}
+                                    textColor={grayText}
+                                    style={{ backgroundColor: mainColor, marginTop: 10 }}
                                     theme={{
                                         colors: {
                                             onSurfaceVariant: 'white'
@@ -289,11 +277,11 @@ const styles = StyleSheet.create({
     body: {
         backgroundColor: mainColor,
         width: '100%',
-        borderTopLeftRadius: 35,
-        borderTopRightRadius: 35,
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
         top: -32,
         paddingLeft: 20,
-        paddingRight: 20
+        paddingRight: 20,
     },
     containerTopics: {
         marginTop: 20,
@@ -338,7 +326,8 @@ const styles = StyleSheet.create({
     },
     aboutEvent: {
         marginTop: 20,
-        gap: 8
+        gap: 8,
+        marginBottom: 10,
     },
     organizer: {
         flexDirection: 'column',
@@ -361,6 +350,20 @@ const styles = StyleSheet.create({
     plataform: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 95,
+        width: '100%',
     },
+    buttons: {
+        flexDirection: 'row',
+        paddingTop: 45,
+        paddingLeft: 20,
+        paddingRight: 20,
+        gap: 290
+    },
+    button: {
+        width: 32,
+        height: 32,
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });
