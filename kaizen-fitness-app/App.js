@@ -31,6 +31,7 @@ import UserController from './src/controller/UserController';
 import auth from '@react-native-firebase/auth';
 
 import 'expo-dev-client';
+import Calendar from './src/view/screens/Calendar';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +39,7 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('Home');
+  const [route, setRoute] = useState('Calendar');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState('');
@@ -93,6 +94,7 @@ export default function App() {
               <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
               <Stack.Screen name="DisplayEvent" component={DisplayEvent} options={{ headerShown: false }}/>
               <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
+              <Stack.Screen name="Calendar" component={Calendar} options={{ headerShown: false }}/> 
             </Stack.Navigator>
           </NavigationContainer>
         </DataContextProvider>

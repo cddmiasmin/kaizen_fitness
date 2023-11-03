@@ -9,7 +9,7 @@ import { monthsOfTheYear } from '../../services/monthsOfTheYear';
 import { onlinePlataforms } from '../../services/onlinePlataforms';
 import { grayText } from '../../colors/colors';
 
-export default function EventCard({ data }) {
+export default function EventCard({ data, orientation }) {
 
     const navigation = useNavigation();
 
@@ -35,7 +35,7 @@ export default function EventCard({ data }) {
 
     return (
         <TouchableOpacity 
-            style={[styles.container]}
+            style={[styles.container, { width: orientation === 'vertical' ? '100%' : 260}]}
             onPress={() => navigation.navigate('DisplayEvent', { data: data })}
         >
             <View style={styles.wallpaper}>
@@ -64,27 +64,29 @@ export default function EventCard({ data }) {
                     {data.name}
                 </Text>
                 <View style={styles.information}>
-                    <View style={styles.info}>
-                        <Icon 
-                            name={data.modality === 'Online' ? 'monitor-shimmer' : 'account-group'} 
-                            size={18} 
-                            color={color} 
-                        />
-                        <Text style={{ color: grayText }}>{data.modality}</Text>
-                    </View>
-                    <View style={styles.info}>
-                        <Icon 
-                            name="timer" 
-                            size={18} 
-                            color={color} 
-                        />
-                        <Text style={{ color: grayText }}>
-                            {
-                                data.datatime.getDate() + ' ' + monthsOfTheYear[data.datatime.getMonth()] + ' ' + (data.datatime.getFullYear() === nowDate.getFullYear() ? '' : data.datatime.getFullYear())
-                                + ' - '
-                                + data.datatime.getHours() + 'h'+ (data.datatime.getMinutes() === 0 ? '' : data.datatime.getMinutes())
-                            }
-                        </Text>
+                    <View style={{ justifyContent: 'center', flexDirection: 'row', width: '100%', gap: 5}}>
+                        <View style={styles.info}>
+                            <Icon 
+                                name={data.modality === 'Online' ? 'monitor-shimmer' : 'account-group'} 
+                                size={18} 
+                                color={color} 
+                            />
+                            <Text style={{ color: grayText }}>{data.modality}</Text>
+                        </View>
+                        <View style={styles.info}>
+                            <Icon 
+                                name="timer" 
+                                size={18} 
+                                color={color} 
+                            />
+                            <Text style={{ color: grayText }}>
+                                {
+                                    data.datatime.getDate() + ' ' + monthsOfTheYear[data.datatime.getMonth()] + ' ' + (data.datatime.getFullYear() === nowDate.getFullYear() ? '' : data.datatime.getFullYear())
+                                    + ' - '
+                                    + data.datatime.getHours() + 'h'+ (data.datatime.getMinutes() === 0 ? '' : data.datatime.getMinutes())
+                                }
+                            </Text>
+                        </View>
                     </View>
                     <View style={styles.info}>
                         <Icon 
@@ -108,7 +110,7 @@ export default function EventCard({ data }) {
 
 const styles = StyleSheet.create({
     container : {
-        width: 260,
+
         height: 270,
         borderRadius: 5,
         overflow: 'hidden',
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
     },
     information: {
         paddingTop: 5,
-        flexDirection: 'row',
+        flexDirection: 'column',
         gap: 5,
         width: '100%',
         justifyContent: 'center',

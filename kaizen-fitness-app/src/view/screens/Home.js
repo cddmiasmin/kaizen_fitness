@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
-
-import { StyleSheet, 
+import { 
+  StyleSheet, 
   Text, View,
   TouchableOpacity,
   ScrollView
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -13,10 +14,10 @@ import { mainColor } from '../../colors/colors';
 import { topics } from '../../services/availableServices';
 
 import { ColorContext } from '../../contexts/ColorContext';
-import Category from '../components/Categories/Category';
-import { useNavigation } from '@react-navigation/native';
-import EventCard from '../components/EventCard';
+
 import Footer from '../components/Footer';
+import EventCard from '../components/EventCard';
+import Category from '../components/Categories/Category';
 
 export default function Home() {
 
@@ -55,12 +56,12 @@ export default function Home() {
     styleStatusBar: 'light',
     wallpaper: 'https://images.unsplash.com/photo-1522543558187-768b6df7c25c?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     name: "Semana da Saúde Feminina",
-    datatime: new Date(2024, 0, 2, 10, 0),
+    datatime: new Date(2024, 0, 2, 10, 30),
     topics: ["Saúde Pública", "Saúde Feminina"],
     modality: "Presencial",
     address: "Rua Frei João, 123",
-    city: "São Paulo",
-    state: "SP",
+    city: "Rio GRande do Norte",
+    state: "RN",
     latitude: -22.90956,
     longitude: -43.17632,
     organizer: {
@@ -90,7 +91,7 @@ export default function Home() {
       { photo: ''},
       { photo: ''},
       { photo: ''},
-  ]
+    ]
   }
 
   return (
@@ -107,7 +108,7 @@ export default function Home() {
             outlineColor={'white'}
             activeOutlineColor={color}
             textColor={colorTextSearch}
-            style={{ backgroundColor: mainColor, marginTop: 55 }}
+            style={{ backgroundColor: mainColor, marginTop: 50 }}
             theme={{
               colors: {
                   onSurfaceVariant: 'white'
@@ -148,8 +149,8 @@ export default function Home() {
                 </Text>
                 <ScrollView horizontal={true}>
                   <View style={styles.cardContainerUpcoming}>
-                      <EventCard data={inPersonEvent}/>
-                      <EventCard data={eventOnline}/>
+                      <EventCard data={inPersonEvent} orientation={'horizontal'}/>
+                      <EventCard data={eventOnline}   orientation={'horizontal'}/>
                       {/* <EventCard data={search}/>
                       <EventCard data={search}/> */}
                   </View>
@@ -159,11 +160,10 @@ export default function Home() {
                 <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>
                   Eventos Futuros
                 </Text>       
-                {/* <View style={styles.cardContainerNearby}>
-                    <EventCard data={search}/>
-                    <EventCard data={search}/>
-                    <EventCard data={search}/>
-                </View> */}
+                <View style={styles.cardContainerNearby}>
+                    <EventCard data={eventOnline} orientation={'vertical'}/>
+                    <EventCard data={inPersonEvent} orientation={'vertical'}/>
+                </View>
             </View>
           </View>
         </ScrollView>
@@ -176,8 +176,8 @@ const styles =  StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: mainColor,
-      paddingLeft: '8%',
-      paddingRight: '8%',
+      paddingLeft: '6%',
+      paddingRight: '6%',
     },
     home: {
       flexDirection: 'column',
