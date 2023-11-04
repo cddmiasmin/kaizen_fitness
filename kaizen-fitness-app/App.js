@@ -39,7 +39,7 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('SignIn');
+  const [route, setRoute] = useState('SignUp');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState('');
