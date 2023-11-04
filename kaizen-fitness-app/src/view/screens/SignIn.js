@@ -2,17 +2,17 @@ import { useContext, useState } from 'react';
 import { View, 
     StyleSheet, 
     Text, 
-    TouchableOpacity, 
-    TextInput,  
+    TouchableOpacity,   
     KeyboardAvoidingView,
-    ScrollView
+    Image,
 } from 'react-native';
+import { TextInput, Snackbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { StatusBar } from 'expo-status-bar';
-import { AntDesign } from '@expo/vector-icons';
 
-import { mainColor } from '../../colors/colors';
+import { error, grayText, mainColor, success } from '../../colors/colors';
+
 import { ColorContext } from '../../contexts/ColorContext';
 
 import UserController from '../../controller/UserController';
@@ -21,6 +21,14 @@ export default function SignIn() {
 
     const [email, setEmail] = useState('florence.welch@hotmail.com');
     const [password, setPassword] = useState('123456');
+
+    const [colorTextPassword, setColorTextPassword] = useState(color);
+    const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+    const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+    const [messageSnackBar, setMessageSnackbar] = useState('iasmin');
+
+    const [signInResult, setSignInResult] = useState(true);
   
     const navigation = useNavigation();
 
@@ -29,144 +37,216 @@ export default function SignIn() {
     const {
       color
     } = useContext(ColorContext);
+
+    const makeUserSignIn = async () => {
+      const response = await userController.signIn(email, password);
+
+      setSignInResult(response.result);
+      setMessageSnackbar(response.message);
+      setVisibleSnackbar(true)
+
+      if(signInResult) navigation.navigate('Home');
+
+    }
    
     return (
-    <ScrollView style={styles.scroll}>
       <View style={styles.container}>
         <StatusBar style="light" />
-        <View style={styles.containerTexts}>
-          <Text style={styles.title}>Bem Vindo!</Text>
-          <Text style={styles.subtitle}>Acesse sua conta</Text>
-        </View>
-        <TouchableOpacity onPress={() => userController.signInGoogle()} style={[styles.google, { backgroundColor: color }]}>
-          <AntDesign name="google" size={20} color="white" />
-        </TouchableOpacity >
-        <Text style={styles.info}>ou acesse através de seu e-mail</Text>
-        <KeyboardAvoidingView style={styles.containerInput}>
-          <Text style={[styles.span, { color: color }]}>Email</Text>
-          <View style={styles.inputComponent}>
-            <TextInput
-                style={styles.input}
-                underlineColorAndroid="transparent"
-                onChangeText={(text) => setEmail(text)}
-                value={email}
-            />
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Login</Text>
+            <View style={[styles.headerLine,{ backgroundColor: color }]} />
           </View>
-          <Text style={[styles.span, { color: color, marginTop: 20 }]}>Senha</Text>
-          <View style={styles.inputComponent}>
-            <TextInput
-                style={styles.input}
-                underlineColorAndroid="transparent"
-                onChangeText={(text) => setPassword(text)}
-                value={password}
-            />
+          <View style={styles.body}>
+            <KeyboardAvoidingView style={styles.keyboardArea}>
+              <View style={styles.containerTextInput}>
+                <View style={styles.textInput}>
+                  <Text style={{color: 'white', fontWeight: 'bold'}}>Email</Text>
+                  <TextInput
+                    mode='flat'
+                    label=''
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
+                    underlineColor={'white'}
+                    activeUnderlineColor={color}
+                    textColor={grayText}
+                    editable={true}
+                    style={
+                      { backgroundColor: mainColor , width: 350, height: 35}
+                    }
+                    theme={{
+                      colors: {
+                          onSurfaceVariant: 'white'
+                      }
+                    }}
+                  />
+                </View>
+                <View style={styles.textInput}>
+                  <Text style={{color: 'white', fontWeight: 'bold'}}>Senha</Text>
+                  <TextInput
+                    mode='flat'
+                    label=''
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
+                    underlineColor={'white'}
+                    activeUnderlineColor={color}
+                    textColor={grayText}
+                    editable={true}
+                    style={
+                      { backgroundColor: mainColor , width: 350, height: 35}
+                    }
+                    theme={{
+                      colors: {
+                          onSurfaceVariant: 'white'
+                      }
+                    }}
+                    onFocus={() => setColorTextPassword(color)}
+                    onBlur={() => setColorTextPassword(grayText)}
+                    secureTextEntry={secureTextEntry}
+                    right={
+                      <TextInput.Icon 
+                        icon={secureTextEntry === true ? 'eye' : 'eye-off'} 
+                        color={colorTextPassword}
+                        onPress={() => setSecureTextEntry(!secureTextEntry)}
+                      />
+                    }
+                  />
+                </View>
+    
+              </View>
+              <TouchableOpacity 
+                style={styles.forgotPassword}
+                onPress={() => console.log('Amém')}
+              >
+                <Text style={{color: color, fontWeight: 'bold'}}>Esqueceu a senha?</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.signIn, { backgroundColor: color }]}
+                onPress={() => makeUserSignIn()}
+              >
+                <Text style={{color: 'white', fontWeight: 'bold'}}>Entrar</Text>
+              </TouchableOpacity>
+            </KeyboardAvoidingView>
+            <TouchableOpacity 
+                style={styles.newUser}
+                onPress={() => navigation.navigate('SignUp')}
+            >
+                <Text style={{color: grayText, fontWeight: 'normal'}}>Novo usuário?</Text>
+                <Text style={{color: color, fontWeight: 'bold'}}>Inscreva-se</Text>
+            </TouchableOpacity>
+            <View style={styles.continue}>
+              <Text style={{color: grayText, fontWeight: 'normal'}}>Ou continue com</Text>
+              <TouchableOpacity 
+                style={styles.google}
+                // onPress={() => setVisibleSnackbar(true)}
+              >
+                <Image
+                  style={{ width: 30, height: 30}} 
+                  source={require('../../assets/SignIn/icon_google-logo.png') }
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </KeyboardAvoidingView>
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={async () => {
-            await userController.signIn(email, password);
-            navigation.navigate('Home');
-
-          }} style={[styles.login, { backgroundColor: color }]}>
-            <Text style={styles.titleBotao}>Acessar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={styles.register}>
-            <Text style={{ color: 'white'}}>Não possui uma conta? </Text>
-            <Text style={{ color: 'white'}}>Cadastre-se</Text>
-          </TouchableOpacity>
-        </View>
+          <Snackbar
+            visible={visibleSnackbar}
+            onDismiss={() => setVisibleSnackbar(false)}
+            duration={3000}
+            action={{
+              label: 'Ok',
+              textColor: signInResult === true ? 'white' : 'black',
+              onPress: () => {
+                setVisibleSnackbar(false);
+              },
+            }}
+            style={[styles.snackbar, signInResult === true ? styles.snackbarSucess : styles.snackbarError]}
+          >
+            <Text style={{ color: signInResult === true ? 'white' : 'black'}}>
+              {messageSnackBar}
+            </Text>
+          </Snackbar>
       </View>
-    </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
-    scroll: {
-        flex: 1,
-        backgroundColor: mainColor,
-        paddingLeft: '8%',
-        paddingRight: '8%',
-        paddingTop: '5%',
-    },
     container: {
+      flex: 1,
+      backgroundColor: mainColor,
+      paddingLeft: '8%',
+      paddingRight: '8%',
+      paddingTop: '5%',
       justifyContent: 'star',
       alignItems: 'center',
     },
-    containerTexts: {
+    header: {
+      marginTop: 25,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    headerTitle: {
+      color: 'white',
+      fontWeight: 'bold',
+      fontSize: 16,
+      marginBottom: 15
+    },
+    headerLine: {
+      width: 400,
+      height: 5
+    },
+    body: {
+      marginTop: 25,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    keyboardArea:{
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    containerTextInput: {
+      width: '100%',
       flexDirection: 'column',
-      gap: 4,
-      marginTop: '10%',
+      gap: 20
     },
-    title: {
-      color: 'white',
-      fontSize: 32,
-      fontWeight: 'bold'
-    },
-    subtitle: {
-      fontSize: 12,
-      color: 'white'
-    }, 
-    google: {
-      marginTop: '15%',
-      width: 50,
-      height: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 50
-    },
-    info: {
-      color: 'white',
-      fontSize: 14,
-      marginTop: '10%',
-      marginBottom: '10%',
-      textAlign: 'center'
-    }, 
-    containerInput: {
-      width: '100%'
-    },
-    inputComponent: {
-      width: '100%',
-      height: 45,
-      backgroundColor: 'white',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 10
-    },
-    input: {
-      width: '95%',
-      height: 35,
-      backgroundColor: 'white',
-    },
-    span: {
-      fontWeight: 'bold',
-      marginBottom: 5
-    },
-    footer: {
-      marginTop: '65%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%'
-    },
-    login: {
-      width: '100%',
-      height: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 15
-    },
-    register: {
-      width: '100%',
-      flexDirection: 'row',
-      gap: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 15,
+    forgotPassword: {
       marginTop: 15,
+      marginBottom: 40,
+      alignSelf: 'flex-start'
     },
-    titleButton: {
-      fontWeight: 'bold',
-      color: 'white',
+    signIn: {
+      width: 350,
+      height: 40,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 5
     },
-  });
+    newUser: {
+      marginTop: 30,
+      flexDirection: 'row',
+      gap: 2.5
+    }, 
+    continue: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 45,
+      flexDirection: 'column',
+      gap: 15
+    },
+    google: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 45,
+      height: 45,
+      borderWidth: 1,
+      borderColor: 'white',
+      borderRadius: 5
+    },
+    snackbar: {
+      width: 350,
+      alignSelf: 'center',
+    },
+    snackbarSucess: {
+      backgroundColor: success,
+    },
+    snackbarError: {
+      backgroundColor: error,
+    }
+});

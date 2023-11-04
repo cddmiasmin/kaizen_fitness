@@ -12,15 +12,16 @@ class UserController {
         return await this.userModal.signIn(email, password);
     }
     
-    signUp = (email, password) => this.userModal.signUp(email, password);
+    signUp = async (email, password) => {
+        return this.userModal.signUp(email, password);
+    }
     
-
-    signOut = () => this.userModal.signOut();
+    signOut = async () => {
+        return this.userModal.signOut();
+    }
     
-
-    signInGoogle = () => this.userModal.signInGoogle();
+    signInGoogle = async () => this.userModal.signInGoogle();
     
-
 }
 
 export default UserController;

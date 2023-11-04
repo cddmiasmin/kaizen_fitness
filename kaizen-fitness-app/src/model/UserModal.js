@@ -9,7 +9,7 @@ class UserModal {
 
     hasFullResgistration = async () => {
 
-        const idUser = await auth().currentUser.uid;
+        const idUser = auth().currentUser.uid;
 
         const professional = await this.professionalController.getProfessional(idUser);
         const consumer = await firestore().collection('UserConsumer').doc(idUser).get();
@@ -24,44 +24,51 @@ class UserModal {
     
     }
 
-    signIn = (email, password) => {
-        auth()
-        .signInWithEmailAndPassword(email, password)
-        .then((success) => {
-          console.log('User account created & signed in!', success);
-          return true;
-        })
-        .catch(error => {
-
-          if (error.code === 'auth/invalid-login') console.log('Endereço de e-mail ou senha incorretos');
-          else console.log(error.code, error)
-  
-        });
+    signIn = async (email, password) => {
+        const response = await auth()
+                                .signInWithEmailAndPassword(email, password)
+                                .then(() => {
+                                    return { result: true, message: 'Login bem-sucedido. Bem-vindo de volta!'}
+                                })
+                                .catch(error => {
+                                    if (error.code === 'auth/invalid-login')
+                                        return { result: false, message: 'Endereço de e-mail ou senha incorretos'} 
+                                    else
+                                        return { result: false, message: error.code + ': ' + error}
+                                });
+        return response;
     }
 
-    signUp = (email, password) => {
-        auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(() => {
-            console.log('User account created & signed in!');
-        })
-        .catch(error => {
-            if (error.code === 'auth/email-already-in-use') {
-            console.log('That email address is already in use!');
-            }
+    signUp = async (email, password) => {
+        const response = await auth()
+                                .createUserWithEmailAndPassword(email, password)
+                                .then(() => {
+                                    return { result: true, message: 'Cadastro concluído com sucesso. Obrigado por se juntar a nós!'}
+                                })
+                                .catch(error => {
+                                    if (error.code === 'auth/email-already-in-use') {
+                                        return { result: false, message: 'Esse endereço de email já esta em uso!'}
+                                    }
 
-            if (error.code === 'auth/invalid-email') {
-            console.log('That email address is invalid!');
-            }
+                                    if (error.code === 'auth/invalid-email') {
+                                        return { result: false, message: 'Esse endereço de e-mail é inválido!'}
+                                    }
 
-            console.error(error);
-        });
+                                    return { result: false, message: error.code + ': ' + error }
+                                });
+        return response;
     }
 
-    signOut = () => {
-        auth()
-        .signOut()
-        .then(() => console.log('User signed out!'));
+    signOut = async () => {
+        const response = await auth()
+                                .signOut()
+                                .then(() => {
+                                    return { result: true, message: 'Cadastro concluído com sucesso. Obrigado por se juntar a nós!'}
+                                })
+                                .catch(error => {
+                                    return { result: false, message: error.code + ': ' + error }
+                                })
+        return response;
     }
 
     signInGoogle = async () => {
