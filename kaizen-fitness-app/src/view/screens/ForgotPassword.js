@@ -36,14 +36,14 @@ export default function ForgotPassword() {
       color
     } = useContext(ColorContext);
 
-    const makeUserSignIn = async () => {
-    //   const response = await userController.signIn(email, password);
+    const forgotPassword = async () => {
+      const response = await userController.forgotPassword(email);
 
-    //   setSignInResult(response.result);
-    //   setMessageSnackbar(response.message);
-    //   setVisibleSnackbar(true)
+      setForgotPasswordResult(response.result);
+      setMessageSnackbar(response.message);
+      setVisibleSnackbar(true)
 
-    //   if(signInResult) navigation.navigate('Home');
+      //if(forgotPasswordResult) navigation.navigate('Home');
 
     }
    
@@ -94,7 +94,7 @@ export default function ForgotPassword() {
 
               <TouchableOpacity 
                 style={[styles.forgotPassword, { backgroundColor: email.length === 0 ? '#a6a6a6' : color }]}
-                // onPress={() => makeUserSignIn()}
+                onPress={() => forgotPassword()}
                 activeOpacity={email.length === 0 ? 1 : 0.2}
               >
                 <Text style={{color: email.length === 0 ?'#666666' : 'white', fontWeight: 'bold'}}>

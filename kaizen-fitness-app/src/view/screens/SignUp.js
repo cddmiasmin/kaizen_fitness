@@ -19,9 +19,10 @@ import UserController from '../../controller/UserController';
 
 export default function SignUp() {
 
-    const [name, setName] = useState('Florence');
-    const [familyName, setFamilyName] = useState('Welch');
-    const [email, setEmail] = useState('florence.welch@hotmail.com');
+    const [photo, setPhoto] = useState('')
+    const [name, setName] = useState('Iasmin');
+    const [familyName, setFamilyName] = useState('Dias');
+    const [email, setEmail] = useState('iasmin.dias87@gmail.com');
     const [password, setPassword] = useState('123456');
     const [confirmPassword, setConfirmPassword] = useState('123456');
 
@@ -44,13 +45,13 @@ export default function SignUp() {
     } = useContext(ColorContext);
 
     const makeUserSignUp = async () => {
-      // const response = await userController.signIn(email, password);
+      const response = await userController.signUp(photo, name, familyName, email, password);
 
-      // setSignUpResult(response.result);
-      // setMessageSnackbar(response.message);
-      // setVisibleSnackbar(true)
+      setSignUpResult(response.result);
+      setMessageSnackbar(response.message);
+      setVisibleSnackbar(true)
 
-      // if(signUpResult) navigation.navigate('Home');
+      //if(signUpResult) navigation.navigate('Home');
 
     }
    

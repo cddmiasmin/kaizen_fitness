@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext();
 
-export const UserContextProvider = ({ userAux , children }) => {
+export const UserContextProvider = ({ userAuthData , children }) => {
 
     const [user, setUser] = useState({
         calendar: [],
@@ -22,17 +22,17 @@ export const UserContextProvider = ({ userAux , children }) => {
         state: "London",
       });
     const [userType, setUserType] = useState('professional');
+    const [userBlockedFromContent, setUserBlockedFromContent] = useState(true);
 
-    console.log('User - I', user, userType);
+    useEffect(() => {
+        if(userAuthData) {
+            
+            if(userAuthData.emailVerified == false) setUserBlockedFromContent(true);
+           
+        }
+    }, [userAuthData]);
 
-    // useEffect(() => {
-    //     if(userAux) {
-    //         if(userAux.data) setUser(userAux.data);
-    //         if(userAux.userType) setUserType(userAux.userType);
-    //     }
-    // }, [userAux]);
-
-    console.log('User - F', user, userType);
+    console.log('UserContext', user, userType, userBlockedFromContent);
 
     return (
         <UserContext.Provider

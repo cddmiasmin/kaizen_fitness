@@ -7,7 +7,7 @@ class UserModal {
 
     professionalController = new ProfessionalController();
 
-    hasFullResgistration = async () => {
+    userHasAProfile = async () => {
 
         const idUser = auth().currentUser.uid;
 
@@ -59,6 +59,19 @@ class UserModal {
         return response;
     }
 
+    updateProfile = async ( update ) => {
+        const response = await auth()
+                                .currentUser
+                                .updateProfile(update)
+                                .then(() => {
+                                    return true;
+                                })
+                                .catch(() => {
+                                    return false;
+                                })
+        return response;
+    }
+
     signOut = async () => {
         const response = await auth()
                                 .signOut()
@@ -91,6 +104,22 @@ class UserModal {
         .catch((error) => {
           console.log(error)
         });
+    }
+
+    forgotPassword = async (email) => {
+        const response = auth()
+                            .sendPasswordResetEmail(email)
+                            .then(() => {
+                                return { result: true, message: 'E-mail de recuperação enviado!'}
+                            })
+                            .catch( error => {
+                                if (error.code === 'auth/invalid-email') 
+                                    return { result: false, message: 'Esse endereço de e-mail é inválido!'}
+                                
+                        
+                                return { result: false, message: error.code + ': ' + error }
+                            });
+        return response;
     }
 }
 

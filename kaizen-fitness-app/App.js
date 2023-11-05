@@ -1,67 +1,54 @@
-import React, { useState, useEffect } from 'react';
-
+import { useState, useEffect } from 'react';
+import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Test       from './src/view/screens/Test';
-import Home1       from './src/view/screens/Home1';
-import Profile    from './src/view/screens/Profile';
-import Topics     from './src/view/screens/Topics';
-import MyData     from './src/view/screens/MyData';
-import Services   from './src/view/screens/Services';
-import SignIn     from './src/view/screens/SignIn';
-import SignUp     from './src/view/screens/SignUp';
-import UserType   from './src/view/screens/UserType';
-import Register   from './src/view/screens/Register';
-import MyAccount  from './src/view/screens/MyAccount';
-import Categories from './src/view/screens/Categories';
-import UpdateEvent    from './src/view/screens/UpdateEvent';
-import DisplayEvent     from './src/view/screens/DisplayEvent';
+import Home             from './src/view/screens/Home';
+import Test             from './src/view/screens/Test';
+import Home1            from './src/view/screens/Home1';
+import Topics           from './src/view/screens/Topics';
+import MyData           from './src/view/screens/MyData';
+import SignIn           from './src/view/screens/SignIn';
+import SignUp           from './src/view/screens/SignUp';
+import Profile          from './src/view/screens/Profile';
+import Services         from './src/view/screens/Services';
+import UserType         from './src/view/screens/UserType';
+import Register         from './src/view/screens/Register';
+import Calendar         from './src/view/screens/Calendar';
+import MyAccount        from './src/view/screens/MyAccount';
+import Categories       from './src/view/screens/Categories';
 import KindOfEvent      from './src/view/screens/KindOfEvent';
+import UpdateEvent      from './src/view/screens/UpdateEvent';
+import DisplayEvent     from './src/view/screens/DisplayEvent';
 import RegisterEvent    from './src/view/screens/RegisterEvent';
+import ForgotPassword   from './src/view/screens/ForgotPassword';
 import EmailValidation  from './src/view/screens/EmailValidation';
-import Home from './src/view/screens/Home';
 
 import { UserContextProvider } from './src/contexts/UserContext';
-import { ColorContextProvider } from './src/contexts/ColorContext';
 import { DataContextProvider } from './src/contexts/DataContext';
-
-import UserController from './src/controller/UserController';
-
-import auth from '@react-native-firebase/auth';
+import { ColorContextProvider } from './src/contexts/ColorContext';
 
 import 'expo-dev-client';
-import Calendar from './src/view/screens/Calendar';
-import ForgotPassword from './src/view/screens/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const userController = new UserController();
-
-  const [route, setRoute] = useState('ForgotPassword');
-  const [hasRegister, setHasRegister] = useState(false)
+  const [route, setRoute] = useState('Register');
   const [initializing, setInitializing] = useState(true);
-  const [userAux, setUserAux] = useState('');
-  const [stepNum, setStepNum] = useState(3);
+  const [userAuthData, setUserAuthData] = useState('');
+  const [stepNum, setStepNum] = useState(1);
 
-  // const onAuthStateChanged = (user) => {
+  const onAuthStateChanged = (user) => {
 
-  //   if (initializing) setInitializing(false);
+    setUserAuthData(user);
+    if (initializing) setInitializing(false);
+    console.log(user);
+  }
 
-  //   if(user !== null) {
-
-  //     const getUser = async () => {
-  //        var response = await userController.hasFullResgistration();
-  //        if(response !== false){
-  //         setUserAux(response);
-  //        }
-  //     }
-
-  //     getUser();
-
-  //   } 
+  // const WhatWillBeTheInitialRouteName = () => {
+  //   if(userAuthData !== null) setRoute('Home'); 
+  //   else setRoute('SignIn');
   // }
 
   // useEffect(() => {
@@ -69,10 +56,12 @@ export default function App() {
   //   return subscriber; // unsubscribe on unmount
   // }, []);
 
+  // useEffect(() => WhatWillBeTheInitialRouteName(), [userAuthData]);
+
   // if (initializing) return null;
 
   return (
-    <UserContextProvider userAux={userAux}>
+    <UserContextProvider userAuthData={userAuthData}>
       <ColorContextProvider>
         <DataContextProvider stepNum={stepNum} setStepNum={setStepNum}>
           <NavigationContainer>
