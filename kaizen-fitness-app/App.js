@@ -32,6 +32,7 @@ import auth from '@react-native-firebase/auth';
 
 import 'expo-dev-client';
 import Calendar from './src/view/screens/Calendar';
+import ForgotPassword from './src/view/screens/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,7 +40,7 @@ export default function App() {
 
   const userController = new UserController();
 
-  const [route, setRoute] = useState('SignUp');
+  const [route, setRoute] = useState('ForgotPassword');
   const [hasRegister, setHasRegister] = useState(false)
   const [initializing, setInitializing] = useState(true);
   const [userAux, setUserAux] = useState('');
@@ -95,6 +96,7 @@ export default function App() {
               <Stack.Screen name="DisplayEvent" component={DisplayEvent} options={{ headerShown: false }}/>
               <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
               <Stack.Screen name="Calendar" component={Calendar} options={{ headerShown: false }}/> 
+              <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }}/> 
             </Stack.Navigator>
           </NavigationContainer>
         </DataContextProvider>

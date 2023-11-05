@@ -33,7 +33,7 @@ export default function SignUp() {
     const [visibleSnackbar, setVisibleSnackbar] = useState(false);
     const [messageSnackBar, setMessageSnackbar] = useState('iasmin');
 
-    const [signInResult, setSignInResult] = useState(true);
+    const [signUpResult, setSignUpResult] = useState(true);
   
     const navigation = useNavigation();
 
@@ -46,11 +46,11 @@ export default function SignUp() {
     const makeUserSignUp = async () => {
       // const response = await userController.signIn(email, password);
 
-      // setSignInResult(response.result);
+      // setSignUpResult(response.result);
       // setMessageSnackbar(response.message);
       // setVisibleSnackbar(true)
 
-      // if(signInResult) navigation.navigate('Home');
+      // if(signUpResult) navigation.navigate('Home');
 
     }
    
@@ -239,14 +239,14 @@ export default function SignUp() {
             duration={3000}
             action={{
               label: 'Ok',
-              textColor: signInResult === true ? 'white' : 'black',
+              textColor: signUpResult === true ? 'white' : 'black',
               onPress: () => {
                 setVisibleSnackbar(false);
               },
             }}
-            style={[styles.snackbar, signInResult === true ? styles.snackbarSucess : styles.snackbarError]}
+            style={[styles.snackbar, signUpResult === true ? styles.snackbarSucess : styles.snackbarError]}
           >
-            <Text style={{ color: signInResult === true ? 'white' : 'black'}}>
+            <Text style={{ color: signUpResult === true ? 'white' : 'black'}}>
               {messageSnackBar}
             </Text>
           </Snackbar>

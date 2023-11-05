@@ -26,7 +26,7 @@ export default function SignIn() {
     const [secureTextEntry, setSecureTextEntry] = useState(true);
 
     const [visibleSnackbar, setVisibleSnackbar] = useState(false);
-    const [messageSnackBar, setMessageSnackbar] = useState('iasmin');
+    const [messageSnackBar, setMessageSnackbar] = useState('');
 
     const [signInResult, setSignInResult] = useState(true);
   
@@ -111,11 +111,10 @@ export default function SignIn() {
                     }
                   />
                 </View>
-    
               </View>
               <TouchableOpacity 
                 style={styles.forgotPassword}
-                onPress={() => console.log('Amém')}
+                onPress={() => navigation.navigate('ForgotPassword')}
               >
                 <Text style={{color: color, fontWeight: 'bold'}}>Esqueceu a senha?</Text>
               </TouchableOpacity>
