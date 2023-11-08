@@ -26,7 +26,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const [longitude, setLongitude] = useState('');
     const [height, setHeight] = useState('');
     const [weight, setWeight] = useState('');
-    const [topics, setTopics] = useState(['Treinamento']);
+    const [topics, setTopics] = useState([]);
     const [kindOfPerson, setKindOfPerson] = useState('PF');
 
     const clearData = () => {
@@ -69,59 +69,22 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     }
 
     useEffect(() => {
-
-        const registerUser = async () => {
-
-            if(kindOfPerson === 'PF') {
-
-                await setData({
-                    "name": name,
-                    "familyName": familyName,
-                    "photo": photo,
-                    "dataOfBirth": dataOfBirth,
-                    "state": state,
-                    "city": city,
-                    "latitude": latitude,
-                    "longitude": longitude,
-                    "cpf": document,
-                    "kindOfPerson": kindOfPerson,
-                    "topics": topics,
-                    "mediaSocial": [],
-                    "calendar": []
-                });
-
-            }
-            else await setData({
-                "name": name,
-                "photo": photo,
-                "state": state,
-                "city": city,
-                "latitude": latitude,
-                "longitude": longitude,
-                "cnpj": document,
-                "kindOfPerson": kindOfPerson,
-                "topics": topics,
-                "mediaSocial": [],
-                "calendar": []
-            });
-
-        }
-
-        if(stepNum === 5) registerUser();
-
+        if(stepNum === 5) console.log('a paz', data)
     }, [stepNum]);
 
     useEffect(() => {
-        if(Object.keys(data).length > 0) {
-            console.log("Register", data, typeof data);
-            professionalController.registerProfessional(data);
-        }
+        // if(Object.keys(data).length > 0) {
+        //     console.log("Register", data, typeof data);
+        //     professionalController.registerProfessional(data);
+        // }
+        console.log('data', data);
     }, [data]);
 
     return (
         <DataContext.Provider
             value={{
-                data, clearData, myData,
+                data, setData, 
+                clearData, myData,
                 stepNum, setStepNum,
                 name, setName,
                 familyName, setFamilyName,

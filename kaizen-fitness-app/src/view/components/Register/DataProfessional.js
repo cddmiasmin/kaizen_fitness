@@ -15,12 +15,20 @@ export default function DataProfessional() {
     kindOfPerson, setKindOfPerson,
     document, setDocument,
     stepNum, setStepNum,
+    data, setData
   } = useContext(DataContext);
 
   const { color } = useContext(ColorContext);
 
   function validateData() {
-    setStepNum(stepNum + 1)
+      let dataAux = data;
+      dataAux.kindOfPerson = kindOfPerson;
+      dataAux.document = document;
+
+      console.log('Aux', dataAux);
+
+      setData(dataAux);
+      setStepNum(stepNum + 1);
   }
   
  return (
@@ -51,7 +59,9 @@ export default function DataProfessional() {
         <Text style={[styles.titleInput, { color: color}]}>{kindOfPerson === 'PF' ? 'CPF:' : 'CNPJ:'}</Text>
         <TextInput
           style={styles.input}
+          inputMode={'numeric'}
           underlineColorAndroid="transparent"
+          keyboardType={'number-pad'}
           onChangeText={(text) => setDocument(mask(unMask(text), kindOfPerson === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'))}
           value={document}
         />
@@ -63,7 +73,7 @@ export default function DataProfessional() {
 
 const styles = StyleSheet.create({
   container: {
-      marginTop: 30,
+      marginTop: 15,
       alignItems: 'center',
   },
   title: {

@@ -17,6 +17,7 @@ export default function DataBasicPerson() {
     familyName, setFamilyName,
     dataOfBirth, setDataOfBirth,
     stepNum, setStepNum,
+    data, setData
   } = useContext(DataContext);
 
   const { color } = useContext(ColorContext);
@@ -37,10 +38,20 @@ export default function DataBasicPerson() {
   };
 
   function validateData() {
+    let dataAux = data;
+
+    dataAux.photo = photo;
+    dataAux.name = name;
+    dataAux.familyName = familyName;
+    dataAux.dataOfBirth = new Date(dataOfBirth);
+
+    console.log('Aux', dataAux);
+
+    setData(dataAux);
     setStepNum(stepNum + 1);
   }
 
-  useEffect(() => setDataOfBirth( new Date(maximumDateOf18YearsAgo())), []);
+  useEffect(() => setDataOfBirth(new Date(maximumDateOf18YearsAgo())), []);
 
   return (
     <View style={styles.container}>
@@ -50,6 +61,7 @@ export default function DataBasicPerson() {
         <Text style={[styles.titleInput, { color: color }]}>Nome</Text>
         <TextInput
           style={styles.input}
+          inputMode={'text'}
           underlineColorAndroid="transparent"
           onChangeText={(text) => setName(text)}
           value={name}
@@ -59,6 +71,7 @@ export default function DataBasicPerson() {
         <Text style={[styles.titleInput, { color: color } ]}>Sobrenome</Text>
         <TextInput
           style={styles.input}
+          inputMode={'text'}
           underlineColorAndroid="transparent"
           onChangeText={(text) => setFamilyName(text)}
           value={familyName}
@@ -96,8 +109,8 @@ export default function DataBasicPerson() {
 
 const styles = StyleSheet.create({
   container: {
-      marginTop: 30,
-      alignItems: 'center',
+    marginTop: 15,
+    alignItems: 'center',
   },
   title: {
     fontWeight: 'bold',

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
@@ -6,7 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { mainColor } from '../../colors/colors';
 
 import { UserContext } from './../../contexts/UserContext';
-import { DataContext, DataContextProvider } from './../../contexts/DataContext';
+import { DataContext } from './../../contexts/DataContext';
 
 import Stages                from '../components/Register/Stages';
 import Services              from '../components/Register/Services';
@@ -19,11 +19,9 @@ import DataBasicProfessional from '../components/Register/DataBasicProfessional'
 export default function Register() {
  
  const { userType } = useContext(UserContext);
-
  const { stepNum } = useContext(DataContext);
 
  return (
-  
       <ScrollView style={styles.container}>
         <StatusBar style='light'/>
           <View style={styles.stepper}>

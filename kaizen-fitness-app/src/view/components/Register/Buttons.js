@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { ColorContext } from '../../../contexts/ColorContext';
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: 'bold',
+        color: 'white',
         fontSize: 12
     }
 });

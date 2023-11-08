@@ -2,9 +2,9 @@ import { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 
 import { DataContext } from '../../../contexts/DataContext';
+import { ColorContext } from '../../../contexts/ColorContext';
 
 import Buttons from './Buttons';
-import { ColorContext } from '../../../contexts/ColorContext';
 
 import * as Location from 'expo-location';
 
@@ -13,10 +13,15 @@ export default function LocationUser() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
+  const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+  const [messageSnackBar, setMessageSnackbar] = useState('');
+  const [errorSnackBar, setErrorSnackBar] = useState(false);
+
   const {
     city, setCity,
     state, setState,
     stepNum, setStepNum,
+    data, setData
   } = useContext(DataContext);
 
   const { color } = useContext(ColorContext);
@@ -48,27 +53,33 @@ export default function LocationUser() {
   //   console.log("Cidade: " + city);
   // }
 
-  const getUserLocation = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
+  // const getUserLocation = async () => {
+  //     let { status } = await Location.requestForegroundPermissionsAsync();
 
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+  //     if (status !== 'granted') {
+  //       setErrorMsg('Permission to access location was denied');
+  //       return;
+  //     }
 
-      let location = await Location.getCurrentPositionAsync({});
-      if(location) setLocation([location.coords.latitude, location.coords.latitude]);
-      console.log(location);
-  }
+  //     let location = await Location.getCurrentPositionAsync({});
+  //     if(location) setLocation([location.coords.latitude, location.coords.latitude]);
+  //     console.log(location);
+  // }
 
   // useEffect(() => {
   //   getAdress();
   // }, [location])
 
   function validateData() {
-    setStepNum(stepNum + 1)
-  }
+    let dataAux = data;
+    dataAux.city = city;
+    dataAux.state = state;
 
+    console.log('Aux', dataAux);
+
+    setData(dataAux);
+    setStepNum(stepNum + 1);
+  }
 
  return (
    <View style={styles.container}>
@@ -76,27 +87,27 @@ export default function LocationUser() {
       <Text style={styles.description}>
         Precisamos da sua localização para recomendar eventos presenciais, procurar pessoas e estabelecimentos.
       </Text>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => getUserLocation()}
         style={styles.permissionButton}
       >
         <Text style={{color: 'white', fontWeight: 'bold'}}>Fornecer minha localização atual</Text>
-      </TouchableOpacity>
-
+      </TouchableOpacity> */}
       <View style={styles.boxInput}>
         <Text style={[styles.titleInput, { color: color}]}>Estado</Text>
         <TextInput
           style={styles.input}
+          inputMode={'text'}
           underlineColorAndroid="transparent"
           onChangeText={(text) => setState(text)}
           value={state}
         />
       </View>
-
       <View style={styles.boxInput}>
         <Text style={[styles.titleInput, { color: color } ]}>Cidade</Text>
         <TextInput
           style={styles.input}
+          inputMode={'text'}
           underlineColorAndroid="transparent"
           onChangeText={(text) => setCity(text)}
           value={city}
@@ -122,7 +133,7 @@ const styles = StyleSheet.create({
   description: {
     color: 'white',
     marginTop: 15,
-    marginBottom: 30,
+    marginBottom: 15,
     textAlign: 'center'
   },
   permissionButton:{
@@ -148,6 +159,6 @@ const styles = StyleSheet.create({
   },
   boxInput: {
     width: '100%',
-    marginTop: 20,
+    marginTop: 15,
   }
 });

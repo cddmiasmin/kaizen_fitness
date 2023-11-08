@@ -1,4 +1,4 @@
-export const availableServices = [
+export const availableTopics = [
     "Nutrição", "Atividade Física", "Esporte", 
     "Fisioterapia", "Reabilitação", "Massagem", "Coaching", "Terapia", 
     "Yoga", "Meditação", "Quiropraxia",
