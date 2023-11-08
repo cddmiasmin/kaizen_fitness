@@ -17,7 +17,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const [name, setName] = useState('');
     const [familyName, setFamilyName] = useState('Welch');
     const [photo, setPhoto] = useState('https://i.pinimg.com/564x/e5/40/87/e5408786edbaf21937f2caa40c0173ac.jpg');
-    const [dataOfBirth, setDataOfBirth] = useState('28/08/1986');
+    const [dataOfBirth, setDataOfBirth] = useState(new Date());
     const [document, setDocument] = useState('123.456.789-00');
     const [city, setCity] = useState('England');
     const [county, setCounty] = useState('');

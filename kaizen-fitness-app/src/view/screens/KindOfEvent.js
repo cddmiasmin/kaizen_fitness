@@ -30,7 +30,7 @@ export default function KindOfEvent() {
    <View style={styles.container}>
         <StatusBar style='light'/>
         <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')} >
+            <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Calendar'})} >
                 <AntDesign name="left" size={20} color="white" />
             </TouchableOpacity>
             <Text style={styles.screen}>Modalidade do Evento</Text>

@@ -21,6 +21,7 @@ import KindOfEvent      from './src/view/screens/KindOfEvent';
 import UpdateEvent      from './src/view/screens/UpdateEvent';
 import DisplayEvent     from './src/view/screens/DisplayEvent';
 import RegisterEvent    from './src/view/screens/RegisterEvent';
+import SearchResults    from './src/view/screens/SearchResults';
 import ForgotPassword   from './src/view/screens/ForgotPassword';
 import EmailValidation  from './src/view/screens/EmailValidation';
 
@@ -34,7 +35,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [route, setRoute] = useState('Register');
+  const [route, setRoute] = useState('Home');
   const [initializing, setInitializing] = useState(true);
   const [userAuthData, setUserAuthData] = useState('');
   const [stepNum, setStepNum] = useState(1);
@@ -86,6 +87,7 @@ export default function App() {
               <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
               <Stack.Screen name="Calendar" component={Calendar} options={{ headerShown: false }}/> 
               <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }}/> 
+              <Stack.Screen name="SearchResults" component={SearchResults} options={{ headerShown: false }}/> 
             </Stack.Navigator>
           </NavigationContainer>
         </DataContextProvider>

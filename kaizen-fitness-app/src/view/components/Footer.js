@@ -13,7 +13,15 @@ const route = useRoute();
 
 const navigation = useNavigation();
 
-const { color } = useContext(ColorContext);
+    const { color } = useContext(ColorContext);
+
+    const consumer = [
+        {key: 'home', route: 'Home', title: 'Home', focusedIcon: 'home-variant', unfocusedIcon: 'home-variant-outline', color: 'black'},
+        {key: 'people', route: 'People', title: 'Pessoas', focusedIcon: 'account-group', unfocusedIcon: 'account-group-outline', color: 'blue'},
+        {key: 'place', route: 'Place', title: 'Locais', focusedIcon: 'store', unfocusedIcon: 'store-outline', color: 'green'},
+        {key: 'calendar', route: 'Calendar', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline', color: 'purple'},
+        {key: 'profile', route: 'Profile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline', color: 'grey'}
+    ]
 
     const bottomTaps = [
         {key: 'home', route: 'Home', title: 'Home', focusedIcon: 'home-variant', unfocusedIcon: 'home-variant-outline', color: 'black'},
@@ -30,7 +38,10 @@ const { color } = useContext(ColorContext);
                 <TouchableOpacity
                     key={`button#${tap.key}`}
                     style={[styles.bottomTaps]}
-                    onPress={() => navigation.navigate(tap.route)}
+                    onPress={() => {
+                        if(tap.route === 'Calendar') navigation.navigate(tap.route, { screen: 'Calendar'});
+                        else navigation.navigate(tap.route);
+                    }}
                 >
                     <Icon 
                         name={route.name === tap.route ? tap.focusedIcon : tap.unfocusedIcon} 

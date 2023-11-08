@@ -5,7 +5,12 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ userAuthData , children }) => {
 
     const [user, setUser] = useState({
-        calendar: [],
+        searchHistory: [
+            { search: 'como perder peso', datatime: new Date(2023, 10, 6, 10, 13) },
+            { search: 'caminhada', datatime: new Date(2023, 2, 15, 10, 13) },
+            { search: 'emagrecer', datatime: new Date(2023, 10, 6, 10, 13) },
+            { search: 'alimentacao', datatime: new Date(2023, 5, 6, 10, 13) },
+        ],
         city: "England",
         document: "123.456.789-00",
         dataOfBirth: "28/08/1986",

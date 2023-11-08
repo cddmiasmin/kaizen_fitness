@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext} from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CalendarStrip from 'react-native-calendar-strip';
 
@@ -24,7 +24,11 @@ export default function Calendar() {
 
     const { userType } = useContext(UserContext);
     const { color } = useContext(ColorContext);
-
+ 
+    const route = useRoute();
+    const navigation = useNavigation();
+    // const screen = route.params.screen;
+    const screen = 'Calendar';
     const data = [
         {
             styleStatusBar: 'light',
@@ -139,11 +143,7 @@ export default function Calendar() {
             ]
         },
     ];
-
-    const route = useRoute();
-    const navigation = useNavigation();
-    const screen = 'Calendar';
-
+    
     const nowDate = new Date();
 
     const [segmentedButtonsValue, setSegmentedButtonsValue] = useState('online');
@@ -254,6 +254,7 @@ export default function Calendar() {
         if(temporaryModalityData.length !== 0) filterDataSameDate();
     }, [temporaryModalityData]);
 
+
     if(onlineModalityData.length === 0 && inPersonModalityData.length === 0)
         return (
             <View style={styles.loading}> 
@@ -343,36 +344,51 @@ export default function Calendar() {
                         </TouchableOpacity>
                     </View>
                 </View>
-                    <View style={styles.body}>
-                        <View style={styles.eventCards}>
-                            <FlatList
-                                style={{ marginBottom: 210 }}
-                                data={segmentedButtonsValue === 'online' ? onlineModalityData : inPersonModalityData}
-                                ItemSeparatorComponent={ItemSeparator}
-                                renderItem={({ item: event }) => 
-                                    <View
-                                        style={styles.eventCard}
-                                    >
-                                        <Text style={styles.eventCardTitle}>
-                                            {
-                                                event.data.getDate() + ' de ' + monthsOfTheYear[event.data.getMonth()] + '. ' + (event.data.getFullYear() === nowDate.getFullYear() ? '' : event.data.getFullYear())
-                                            }
-                                        </Text>
-                                        <View style={styles.eventCardLine} />
-                                        <View style={styles.events}>
-                                            {
-                                                event.objects?.map((event, key) => (
-                                                    <EventCard key={key} data={event} orientation={'vertical'}/>
-                                                ))
-                                            }
-                                        </View>
+                <View style={styles.body}>
+                    <View style={styles.eventCards}>
+                        <FlatList
+                            style={{ marginBottom: 210 }}
+                            data={segmentedButtonsValue === 'online' ? onlineModalityData : inPersonModalityData}
+                            ItemSeparatorComponent={ItemSeparator}
+                            renderItem={({ item: event }) => 
+                                <View
+                                    style={styles.eventCard}
+                                >
+                                    <Text style={styles.eventCardTitle}>
+                                        {
+                                            event.data.getDate() + ' de ' + monthsOfTheYear[event.data.getMonth()] + '. ' + (event.data.getFullYear() === nowDate.getFullYear() ? '' : event.data.getFullYear())
+                                        }
+                                    </Text>
+                                    <View style={styles.eventCardLine} />
+                                    <View style={styles.events}>
+                                        {
+                                            event.objects?.map((event, key) => (
+                                                <EventCard key={key} data={event} orientation={'vertical'}/>
+                                            ))
+                                        }
                                     </View>
-                                }
-                            />   
-                        </View>
+                                </View>
+                            }
+                        />   
                     </View>
+                </View>
+                <View>
+                </View>
                 {
                     screen === 'Calendar' && <Footer />
+                }
+                {
+                    screen === 'Calendar' && userType === 'professional' &&
+                    <View style={styles.registerEvent}> 
+                        <IconButton
+                            icon="calendar-plus"
+                            iconColor={'white'}
+                            mode='contained'
+                            containerColor={color}
+                            size={24}
+                            onPress={() => navigation.navigate('KindOfEvent')}
+                        />
+                    </View>
                 }
             </View>
         );
@@ -464,5 +480,10 @@ const styles = StyleSheet.create({
     },
     separator: {
         marginBottom: 20
+    },
+    registerEvent: {
+        position: 'absolute',
+        bottom: 75,
+        left: 330
     }
 });

@@ -85,11 +85,11 @@ export default function Perfil() {
         </TouchableOpacity>
       ))}
       <Footer/>
-      <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+      <Dialog visible={visible} onDismiss={() => setVisible(false)} style={{ backgroundColor: mainColor }}>
         <Dialog.Icon icon="alert" size={35} color={color}/>
         <Dialog.Title style={{color: color, fontWeight: 'bold', textAlign: 'center'}}>{dialogTitle}</Dialog.Title>
         <Dialog.Content>
-          <Text variant="bodyMedium" style={{textAlign: 'center'}}>{dialogContent}</Text>
+          <Text style={{textAlign: 'center', color: 'white'}}>{dialogContent}</Text>
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={() => setVisible(false)} textColor={color}>Não</Button>

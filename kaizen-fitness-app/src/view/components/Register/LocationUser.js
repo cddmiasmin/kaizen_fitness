@@ -6,12 +6,12 @@ import { DataContext } from '../../../contexts/DataContext';
 import Buttons from './Buttons';
 import { ColorContext } from '../../../contexts/ColorContext';
 
-// import * as Location from 'expo-location';
+import * as Location from 'expo-location';
 
 export default function LocationUser() {
 
-  // const [location, setLocation] = useState(null);
-  // const [errorMsg, setErrorMsg] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const {
     city, setCity,
@@ -48,18 +48,18 @@ export default function LocationUser() {
   //   console.log("Cidade: " + city);
   // }
 
-  // const getUserLocation = async () => {
-  //     let { status } = await Location.requestForegroundPermissionsAsync();
+  const getUserLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
 
-  //     if (status !== 'granted') {
-  //       setErrorMsg('Permission to access location was denied');
-  //       return;
-  //     }
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
 
-  //     let location = await Location.getCurrentPositionAsync({});
-  //     if(location) setLocation([location.coords.latitude, location.coords.latitude]);
-  //     console.log(location);
-  // }
+      let location = await Location.getCurrentPositionAsync({});
+      if(location) setLocation([location.coords.latitude, location.coords.latitude]);
+      console.log(location);
+  }
 
   // useEffect(() => {
   //   getAdress();
@@ -76,12 +76,12 @@ export default function LocationUser() {
       <Text style={styles.description}>
         Precisamos da sua localização para recomendar eventos presenciais, procurar pessoas e estabelecimentos.
       </Text>
-      {/* <TouchableOpacity
+      <TouchableOpacity
         onPress={() => getUserLocation()}
         style={styles.permissionButton}
       >
         <Text style={{color: 'white', fontWeight: 'bold'}}>Fornecer minha localização atual</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
 
       <View style={styles.boxInput}>
         <Text style={[styles.titleInput, { color: color}]}>Estado</Text>

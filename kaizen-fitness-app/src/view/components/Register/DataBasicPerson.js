@@ -1,15 +1,16 @@
-import { useContext } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
 import { DataContext } from '../../../contexts/DataContext';
 import { ColorContext } from '../../../contexts/ColorContext';
 
-import { mask, unMask } from 'remask';
-
 import Buttons from './Buttons';
 
 export default function DataBasicPerson() {
- 
+
+  const [isDateTimePickerActive, setDateTimePicker] = useState(false);
+
   const {
     photo, setPhoto,
     name, setName,
@@ -20,17 +21,33 @@ export default function DataBasicPerson() {
 
   const { color } = useContext(ColorContext);
 
-  function validateData() {
-    setStepNum(stepNum + 1)
+  const maximumDateOf18YearsAgo = () => {
+    const today = new Date();
+    return today.setFullYear(today.getFullYear() - 18);
   }
+
+  const minimumDateOf120YearsAgo = () => {
+    const today = new Date();
+    return today.setFullYear(today.getFullYear() - 120);
+  }
+
+  const onChange = (event, datetime) => {
+    setDataOfBirth(datetime);
+    setDateTimePicker(false);
+  };
+
+  function validateData() {
+    setStepNum(stepNum + 1);
+  }
+
+  useEffect(() => setDataOfBirth( new Date(maximumDateOf18YearsAgo())), []);
 
   return (
     <View style={styles.container}>
       <Text style={[styles.title, { color: color}]}>Dados Básicos</Text>
-      <Text style={styles.description}>Preencha os campos abaixo para continuar com o processo de cadastro</Text>
-      
+      <Text style={styles.description}>Preencha os campos abaixo com as informações solicitadas:</Text>
       <View style={styles.boxInput}>
-        <Text style={[styles.titleInput, { color: color}]}>Nome</Text>
+        <Text style={[styles.titleInput, { color: color }]}>Nome</Text>
         <TextInput
           style={styles.input}
           underlineColorAndroid="transparent"
@@ -38,7 +55,6 @@ export default function DataBasicPerson() {
           value={name}
         />
       </View>
-
       <View style={styles.boxInput}>
         <Text style={[styles.titleInput, { color: color } ]}>Sobrenome</Text>
         <TextInput
@@ -48,16 +64,31 @@ export default function DataBasicPerson() {
           value={familyName}
         />
       </View>
-
       <View style={styles.boxInput}>
-        <Text style={[styles.titleInput, { color: color}]}>Data de nascimento</Text>
-        <TextInput
-          style={styles.input}
-          underlineColorAndroid="transparent"
-          onChangeText={(text) => setDataOfBirth(mask(unMask(text), ['99/99/9999']))}
-          value={dataOfBirth}
-        />
+        <Text style={[styles.titleInput, { color: color }]}>Data de nascimento</Text>                               
+        <TouchableOpacity
+          style={styles.datatime} 
+          onPress={() => {
+              setDateTimePicker(true);
+          }}
+        >
+          <Text>{dataOfBirth.toLocaleDateString('pt-BR')}</Text>
+        </TouchableOpacity>
+                                
+        {isDateTimePickerActive  && (
+          <DateTimePicker
+            value={dataOfBirth}
+            mode={'date'}
+            display={'spinner'}
+            is24Hour={true}
+            onChange={onChange}
+            maximumDate={new Date(maximumDateOf18YearsAgo())}
+            minimumDate={new Date(minimumDateOf120YearsAgo())}
+          />
+        )}
+
       </View>
+
       <Buttons validateData={() => validateData()}/>
     </View>
   );
@@ -83,14 +114,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10
   },
+  boxInput: {
+    width: '100%',
+    marginTop: 20,
+  },
   input: {
     width: '100%',
     height: 45,
     backgroundColor: 'white',
     paddingLeft: 15
   },
-  boxInput: {
-    width: '100%',
-    marginTop: 20,
+  datatime: {
+    backgroundColor: 'white',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingLeft: 15,
+    height: 45
   }
 });

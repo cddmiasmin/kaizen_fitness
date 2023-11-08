@@ -8,6 +8,7 @@ import { ColorContext } from '../../contexts/ColorContext';
 import { monthsOfTheYear } from '../../services/monthsOfTheYear';
 import { onlinePlataforms } from '../../services/onlinePlataforms';
 import { grayText } from '../../colors/colors';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function EventCard({ data, orientation }) {
 
@@ -17,6 +18,7 @@ export default function EventCard({ data, orientation }) {
         persistedState: false,
     });
 
+    const { userType } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
     const nowDate = new Date();
@@ -36,7 +38,10 @@ export default function EventCard({ data, orientation }) {
     return (
         <TouchableOpacity 
             style={[styles.container, { width: orientation === 'vertical' ? '100%' : 260}]}
-            onPress={() => navigation.navigate('DisplayEvent', { data: data })}
+            onPress={() => {
+                if(userType === 'consumer') navigation.navigate('DisplayEvent', { data: data })
+                else navigation.navigate('UpdateEvent', { data: data })
+            }}
         >
             <View style={styles.wallpaper}>
                 <View style={[{ backgroundColor: data.styleStatusBar === 'dark' ? 'white' : 'black' }, , StyleSheet.absoluteFill]}>

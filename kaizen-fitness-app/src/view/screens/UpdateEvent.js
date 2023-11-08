@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Avatar, Chip, IconButton, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -15,7 +15,6 @@ import {
 import { StatusBar } from 'expo-status-bar';
 
 import { mainColor } from '../../colors/colors';
-import { participantsColors } from '../../services/participantsColors';
 
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
@@ -27,29 +26,63 @@ import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataf
 import ModalEventWallpaper from '../components/RegisterEvent/ModalEventWallpaper';
 import { onlinePlataforms } from '../../services/onlinePlataforms';
 
-export default function RegisterEvent() {
+import _ from 'lodash';
+
+export default function UpdateEvent() {
 
     const eventController = new EventController();
 
-    const route = useRoute()
-    const modality = route.params === undefined ? 'Online' : route.params.modality
+    const route = useRoute();
+    const navigation = useNavigation()
+    const data = route.params.data;
+    // const data = {
+    //     styleStatusBar: 'light',
+    //     wallpaper: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //     topics: ["Nutrição","Saúde pública",],
+    //     name: 'Palestra sobre alimentação saudável' ,
+    //     about: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+    //     plataform: 'microsoft-teams',
+    //     meetingLink: 'https://florenceandthemachine.net/home/',
+    //     organizer: {
+    //         kindOfPerson: 'PF',
+    //         name: 'Florence',
+    //         familyName: 'Welch',
+    //         photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
+    //     },
+    //     datatime: new Date(2023, 9, 25, 19, 30),
+    //     modality: 'Online',
+    //     participants: [
+    //         { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
+    //         { photo: 'https://i.pinimg.com/564x/68/4b/c3/684bc340f3b189650bfbc7994f0f4261.jpg'},
+    //         { photo: 'https://i.pinimg.com/564x/d1/e1/3b/d1e13b7cebfbb1b90ddf1d4243efd317.jpg'},
+    //         { photo: 'https://i.pinimg.com/564x/17/54/b8/1754b8ff13cbbb0d7fefbae61a0bbc49.jpg'},
+    //     ]
+    // };
 
     const { user } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
-    const [eventWallpaper, setEventWallpaper] = useState('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1931');
-    const [eventTopics, setEventTopics] = useState(["Reabilitação"]);
-    const [eventName, setEventName] = useState('Reabilitação online para AVC');
-    const [eventDateTime, setEventDateTime] = useState(new Date(2023,8,19,19,0));
-    const [eventAbout, setEventAbout] = useState('Este evento fornecerá informações e dicas sobre reabilitação online para pessoas que sofreram um AVC. Os participantes aprenderão sobre os diferentes tipos de reabilitação online disponíveis, como escolher o programa certo para suas necessidades e como aproveitar ao máximo o programa de reabilitação.');
-    const [eventOnlinePlataform, setEventOnlinePlataform] = useState('zoom');
-    const [eventLink, setEventLink] = useState('https://florenceandthemachine.net/home/');
+    const [eventWallpaper, setEventWallpaper] = useState(data.wallpaper);
+    const [eventTopics, setEventTopics] = useState(data.topics);
+    const [eventName, setEventName] = useState(data.name);
+    const [eventDateTime, setEventDateTime] = useState(new Date(data.datatime));
+    const [eventAbout, setEventAbout] = useState(data.about || '');
+    const [eventOnlinePlataform, setEventOnlinePlataform] = useState(data.plataform || '');
+    const [eventLink, setEventLink] = useState(data.meetingLink || '');
+    const [eventAddress, setEventAddress] = useState(data.address || '');
 
-    const [styleStatusBar, setStyleStatusBar] = useState('light');
+    const [styleStatusBar, setStyleStatusBar] = useState(data.styleStatusBar);
     const [dateTimePickerMode, setDateTimePickerMode] = useState('date');
     const [plataformIndex, setPlataformIndex] = useState(0);
 
     const [isDateTimePickerActive, setDateTimePicker] = useState(false);
+    const [isTheBackIconButtonVisible, setIsTheBackIconButtonVisible] = useState(false);
+    const [isTheDeleteIconButtonVisible, setIsTheDeleteIconButtonVisible] = useState(false);
+    const [isTheCheckIconButtonVisible, setIsTheCheckIconButtonVisible] = useState(false);
+
+    const [changes, setChanges] = useState(true);
+    const [changesNames, setChangesNames] = useState([]);
+    const [changesData, setChangesData] = useState([]);
 
     const onChange = (event, datetime) => {
         setEventDateTime(datetime);
@@ -60,6 +93,145 @@ export default function RegisterEvent() {
     const [isModalEventTopicsActive, setModalEventTopics] = useState(false);
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
 
+    const thereWereChangesInTheDataForTheOnlineEvent = () => {
+        return eventOnlinePlataform         === data.plataform
+            || eventLink                    === data.meetingLink
+            || eventWallpaper               === data.wallpaper 
+            || eventName                    === data.name
+            || eventAbout                   === data.about
+            || eventDateTime.toISOString()  === data.datatime.toISOString()
+            || !_.isEqual(data.topics, eventTopics);
+    }
+
+    const thereWereChangesInTheDataForTheInPerson = () => {
+        return eventAddress                 === data.address
+            || eventWallpaper               === data.wallpaper 
+            || eventName                    === data.name
+            || eventAbout                   === data.about
+            || eventDateTime.toISOString()  === data.datatime.toISOString()
+            || !_.isEqual(data.topics, eventTopics);
+    }
+
+    const thereWasAChange = () => {
+
+        if(data.modality === 'Online')
+            return thereWereChangesInTheDataForTheOnlineEvent();
+        else 
+            return thereWereChangesInTheDataForTheInPerson();
+
+    }
+
+    const whatOnlineEventDataHasChanged = () => {
+        let changesNames = [];
+        let changesData = {};
+
+        if(eventWallpaper !== data.wallpaper){
+            changesNames.push("Papel de parede");
+            changesData.wallpaper = eventWallpaper;
+        }
+
+        if(eventName !== data.name){
+            changesNames.push("Nome");
+            changesData.name = eventName;
+        }
+
+        if(eventAbout !== data.about){
+            changesNames.push("Sobre");
+            changesData.about = eventAbout;
+        }
+
+        if(eventDateTime.toISOString() !== data.datatime.toISOString()){
+            changesData.datatime = eventDateTime;
+
+            if(eventDateTime.toDateString() !== data.datatime.toDateString())
+                changesNames.push("Data");
+            else changesNames.push("Hora");
+
+        }
+
+        if(!_.isEqual(data.topics, eventTopics)){
+            changesNames.push("Tópicos");
+            changesData.topics = eventTopics;
+        }
+
+        if(eventOnlinePlataform !== data.plataform){
+            changesNames.push("Plataforma");
+            changesData.plataform = eventOnlinePlataform;
+        }
+        
+        if(eventLink !== data.meetingLink){
+            changesNames.push("Link");
+            changesData.meetingLink = eventLink;
+        }
+
+        return {names: changesNames, data: changesData };
+
+    }
+
+    const whatInPersonEventDataHasChanged = () => {
+        let changesNames = [];
+        let changesData = {};
+
+        if(eventWallpaper !== data.wallpaper){
+            changesNames.push("Papel de parede");
+            changesData.wallpaper = eventWallpaper;
+        }
+
+        if(eventName !== data.name){
+            changesNames.push("Nome");
+            changesData.name = eventName;
+        }
+
+        if(eventAbout !== data.about){
+            changesNames.push("Sobre");
+            changesData.about = eventAbout;
+        }
+
+        if(eventDateTime.toISOString() !== data.datatime.toISOString()){
+            changesData.datatime = eventDateTime;
+
+            if(eventDateTime.toDateString() !== data.datatime.toDateString())
+                changesNames.push("Data");
+            else changesNames.push("Hora");
+
+        }
+
+        if(!_.isEqual(data.topics, eventTopics)){
+            changesNames.push("Tópicos");
+            changesData.topics = eventTopics;
+        }
+
+        if(eventAddress !== data.address){
+            changesNames.push("Endereço");
+            changesData.address = eventAddress;
+        }
+
+        return {names: changesNames, data: changesData };
+
+    }
+
+    const whatDataHasChanged = () => {
+        let changes = {};
+
+        if(data.modality === 'Online') changes = whatOnlineEventDataHasChanged();
+        else changes = whatInPersonEventDataHasChanged();
+
+        console.log(changes);
+
+        setChangesNames(changes.names);
+        setChangesData(changes.data);
+    }
+
+    useEffect(() => {
+        const change = thereWasAChange();
+        console.log('A',change);
+        setChanges(change);
+        
+        console.log('pohs',eventName  === data.name)
+    }, [
+        eventWallpaper, eventName, eventTopics, eventAbout
+    ]);
+
     useEffect(() => {
         onlinePlataforms.forEach((plataform) => {
             if (plataform.value === eventOnlinePlataform) {
@@ -68,60 +240,62 @@ export default function RegisterEvent() {
         }); 
     },[eventOnlinePlataform]);
 
-    const registerEvent = async (data) => {
-        return await eventController.addEvent(data, user)
-    }
-
-    const completedRegistration = async () => {
-
-        const data = {
-            styleStatusBar: styleStatusBar,
-            wallpaper: eventWallpaper,
-            topics: eventTopics,
-            name: eventName ,
-            about: eventAbout,
-            plataform: eventOnlinePlataform,
-            meetingLink: eventLink,
-            datatime: eventDateTime,
-            modality: modality,
-            participants: []
-        }
-
-        const response = await registerEvent(data);
-
-        console.log(response);
-    }
-
     return (
         <SafeAreaView  style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <StatusBar style={styleStatusBar}/>
                 <View style={styles.header}>
-                    {
-                        eventWallpaper 
-                        ?
-                            <View style={{width: '100%', height: '100%'}}>
-                                <TouchableOpacity onPress={() => setModalEventWallpaper(true)}>
-                                    <Image source={{ uri: eventWallpaper}} resizeMode="cover" style={{width: '100%', height: '100%'}}/>
-                                    <View 
-                                        style={[StyleSheet.absoluteFillObject, 
-                                                styles.eventWallpaperIcon, 
-                                                { backgroundColor: color, borderColor: mainColor}
-                                        ]}
-                                    >
-                                        <Icon 
-                                            name="image-edit" 
-                                            size={18} 
-                                            color={mainColor} 
-                                        />
-                                    </View>
-                                </TouchableOpacity>
+                    <View style={{ width: '100%', height: '100%', backgroundColor: styleStatusBar === 'dark' ? 'white' : 'black'}}>
+                        <TouchableOpacity onPress={() => setModalEventWallpaper(true)}>
+                            <Image source={{ uri: eventWallpaper }} resizeMode="cover" style={{width: '100%', height: '100%', opacity: 0.7}}/>
+                            <View 
+                                style={[StyleSheet.absoluteFillObject, 
+                                        styles.eventWallpaperIcon, 
+                                        { backgroundColor: styleStatusBar === 'dark' ? 'black' : 'white' }
+                                ]}
+                            >
+                                <Icon 
+                                    name="image-edit" 
+                                    size={18} 
+                                    color={color} 
+                                />
                             </View>
-                        : 
-                            <TouchableOpacity style={[styles.eventWallpaperButton, { backgroundColor: color }]} onPress={() => setModalEventWallpaper(true)}>
-                                <Icon name="image-plus" size={40} color="white" />
-                            </TouchableOpacity>
-                    }                  
+                        </TouchableOpacity>
+                    </View>
+                    <View style={[styles.buttons, StyleSheet.absoluteFillObject]}>
+                        <IconButton
+                            mode='contained'
+                            icon="chevron-left"
+                            iconColor={color}
+                            style={[styles.button, { marginRight: 245 }]}
+                            containerColor={styleStatusBar === 'dark' ? 'black' : 'white'}
+                            size={24}
+                            onPress={() => {
+                                if(thereWasAChange()){
+                                    whatDataHasChanged();
+                                    setIsTheBackIconButtonVisible(true);
+                                } else navigation.navigate('Calendar', { screen: 'Calendar' })
+                            }}
+                        />
+                        <IconButton
+                            mode='contained'
+                            icon="delete"
+                            iconColor={color}
+                            style={[styles.button, { marginRight: 5 }]}
+                            containerColor={styleStatusBar === 'dark' ? 'black' : 'white'}
+                            size={20}
+                            onPress={() => setIsTheDeleteIconButtonVisible(true)}
+                        />
+                        <IconButton
+                            icon="check-bold"
+                            iconColor={color}
+                            style={styles.button}
+                            containerColor={styleStatusBar === 'dark' ? 'black' : 'white'}
+                            size={18}
+                            disabled={true}
+                            onPress={() => setIsTheCheckIconButtonVisible(true)}
+                        />
+                    </View>                    
                 </View>
                 <View style={styles.body}>
                     <View style={styles.containerTopics}>
@@ -183,15 +357,14 @@ export default function RegisterEvent() {
                         <View style={styles.infos}>
                             <View style={styles.modality}>
                                 <Icon 
-                                    name= {modality === 'inPerson' ? 'account-group' : 'monitor-shimmer'} 
+                                    name= {data.modality === 'Presencial' ? 'account-group' : 'monitor-shimmer'} 
                                     size={20} color={color} 
                                 />
                                 <Text style={{color: 'white', fontSize: 14}}>
-                                    {modality === 'inPerson' ? 'Presencial' : 'Online'}
+                                    {data.modality}
                                 </Text>
                             </View>
                             <View style={styles.datetime}>
-
                                 {
                                      <TouchableOpacity 
                                         style={styles.datetime}
@@ -212,12 +385,12 @@ export default function RegisterEvent() {
 
                                 {isDateTimePickerActive && dateTimePickerMode === 'date' && (
                                     <DateTimePicker
-                                    value={eventDateTime}
-                                    mode={dateTimePickerMode}
-                                    display={'default'}
-                                    is24Hour={true}
-                                    onChange={onChange}
-                                    style={styles.datePicker}
+                                        value={eventDateTime}
+                                        mode={dateTimePickerMode}
+                                        display={'spinner'}
+                                        is24Hour={true}
+                                        onChange={onChange}
+                                        style={styles.datePicker}
                                     />
                                 )}
 
@@ -252,13 +425,30 @@ export default function RegisterEvent() {
                         </View>
                         <View style={styles.participants}>
                             {
-                                participantsColors.map((color, key) => (
-                                    <View
-                                        key={`viewIcon#${key}`}  
-                                        style={[key !== 0 ? {marginLeft: -15} : '', { borderWidth: 2, borderRadius: 50, borderColor: mainColor}]}
+                                data.participants.length !== 0
+                                ?
+                                    data.participants.map((participant, key) => (
+                                        key < 5 
+                                        ? 
+                                            <View
+                                                key={`viewIcon#${key}`}  
+                                                style={[key !== 0 ? {marginLeft: -15} : '', { borderWidth: 2, borderRadius: 50, borderColor: mainColor}]}
+                                            >
+                                                <Avatar.Image
+                                                    key={`icon#${key}`} 
+                                                    size={32} 
+                                                    style={{ backgroundColor: color }}
+                                                    source={{ uri: participant.photo}}
+                                                />
+                                            </View>
+                                        : 
+                                            ''
+                                    ))
+                                : 
+                                    <View  
+                                        style={[{borderWidth: 2, borderRadius: 50, borderColor: mainColor}]}
                                     >
                                         <Avatar.Icon
-                                            key={`icon#${key}`} 
                                             size={32} 
                                             label=""
                                             style={{ backgroundColor: color }}
@@ -267,9 +457,16 @@ export default function RegisterEvent() {
                                             )}
                                         />
                                     </View>
-                                ))
                             }
-                            <Text style={{color: 'white', fontSize: 14}}> 0 participantes</Text>
+                            <Text style={{color: 'white', fontSize: 14, marginLeft: 5}}>
+                                {
+                                    data.participants.length === 0
+                                    ?
+                                        'Nenhum participante'
+                                    :
+                                    data.participants.length + ' ' + (data.participants.length == 1 ? 'participante' : 'participantes')
+                                } 
+                            </Text>  
                         </View>
                     </View>
                     <View style={styles.aboutEvent}>
@@ -312,20 +509,8 @@ export default function RegisterEvent() {
                             Local
                         </Text>
                         {
-                            !Object.keys(eventOnlinePlataform).length 
+                            data.modality === 'Online' 
                             ?
-                                <TouchableOpacity onPress={() => setModalOnlinePlataforms(true)}>
-                                        <Chip
-                                            icon={() => (
-                                                <Icon name="plus-circle" size={16} color="white" />
-                                            )}
-                                            style={{ backgroundColor: 'rgba(57, 138, 172, 0.2)', marginTop: 5}}
-                                            selectedColor='white'
-                                        >
-                                            Adicionar plataforma 
-                                        </Chip>
-                                </TouchableOpacity>
-                            : 
                                 <>
                                     <View style={styles.plataform}>
                                     <Image 
@@ -358,15 +543,26 @@ export default function RegisterEvent() {
                                     >
                                         O link será liberado para os participantes 1h antes do evento
                                     </Text>
-                                </>           
+                                
+                                </>
+                            : 
+                                <TextInput
+                                    mode='outlined'
+                                    label='Endereço do evento'
+                                    value={eventAddress}
+                                    onChangeText={(text) => setEventAddress(text)}
+                                    outlineColor={'white'}
+                                    activeOutlineColor={color}
+                                    textColor={'white'}
+                                    style={{ backgroundColor: mainColor, marginBottom: 8, marginTop: 10 }}
+                                    theme={{
+                                        colors: {
+                                            onSurfaceVariant: 'white'
+                                        }
+                                    }}
+                                />
                         }
                     </View>
-                    <TouchableOpacity 
-                        style={[styles.register, { backgroundColor: color}]}
-                        onPress={() => completedRegistration()}
-                    >
-                        <Text style={{color: 'white', fontWeight: 'bold'}}>Cadastrar evento</Text>
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
             <ModalEventWallpaper active={isModalEventWallpaperActive} changeMyStatus={setModalEventWallpaper} chooseWallpaper={setEventWallpaper} colorStatusBar={setStyleStatusBar}/>
@@ -394,14 +590,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     eventWallpaperIcon: {
-        marginLeft: 335,
+        marginLeft: 340,
         marginTop: 175,
         width: 35,
         height: 35,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 50,
-        borderWidth: 2
     },
     body: {
         backgroundColor: mainColor,
@@ -484,5 +679,18 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginBottom: 10,
         marginTop: 20
+    },
+    buttons: {
+        flexDirection: 'row',
+        paddingTop: 40,
+        paddingLeft: 10
+    },
+    button: {
+        width: 32,
+        height: 32,
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+       
     }
 });

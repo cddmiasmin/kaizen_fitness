@@ -36,7 +36,8 @@
     "react-native-screens": "~3.22.0",
     "react-native-web": "~0.19.6",
     "remask": "^1.2.2",
-    "unsplash-js": "^7.0.18"
+    "unsplash-js": "^7.0.18",
+    "expo-location": "~16.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
