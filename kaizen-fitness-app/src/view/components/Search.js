@@ -2,6 +2,7 @@ import { useState, useContext, useRef, useEffect } from 'react';
 import { TextInput, List, Dialog, Text, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StyleSheet, TouchableOpacity, View, BackHandler, FlatList } from 'react-native';
+import { TextInput as NativeTextInput } from 'react-native';
 
 import { grayText, mainColor } from '../../colors/colors';
 
@@ -13,7 +14,7 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
 
     const route = useRoute();
     const navigation = useNavigation();
-    console.log(route.name);
+
     const refInput = useRef();
 
     const { user } = useContext(UserContext);
@@ -91,6 +92,7 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
                                 navigation.navigate('SearchResults', { initialSearch: searchAux });
                             }
                         }}
+                        render={(props) => <NativeTextInput inputMode={'search'} returnKeyType="search" {...props} />}
                     />
                 </View>
             </View>
@@ -109,7 +111,7 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
                                 title={history.search}
                                 titleStyle={{ color: grayText }}
                                 left={props => <List.Icon {...props} icon="clock-time-three-outline" color={grayText}/>}
-                                right={props => <List.Icon {...props} icon="arrow-top-right" color={grayText}/>}
+                                right={props => <List.Icon {...props} icon="arrow-top-left" color={grayText}/>}
                             />
                         </TouchableOpacity>          
                     }

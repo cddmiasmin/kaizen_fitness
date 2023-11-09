@@ -5,34 +5,34 @@ import { Avatar } from 'react-native-paper';
 import { UserContext } from '../../../contexts/UserContext';
 import { ColorContext } from '../../../contexts/ColorContext';
 
-export default function Header() {
+export default function HeaderProfessional() {
 
- const { user, userType } = useContext(UserContext);
+    const { user, userType } = useContext(UserContext);
 
- const { color } = useContext(ColorContext);
+    const { color } = useContext(ColorContext);
 
- const name = userType === 'consumer' || user.kindOfPerson === 'PF' 
-                ? user.name + ' ' + user.familyName 
-                : user.name;
+    const name = userType === 'consumer' || user.kindOfPerson === 'PF' 
+                    ? user.name + ' ' + user.familyName 
+                    : user.name;
 
- const photo = user 
-                ? {uri:(user.photo)} 
-                : {uri:('https://i.pinimg.com/564x/6a/27/ab/6a27ab62c11c4bb972fedb8307bc8a25.jpg')};
+    const photo = user 
+                    ? {uri:(user.photo)} 
+                    : {uri:('https://i.pinimg.com/564x/6a/27/ab/6a27ab62c11c4bb972fedb8307bc8a25.jpg')};
 
- return (
-    <View style={styles.container}>
-        <View style={styles.started}>
-            <View style={styles.avatar}>
-                <Avatar.Image
-                    size={110} 
-                    source={photo}
-                    style={{backgroundColor: color}}
-                />
-            </View>
-            <Text style={styles.username}>{name}</Text>
-        </View>    
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <View style={styles.started}>
+                <View style={styles.avatar}>
+                    <Avatar.Image
+                        size={110} 
+                        source={photo}
+                        style={{backgroundColor: color}}
+                    />
+                </View>
+                <Text style={styles.username}>{name}</Text>
+            </View>    
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
+        marginTop: 50
     },
     started: {
         alignItems: 'center',

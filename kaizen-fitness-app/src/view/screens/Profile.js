@@ -6,14 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 import { mainColor } from '../../colors/colors';
 
 import Footer from '../components/Footer';
-import Header from '../components/Profile/Header';
+import HeaderProfessional from '../components/Profile/Header';
+import HeaderConsumer from '../components/Profile/HeaderConsumer';
 import DialogAlert from '../components/DialogAlert';
 
 import { ColorContext } from '../../contexts/ColorContext';
 import { UserContext } from '../../contexts/UserContext';
 
 import { StatusBar } from 'expo-status-bar';
-import HeaderConsumer from '../components/Profile/HeaderConsumer';
 
 export default function Perfil() {
 
@@ -32,7 +32,7 @@ export default function Perfil() {
 
   const options = [
     { key: 'myData', name: 'Meus dados', icon: 'badge-account-horizontal' },
-    { key: 'location', name: 'Localização', icon: 'map-marker' },
+    // { key: 'location', name: 'Localização', icon: 'map-marker' },
     { key: 'topics', name: topicName, icon: topicIcon },
     { key: 'deleteAccount', name: 'Excluir conta', icon: 'delete' },
     { key: 'exit', name: 'Sair', icon: 'exit-to-app' }
@@ -45,7 +45,7 @@ export default function Perfil() {
 
   const optionPressed = (key) => {
     if(key === 'myData') navigation.navigate('MyData');
-    else if (key === 'location') navigation.navigate('MyData');
+    // else if (key === 'location') navigation.navigate('MyData');
     else if (key === 'topics') navigation.navigate('Topics');
     else if (key === 'deleteAccount') {
       setDialogTitle('Excluir conta');
@@ -63,8 +63,11 @@ export default function Perfil() {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      {/* <Header /> */}
-      <HeaderConsumer/>
+      {
+        userType === 'professional'
+        ? <HeaderProfessional />
+        : <HeaderConsumer/>
+      }
       <View style={styles.line}/>
       <FlatList
         style={{ width: '100%', paddingBottom: 30}}
@@ -72,8 +75,8 @@ export default function Perfil() {
         ItemSeparatorComponent={() => <View style={{ marginTop: 10 }}/>}
         renderItem={({item: option}) => 
           <TouchableOpacity
-           style={{ backgroundColor: '#1c1c1c', borderRadius: 5}}
-           onPress={() => optionPressed(option.key)}
+          style={{ backgroundColor: '#1c1c1c', borderRadius: 5}}
+          onPress={() => optionPressed(option.key)}
           >
               <List.Item
                 title={option.name}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, 
     Text, 
     View,
@@ -11,86 +11,95 @@ import { consumerUserColor, mainColor, professionalUserColor } from '../../color
 
 import { StatusBar } from 'expo-status-bar';
 import { AntDesign } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function UserType() {
 
- const [color, setColor] = useState(consumerUserColor);   
- const [buttonSelected, setButtonSelected] = useState('consumer');
+    const [color, setColor] = useState(consumerUserColor);   
+    const [buttonSelected, setButtonSelected] = useState('consumer');
 
- const navigation = useNavigation();
+    const navigation = useNavigation();
+    const { setUserType } = useContext(UserContext);
 
- const consumerImage = { uri : 'https://i.pinimg.com/564x/05/67/ea/0567eab0007fbd946a62fe37e7b32e51.jpg'};
- const professionalImage = { uri : 'https://i.pinimg.com/564x/05/82/f2/0582f2834bf0d2af711378b0d1f1f016.jpg'}; 
- 
- useEffect(() => {
-    setColor(buttonSelected === 'consumer' ? consumerUserColor : professionalUserColor);
- }, [buttonSelected]);
+    const consumerImage = require('./../../assets/UserType/consumer.jpg');
+    const professionalImage = require('./../../assets/UserType/professional.jpg');
+    
+    useEffect(() => {
+        setColor(buttonSelected === 'consumer' ? consumerUserColor : professionalUserColor);
+    }, [buttonSelected]);
 
- return (
-   <View style={styles.container}>
-        <StatusBar style='light'/>
-        <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.navigate('SignIn')} >
-                <AntDesign name="left" size={20} color="white" />
-            </TouchableOpacity>
-            <Text style={styles.screen}>Tipo de Perfil</Text>
-        </View>
-        <Text style={styles.description}>
-            Selecione seu tipo de perfil de acordo com seus interesses 
-        </Text>
-        <View style={styles.options}>
-            <TouchableOpacity 
-                style={[styles.option, buttonSelected !== 'consumer' ? styles.optionOutOfFocus : '']} 
-                onPress={() => {
-                    if(buttonSelected === 'consumer') return;
-                    else setButtonSelected('consumer')
-                }}
-            >
-                { buttonSelected === 'consumer' &&
-                    <>
-                        <ImageBackground source={consumerImage} style={[StyleSheet.absoluteFillObject]}/>
-                        {/* <LinearGradient
-                            colors={['transparent', consumerUserColor]}
-                            style={[StyleSheet.absoluteFillObject]}
-                        /> */}
-                    </>
-                }
-                <Text style={styles.title}>Consumidor</Text>
-                <View style={styles.details}>
-                    <Text style={styles.detail}>Sell Goods</Text>
-                    <Text style={styles.detail}>Followers</Text>
-                    <Text style={styles.detail}>Feature</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={[styles.option, buttonSelected !== 'professional' ? styles.optionOutOfFocus : '', styles.professionalOption]} 
-                onPress={() => {
-                    if(buttonSelected === 'professional') return;
-                    else setButtonSelected('professional')
-                }}
-            >
-                    { buttonSelected === 'professional' &&
+    return (
+        <View style={styles.container}>
+            <StatusBar style='light'/>
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.navigate('SignIn')} >
+                    <AntDesign name="left" size={20} color="white" />
+                </TouchableOpacity>
+                <Text style={styles.screen}>Tipo de Perfil</Text>
+            </View>
+            <Text style={styles.description}>
+                Selecione seu tipo de perfil de acordo com seus interesses 
+            </Text>
+            <View style={styles.options}>
+                <TouchableOpacity 
+                    style={[styles.option, buttonSelected !== 'consumer' ? styles.optionOutOfFocus : '']} 
+                    onPress={() => {
+                        if(buttonSelected === 'consumer') return;
+                        else setButtonSelected('consumer')
+                    }}
+                >
+                    { buttonSelected === 'consumer' &&
                         <>
-                            <ImageBackground source={professionalImage} style={[StyleSheet.absoluteFillObject]}/>
-                            {/* <LinearGradient
-                                colors={['transparent', professionalUserColor]}
+                            <ImageBackground source={consumerImage} style={[StyleSheet.absoluteFillObject]}/>
+                            <LinearGradient
+                                colors={['transparent', consumerUserColor]}
                                 style={[StyleSheet.absoluteFillObject]}
-                            /> */}
+                            />
                         </>
                     }
-                <Text style={styles.title}>Profissional</Text>
-                <View style={styles.details}>
-                    <Text style={styles.detail}>Sell Goods</Text>
-                    <Text style={styles.detail}>Followers</Text>
-                    <Text style={styles.detail}>Feature</Text>
-                </View>
+                    <Text style={styles.title}>Consumidor</Text>
+                    <View style={styles.details}>
+                        <Text style={styles.detail}>Sell Goods</Text>
+                        <Text style={styles.detail}>Followers</Text>
+                        <Text style={styles.detail}>Feature</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={[styles.option, buttonSelected !== 'professional' ? styles.optionOutOfFocus : '', styles.professionalOption]} 
+                    onPress={() => {
+                        if(buttonSelected === 'professional') return;
+                        else setButtonSelected('professional')
+                    }}
+                >
+                        { buttonSelected === 'professional' &&
+                            <>
+                                <ImageBackground source={professionalImage} style={[StyleSheet.absoluteFillObject]}/>
+                                <LinearGradient
+                                    colors={['transparent', professionalUserColor]}
+                                    style={[StyleSheet.absoluteFillObject]}
+                                />
+                            </>
+                        }
+                    <Text style={styles.title}>Profissional</Text>
+                    <View style={styles.details}>
+                        <Text style={styles.detail}>Sell Goods</Text>
+                        <Text style={styles.detail}>Followers</Text>
+                        <Text style={styles.detail}>Feature</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+            <TouchableOpacity 
+                onPress={() => {
+                    setUserType(buttonSelected);
+                    navigation.navigate('Register');
+                }} 
+                style={[styles.buttonContinue, { backgroundColor: color }]}
+            >
+                <Text style={{ color: 'white', fontWeight: 'bold'}}> Prosseguir </Text>
             </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp', { UserType: buttonSelected})} style={[styles.buttonContinue, { backgroundColor: color }]}>
-            <Text style={{ color: 'white', fontWeight: 'bold'}}> Prosseguir </Text>
-        </TouchableOpacity>
-   </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({

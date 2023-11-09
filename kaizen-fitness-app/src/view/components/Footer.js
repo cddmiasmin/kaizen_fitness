@@ -6,30 +6,41 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { ColorContext } from '../../contexts/ColorContext';
 import { grayText } from '../../colors/colors';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function Footer() {
 
-const route = useRoute();
+    const route = useRoute();
+    const navigation = useNavigation();
 
-const navigation = useNavigation();
-
+    const { userType } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
     const consumer = [
-        {key: 'home', route: 'Home', title: 'Home', focusedIcon: 'home-variant', unfocusedIcon: 'home-variant-outline', color: 'black'},
-        {key: 'people', route: 'People', title: 'Pessoas', focusedIcon: 'account-group', unfocusedIcon: 'account-group-outline', color: 'blue'},
+        {key: 'home', route: 'HomeConsumer', title: 'Home', focusedIcon: 'home-variant', unfocusedIcon: 'home-variant-outline'},
+        {key: 'people', route: 'People', title: 'Pessoas', focusedIcon: 'account-group', unfocusedIcon: 'account-group-outline'},
         {key: 'place', route: 'Place', title: 'Locais', focusedIcon: 'store', unfocusedIcon: 'store-outline', color: 'green'},
-        {key: 'calendar', route: 'Calendar', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline', color: 'purple'},
-        {key: 'profile', route: 'Profile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline', color: 'grey'}
+        {key: 'calendar', route: 'Calendar', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline'},
+        {key: 'profile', route: 'Profile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline'}
     ]
 
-    const bottomTaps = [
-        {key: 'home', route: 'Home', title: 'Home', focusedIcon: 'home-variant', unfocusedIcon: 'home-variant-outline', color: 'black'},
-        {key: 'people', route: 'People', title: 'Pessoas', focusedIcon: 'account-group', unfocusedIcon: 'account-group-outline', color: 'blue'},
-        {key: 'place', route: 'Place', title: 'Locais', focusedIcon: 'store', unfocusedIcon: 'store-outline', color: 'green'},
-        {key: 'calendar', route: 'Calendar', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline', color: 'purple'},
-        {key: 'profile', route: 'Profile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline', color: 'grey'}
-    ];
+    const professional = [
+        {key: 'home', route: 'HomeProfessional', title: 'Home', focusedIcon: 'home-variant', unfocusedIcon: 'home-variant-outline'},
+        {key: 'calendar', route: 'Calendar', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline'},
+        {key: 'profile', route: 'Profile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline'}
+    ]
+
+    const noUserType = [
+        {key: 'profile', route: 'CreateProfile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline'}
+    ]
+
+    const setBottomTaps = () => {
+        if(userType === 'professional') return professional;
+        else if (userType === 'professional') return consumer;
+        else return noUserType;
+    }
+
+    const bottomTaps = setBottomTaps();
 
     return (
     <View style={styles.footer}>

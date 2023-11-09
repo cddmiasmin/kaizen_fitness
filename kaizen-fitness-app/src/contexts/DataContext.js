@@ -72,13 +72,13 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
         if(stepNum === 5) console.log('a paz', data)
     }, [stepNum]);
 
-    useEffect(() => {
-        // if(Object.keys(data).length > 0) {
-        //     console.log("Register", data, typeof data);
-        //     professionalController.registerProfessional(data);
-        // }
-        console.log('data', data);
-    }, [data]);
+    // useEffect(() => {
+    //     // if(Object.keys(data).length > 0) {
+    //     //     console.log("Register", data, typeof data);
+    //     //     professionalController.registerProfessional(data);
+    //     // }
+    //     console.log('data', data);
+    // }, [data]);
 
     return (
         <DataContext.Provider

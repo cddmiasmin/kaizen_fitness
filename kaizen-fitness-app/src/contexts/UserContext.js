@@ -26,7 +26,7 @@ export const UserContextProvider = ({ userAuthData , children }) => {
         topics: ["Reabilitação"],
         state: "London",
       });
-    const [userType, setUserType] = useState('consumer');
+    const [userType, setUserType] = useState('professional');
     const [userBlockedFromContent, setUserBlockedFromContent] = useState(true);
 
     useEffect(() => {

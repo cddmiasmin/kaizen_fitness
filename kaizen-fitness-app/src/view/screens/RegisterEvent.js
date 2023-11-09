@@ -98,46 +98,45 @@ export default function RegisterEvent() {
         }); 
     },[eventOnlinePlataform]);
 
-    const completedRegistration = async () => {
+    // const completedRegistration = async () => {
 
-        console.log('oio')
 
-        const data = {
-            styleStatusBar: styleStatusBar,
-            wallpaper: eventWallpaper,
-            topics: eventTopics,
-            name: eventName ,
-            about: eventAbout,
-            datatime: eventDateTime,
-            modality: modality,
-            participants: []
-        }
+    //     const data = {
+    //         styleStatusBar: styleStatusBar,
+    //         wallpaper: eventWallpaper,
+    //         topics: eventTopics,
+    //         name: eventName ,
+    //         about: eventAbout,
+    //         datatime: eventDateTime,
+    //         modality: modality,
+    //         participants: []
+    //     }
 
-        if(modality === 'Online') {
-            data.plataform = eventOnlinePlataform;
-            data.meetingLink = eventLink;
-        } else data.address = eventAddress;
+    //     if(modality === 'Online') {
+    //         data.plataform = eventOnlinePlataform;
+    //         data.meetingLink = eventLink;
+    //     } else data.address = eventAddress;
 
-        const professional = user;
-        const idUser = await auth().currentUser.uid;
+    //     const professional = user;
+    //     const idUser = await auth().currentUser.uid;
 
-        professional.idUser = idUser;
+    //     professional.idUser = idUser;
       
-        data.organizer = professional;
+    //     data.organizer = professional;
       
-        const event = await firestore()
-                                .collection('ProfessionalEvent')
-                                .add(data)
-                                .then(() => {
-                                    return { result: true, message: 'Evento cadastrado com sucesso!'}
-                                })
-                                .catch((error) => {
-                                    return { result: false, message: error }
-                                })
+    //     const event = await firestore()
+    //                             .collection('ProfessionalEvent')
+    //                             .add(data)
+    //                             .then(() => {
+    //                                 return { result: true, message: 'Evento cadastrado com sucesso!'}
+    //                             })
+    //                             .catch((error) => {
+    //                                 return { result: false, message: error }
+    //                             })
 
-        console.log('event',event);
-        navigation.navigate('Home');
-    }
+    //     console.log('event',event);
+    //     navigation.navigate('Home');
+    // }
 
     return (
         <SafeAreaView  style={styles.container}>
@@ -379,15 +378,24 @@ export default function RegisterEvent() {
                                         : 
                                             <>
                                                 <View style={styles.plataform}>
-                                                <Image 
-                                                    style={{width: 75, height: 75}} 
-                                                    source={onlinePlataforms[plataformIndex].icon}
-                                                />
-                                                <Text 
-                                                    style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginTop: 2}}
-                                                >
-                                                    {onlinePlataforms[plataformIndex].name} 
-                                                </Text>
+                                                    <View style={styles.plataformInfo}>
+                                                        <Image 
+                                                            style={{width: 75, height: 75}} 
+                                                            source={onlinePlataforms[plataformIndex].icon}
+                                                        />
+                                                        <Text 
+                                                            style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginTop: 2}}
+                                                        >
+                                                            {onlinePlataforms[plataformIndex].name} 
+                                                        </Text>
+                                                    </View>
+                                                    <IconButton
+                                                        icon="pencil-circle"
+                                                        iconColor={color}
+                                                        size={22}
+                                                        style={{ marginLeft: 10}}
+                                                        onPress={() => setModalOnlinePlataforms(true)}
+                                                    />
                                                 </View>
                                                 <TextInput
                                                     mode='outlined'
@@ -440,7 +448,7 @@ export default function RegisterEvent() {
             </ScrollView>
             <ModalEventWallpaper active={isModalEventWallpaperActive} changeMyStatus={setModalEventWallpaper} chooseWallpaper={setEventWallpaper} colorStatusBar={setStyleStatusBar}/>
             <ModalEventTopics active={isModalEventTopicsActive} changeMyStatus={setModalEventTopics} changeTopics={setEventTopics}/>
-            <ModalOnlinePlataforms active={isModalOnlinePlataformsActive} changeMyStatus={setModalOnlinePlataforms} choosePlatform={setEventOnlinePlataform}/>
+            <ModalOnlinePlataforms active={isModalOnlinePlataformsActive} changeMyStatus={setModalOnlinePlataforms} choosePlatform={setEventOnlinePlataform} initialValue={eventOnlinePlataform}/>
         </SafeAreaView >
     );
 }
@@ -543,6 +551,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: 95,
+    },
+    plataformInfo:{
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     register: {
         justifyContent: 'center',

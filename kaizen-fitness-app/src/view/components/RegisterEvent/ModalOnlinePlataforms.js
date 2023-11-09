@@ -9,15 +9,11 @@ import { Image } from 'react-native';
 
 import { onlinePlataforms } from '../../../services/onlinePlataforms';
 
-export default function ModalOnlinePlataforms({ active, changeMyStatus, choosePlatform}) {
+export default function ModalOnlinePlataforms({ active, changeMyStatus, choosePlatform, initialValue }) {
 
     const { color } = useContext(ColorContext);
 
-    const [plataformSelected, setPlataformSelected] = useState({
-        name: "Zoom",
-        icon: require('../../../assets/ModalOnlinePlataforms/zoom.png'),
-        value: "zoom",
-    });
+    const [plataformSelected, setPlataformSelected] = useState(initialValue === '' ? 'zoom' : initialValue );
 
     return (
         <Modal 
@@ -67,7 +63,6 @@ export default function ModalOnlinePlataforms({ active, changeMyStatus, choosePl
                     <Text style={{color: 'white', fontWeight: 'bold'}}>Salvar</Text>
                 </TouchableOpacity>
             </ScrollView>
-
         </Modal>
     );
 }
@@ -81,7 +76,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        height: 600
+        height: 610
     },
     message: {
         width:'100%',
