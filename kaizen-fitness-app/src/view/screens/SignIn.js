@@ -1,21 +1,23 @@
 import { useContext, useState } from 'react';
 import { View, 
-    StyleSheet, 
-    Text, 
-    TouchableOpacity,   
-    KeyboardAvoidingView,
-    Image,
+  StyleSheet, 
+  Text, 
+  TouchableOpacity,   
+  KeyboardAvoidingView,
+  Image, TextInput as NativeTextInput
 } from 'react-native';
-import { TextInput, Snackbar } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { StatusBar } from 'expo-status-bar';
 
-import { error, grayText, mainColor, success } from '../../colors/colors';
+import { grayText, mainColor } from '../../colors/colors';
 
 import { ColorContext } from '../../contexts/ColorContext';
 
 import UserController from '../../controller/UserController';
+
+import SnackBar from '../components/SnackBar';
 
 export default function SignIn() {
 
@@ -41,7 +43,7 @@ export default function SignIn() {
     const makeUserSignIn = async () => {
       const response = await userController.signIn(email, password);
 
-      setSignInResult(response.result);
+      setSignInResult(!response.result);
       setMessageSnackbar(response.message);
       setVisibleSnackbar(true)
 
@@ -58,6 +60,21 @@ export default function SignIn() {
           </View>
           <View style={styles.body}>
             <KeyboardAvoidingView style={styles.keyboardArea}>
+              <TouchableOpacity 
+                style={styles.google}
+                // onPress={() => setVisibleSnackbar(true)}
+              >
+                <Image
+                  style={{ width: 20, height: 20}} 
+                  source={require('../../assets/SignIn/icon_google-logo.png') }
+                />
+                <Text style={{ color: 'white', fontWeight: 'bold'}}>Continue com o Google</Text>
+              </TouchableOpacity>
+              <View style={styles.divider}>
+                <View style={[styles.line, { backgroundColor: color }]}/>
+                <Text style={{ color: color }}>ou</Text>
+                <View style={[styles.line, { backgroundColor: color }]}/>
+              </View>
               <View style={styles.containerTextInput}>
                 <View style={styles.textInput}>
                   <Text style={{color: 'white', fontWeight: 'bold'}}>Email</Text>
@@ -78,6 +95,7 @@ export default function SignIn() {
                           onSurfaceVariant: 'white'
                       }
                     }}
+                    render={(props) => <NativeTextInput inputMode={'email'} keyboardType={'email-address'} {...props} />}
                   />
                 </View>
                 <View style={styles.textInput}>
@@ -132,36 +150,15 @@ export default function SignIn() {
                 <Text style={{color: grayText, fontWeight: 'normal'}}>Novo usuário?</Text>
                 <Text style={{color: color, fontWeight: 'bold'}}>Inscreva-se</Text>
             </TouchableOpacity>
-            <View style={styles.continue}>
-              <Text style={{color: grayText, fontWeight: 'normal'}}>Ou continue com</Text>
-              <TouchableOpacity 
-                style={styles.google}
-                // onPress={() => setVisibleSnackbar(true)}
-              >
-                <Image
-                  style={{ width: 30, height: 30}} 
-                  source={require('../../assets/SignIn/icon_google-logo.png') }
-                />
-              </TouchableOpacity>
-            </View>
+
           </View>
-          <Snackbar
-            visible={visibleSnackbar}
-            onDismiss={() => setVisibleSnackbar(false)}
-            duration={3000}
-            action={{
-              label: 'Ok',
-              textColor: signInResult === true ? 'white' : 'black',
-              onPress: () => {
-                setVisibleSnackbar(false);
-              },
-            }}
-            style={[styles.snackbar, signInResult === true ? styles.snackbarSucess : styles.snackbarError]}
-          >
-            <Text style={{ color: signInResult === true ? 'white' : 'black'}}>
-              {messageSnackBar}
-            </Text>
-          </Snackbar>
+          <SnackBar
+            visible={visibleSnackbar} 
+            setVisible={setVisibleSnackbar} 
+            message={messageSnackBar} 
+            error={signInResult} 
+            width={350}
+          />
       </View>
     )
 }
@@ -199,6 +196,7 @@ const styles = StyleSheet.create({
     keyboardArea:{
       justifyContent: 'center',
       alignItems: 'center',
+      width: '100%'
     },
     containerTextInput: {
       width: '100%',
@@ -225,27 +223,33 @@ const styles = StyleSheet.create({
     continue: {
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 45,
       flexDirection: 'column',
-      gap: 15
+      gap: 15,
+      width: '100%'
     },
     google: {
+      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      width: 45,
+      width: 350,
       height: 45,
       borderWidth: 1,
       borderColor: 'white',
-      borderRadius: 5
+      borderRadius: 5,
+      gap: 10
     },
-    snackbar: {
-      width: 350,
-      alignSelf: 'center',
-    },
-    snackbarSucess: {
-      backgroundColor: success,
-    },
-    snackbarError: {
-      backgroundColor: error,
+    divider: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'row',
+      gap: 10,
+      marginTop: 20,
+      marginBottom: 20,
+      width: 350
+    }, 
+    line: {
+      backgroundColor: grayText,
+      width: 155,
+      height: 1
     }
 });

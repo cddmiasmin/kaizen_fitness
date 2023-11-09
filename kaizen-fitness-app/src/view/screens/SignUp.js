@@ -1,27 +1,25 @@
 import { useContext, useState } from 'react';
 import { View, 
-    StyleSheet, 
-    Text, 
-    TouchableOpacity,   
-    KeyboardAvoidingView,
-    Image,
+  StyleSheet, 
+  Text, 
+  TouchableOpacity,   
+  KeyboardAvoidingView,
+  TextInput as NativeTextInput
 } from 'react-native';
-import { TextInput, Snackbar, IconButton, Avatar } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { StatusBar } from 'expo-status-bar';
 
-import { error, grayText, mainColor, success } from '../../colors/colors';
+import { grayText, mainColor  } from '../../colors/colors';
 
 import { ColorContext } from '../../contexts/ColorContext';
 
 import UserController from '../../controller/UserController';
+import SnackBar from '../components/SnackBar';
 
 export default function SignUp() {
 
-    const [photo, setPhoto] = useState('')
-    const [name, setName] = useState('Iasmin');
-    const [familyName, setFamilyName] = useState('Dias');
     const [email, setEmail] = useState('iasmin.dias87@gmail.com');
     const [password, setPassword] = useState('123456');
     const [confirmPassword, setConfirmPassword] = useState('123456');
@@ -45,9 +43,9 @@ export default function SignUp() {
     } = useContext(ColorContext);
 
     const makeUserSignUp = async () => {
-      const response = await userController.signUp(photo, name, familyName, email, password);
+      const response = await userController.signUp(email, password);
 
-      setSignUpResult(response.result);
+      setSignUpResult(!response.result);
       setMessageSnackbar(response.message);
       setVisibleSnackbar(true)
 
@@ -63,66 +61,8 @@ export default function SignUp() {
             <View style={[styles.headerLine,{ backgroundColor: color }]} />
           </View>
           <View style={styles.body}>
-          <View style={styles.containerPhoto}>
-              <View style={styles.avatar}>                    
-                  <IconButton
-                      icon="image-plus"
-                      iconColor={'white'}
-                      style={[{backgroundColor: color}, styles.icon]}
-                      size={15}
-                      onPress={() => console.log('Pressed')}
-                  />
-                  <Avatar.Image
-                      size={80} 
-                      source={{uri: 'https://i.pinimg.com/564x/25/fe/9f/25fe9f36701bdd3b29e4e1ed4dabe032.jpg'}}
-                      style={{zIndex: 1}}
-                  />
-              </View>
-            </View>
             <KeyboardAvoidingView style={styles.keyboardArea}>
               <View style={styles.containerTextInput}>
-                <View style={styles.textInput}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>Nome</Text>
-                  <TextInput
-                    mode='flat'
-                    label=''
-                    value={name}
-                    onChangeText={(text) => setName(text)}
-                    underlineColor={'white'}
-                    activeUnderlineColor={color}
-                    textColor={grayText}
-                    editable={true}
-                    style={
-                      { backgroundColor: mainColor , width: 350, height: 35}
-                    }
-                    theme={{
-                      colors: {
-                          onSurfaceVariant: 'white'
-                      }
-                    }}
-                  />
-                </View>
-                <View style={styles.textInput}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>Sobrenome</Text>
-                  <TextInput
-                    mode='flat'
-                    label=''
-                    value={familyName}
-                    onChangeText={(text) => setFamilyName(text)}
-                    underlineColor={'white'}
-                    activeUnderlineColor={color}
-                    textColor={grayText}
-                    editable={true}
-                    style={
-                      { backgroundColor: mainColor , width: 350, height: 35}
-                    }
-                    theme={{
-                      colors: {
-                          onSurfaceVariant: 'white'
-                      }
-                    }}
-                  />
-                </View>
                 <View style={styles.textInput}>
                   <Text style={{color: 'white', fontWeight: 'bold'}}>Email</Text>
                   <TextInput
@@ -142,6 +82,7 @@ export default function SignUp() {
                           onSurfaceVariant: 'white'
                       }
                     }}
+                    render={(props) => <NativeTextInput inputMode={'email'} keyboardType={'email-address'} {...props} />}
                   />
                 </View>
                 <View style={styles.textInput}>
@@ -216,41 +157,19 @@ export default function SignUp() {
             </KeyboardAvoidingView>
             <TouchableOpacity 
                 style={styles.newUser}
-                onPress={() => navigation.navigate('SignUp')}
+                onPress={() => navigation.navigate('SignIn')}
             >
                 <Text style={{color: grayText, fontWeight: 'normal'}}>Já tem uma conta?</Text>
                 <Text style={{color: color, fontWeight: 'bold'}}>Entre</Text>
             </TouchableOpacity>
-            <View style={styles.continue}>
-              <Text style={{color: grayText, fontWeight: 'normal'}}>Ou continue com</Text>
-              <TouchableOpacity 
-                style={styles.google}
-                // onPress={() => setVisibleSnackbar(true)}
-              >
-                <Image
-                  style={{ width: 30, height: 30}} 
-                  source={require('../../assets/SignIn/icon_google-logo.png') }
-                />
-              </TouchableOpacity>
-            </View>
           </View>
-          <Snackbar
-            visible={visibleSnackbar}
-            onDismiss={() => setVisibleSnackbar(false)}
-            duration={3000}
-            action={{
-              label: 'Ok',
-              textColor: signUpResult === true ? 'white' : 'black',
-              onPress: () => {
-                setVisibleSnackbar(false);
-              },
-            }}
-            style={[styles.snackbar, signUpResult === true ? styles.snackbarSucess : styles.snackbarError]}
-          >
-            <Text style={{ color: signUpResult === true ? 'white' : 'black'}}>
-              {messageSnackBar}
-            </Text>
-          </Snackbar>
+          <SnackBar
+            visible={visibleSnackbar} 
+            setVisible={setVisibleSnackbar} 
+            message={messageSnackBar} 
+            error={signUpResult} 
+            width={350}
+          />
       </View>
     )
 }
@@ -281,22 +200,9 @@ const styles = StyleSheet.create({
       height: 5
     },
     body: {
-      marginTop: 15,
+      marginTop: 30,
       justifyContent: 'center',
       alignItems: 'center',
-    },
-    containerPhoto: {
-      width: '100%',
-      alignItems: 'center',
-    },
-    icon: {
-      position: 'absolute', 
-      top: '55%', 
-      left: '15%', 
-      zIndex: 2
-    },
-    avatar: {
-      zIndex: 1
     },
     keyboardArea:{
       justifyContent: 'center',
@@ -323,31 +229,5 @@ const styles = StyleSheet.create({
       marginTop: 20,
       flexDirection: 'row',
       gap: 2.5
-    }, 
-    continue: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 25,
-      flexDirection: 'column',
-      gap: 15
     },
-    google: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: 45,
-      height: 45,
-      borderWidth: 1,
-      borderColor: 'white',
-      borderRadius: 5
-    },
-    snackbar: {
-      width: 350,
-      alignSelf: 'center',
-    },
-    snackbarSucess: {
-      backgroundColor: success,
-    },
-    snackbarError: {
-      backgroundColor: error,
-    }
 });
