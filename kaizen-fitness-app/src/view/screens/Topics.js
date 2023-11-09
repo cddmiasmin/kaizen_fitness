@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Chip } from 'react-native-paper';
 
 import { mainColor } from '../../colors/colors';
@@ -10,13 +11,24 @@ import { StatusBar } from 'expo-status-bar';
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
 
-import { availableServices } from '../../services/availableServices';
+import { availableTopics } from '../../services/availableServices';
 
 import _ from 'lodash';
 
 export default function Topics() {
 
-    const [topicsSelected, setTopicsSelected] = useState(new Array(availableServices.length));
+    const navigation = useNavigation();
+
+    const availableTopics = [
+        "Nutrição", "Atividade Física", "Esporte", 
+        "Fisioterapia", "Reabilitação", "Massagem", "Coaching", "Terapia", 
+        "Yoga", "Meditação", "Quiropraxia",
+        "Acupuntura", "Estética", "Culinária", "Grupos de Apoio", "Técnicas de Alongamento",
+        "Academia", "Saúde Feminina", "Farmacologia", "Odontologia", "Nutrição infantil",
+        "Oftalmologia", "Saúde pública", "Nutrição para idosos"
+    ];
+
+    const [topicsSelected, setTopicsSelected] = useState(new Array(availableTopics.length));
     const [saveTopicsSelected, setSaveTopicsSelected] = useState([]);
 
     const { user, userType } = useContext(UserContext);
@@ -30,7 +42,7 @@ export default function Topics() {
         var topicsSelectedAux = topicsSelected;
 
         for (let count = 0; count < user.topics.length; count++) {
-            const index = availableServices.findIndex((topic) => topic === user.topics[count]);
+            const index = availableTopics.findIndex((topic) => topic === user.topics[count]);
             topicsSelectedAux[index] = user.topics[count];
         }
 
@@ -65,7 +77,7 @@ export default function Topics() {
             </Text>
             <View style={styles.containerChipTopics}>
                 {
-                    availableServices.map((service, key) => (
+                    availableTopics.map((service, key) => (
                         <Chip
                         key={`chip#${key}`}
                         mode='outlined' 

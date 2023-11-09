@@ -1,101 +1,98 @@
-import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useContext, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { List } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { mainColor } from '../../colors/colors';
 
 import Footer from '../components/Footer';
 import Header from '../components/Profile/Header';
+import DialogAlert from '../components/DialogAlert';
 
 import { ColorContext } from '../../contexts/ColorContext';
 import { UserContext } from '../../contexts/UserContext';
 
-import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
-import { Dialog, Button } from 'react-native-paper';
-import ProfessionalController from '../../controller/ProfessionalController';
-import UserController from '../../controller/UserController';
 import { StatusBar } from 'expo-status-bar';
-
+import HeaderConsumer from '../components/Profile/HeaderConsumer';
 
 export default function Perfil() {
 
   const navigation = useNavigation();
 
   const [visible, setVisible] = useState(false);
+  const [whoCalledTheDialog, setWhoCalledTheDialog] = useState('');
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogContent, setDialogContent] = useState('');
 
   const { color } = useContext(ColorContext);
-
   const { userType } = useContext(UserContext);
 
-  const opcoes = [
-    { 'id': 1, 'nome': 'Meus dados', 'icon': 'account'},
-    { 'id': 2, 'nome': 'Deletar minha conta', 'icon': 'trash-can'},
-    { 'id': 3, 'nome': 'Deslogar minha conta', 'icon': 'exit-to-app'}
+  const topicName = userType === 'consumer' ? 'Interesses' : 'Serviços';
+  const topicIcon = userType === 'consumer' ? 'thumb-up' : 'briefcase';
+
+  const options = [
+    { key: 'myData', name: 'Meus dados', icon: 'badge-account-horizontal' },
+    { key: 'location', name: 'Localização', icon: 'map-marker' },
+    { key: 'topics', name: topicName, icon: topicIcon },
+    { key: 'deleteAccount', name: 'Excluir conta', icon: 'delete' },
+    { key: 'exit', name: 'Sair', icon: 'exit-to-app' }
   ]
 
-  const ativarConfirmacao = async () => {
-
-    var response;
-
-    if (dialogTitle === 'Deletar minha conta'){
-      if(userType === 'professional') {
-        professionalController = new ProfessionalController();
-
-        response = await professionalController.deleteProfessional();
-      }
-    } else {
-      const userController = new UserController();
-
-      response = await userController.signOut(); 
-    }
-    console.log(response);
-    navigation.navigate('SignIn');
+  const executeDialogUserChoice = () => {
+    if(whoCalledTheDialog === 'deleteAccount') console.log('delete');
+    else console.log('exit');
   }
 
-  const ativarOpcao = (key) => {
-    if(key === 0) {
-      navigation.navigate('MyData');
-    } else {
-
+  const optionPressed = (key) => {
+    if(key === 'myData') navigation.navigate('MyData');
+    else if (key === 'location') navigation.navigate('MyData');
+    else if (key === 'topics') navigation.navigate('Topics');
+    else if (key === 'deleteAccount') {
+      setDialogTitle('Excluir conta');
+      setDialogContent('Tem certeza que deseja excluir sua conta do Kaizen Fitness?');
+      setWhoCalledTheDialog(key);
       setVisible(true);
-      
-      if(key === 1){
-        setDialogTitle('Deletar minha conta');
-        setDialogContent('Tem certeza que deseja excluir sua conta do Kaizen Fitness?');
-      } else {
-        setDialogTitle('Deslogar minha conta');
-        setDialogContent('Tem certeza que deseja deslogar do aplicativo?');
-      }
-
+    } else {
+      setDialogTitle('Sair');
+      setDialogContent('Tem certeza que deseja sair do aplicativo?');
+      setWhoCalledTheDialog(key);
+      setVisible(true);
     }
- }
+  }
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={mainColor} style="light" />
-      <Header/>
-      <View style={styles.linha}/>
-      {opcoes.map((opcao, key) => (
-        <TouchableOpacity key={key} style={styles.opcao} onPress={() => ativarOpcao(key)}>
-           <MaterialCommunityIcons name={opcao.icon} size={24} color="white" style={{ marginLeft: 20, marginRight: 20}}/>
-           <Text style={{color: 'white', fontWeight: 'bold'}} >{opcao.nome}</Text>
-           <Entypo style={{position: 'absolute', right: 0, marginRight: 10}} name="chevron-right" size={24} color="white" />
-        </TouchableOpacity>
-      ))}
-      <Footer/>
-      <Dialog visible={visible} onDismiss={() => setVisible(false)} style={{ backgroundColor: mainColor }}>
-        <Dialog.Icon icon="alert" size={35} color={color}/>
-        <Dialog.Title style={{color: color, fontWeight: 'bold', textAlign: 'center'}}>{dialogTitle}</Dialog.Title>
-        <Dialog.Content>
-          <Text style={{textAlign: 'center', color: 'white'}}>{dialogContent}</Text>
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button onPress={() => setVisible(false)} textColor={color}>Não</Button>
-          <Button onPress={() => ativarConfirmacao()} textColor={color}>Sim</Button>
-        </Dialog.Actions>
-      </Dialog>
+      <StatusBar style="light" />
+      {/* <Header /> */}
+      <HeaderConsumer/>
+      <View style={styles.line}/>
+      <FlatList
+        style={{ width: '100%', paddingBottom: 30}}
+        data={options}
+        ItemSeparatorComponent={() => <View style={{ marginTop: 10 }}/>}
+        renderItem={({item: option}) => 
+          <TouchableOpacity
+           style={{ backgroundColor: '#1c1c1c', borderRadius: 5}}
+           onPress={() => optionPressed(option.key)}
+          >
+              <List.Item
+                title={option.name}
+                titleStyle={{ color: 'white' }}
+                left={props => <List.Icon {...props} icon={option.icon} color={color} />}
+                right={props => <List.Icon {...props} icon={'chevron-right'} color={'white'} />}
+              />
+          </TouchableOpacity>
+        }
+        keyExtractor={item => item.key}
+      />
+      <Footer />
+      <DialogAlert
+        visible={visible} 
+        setVisible={setVisible} 
+        title={dialogTitle} 
+        message={dialogContent} 
+        response={() => executeDialogUserChoice()}
+      />
     </View>
   )
 }
@@ -108,16 +105,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: '8%',
     paddingRight: '8%',
-    paddingTop: '5%',
-    marginTop: '10%'
   },
-  linha: {
+  line: {
     width: '100%',
-    height: '0.5%',
+    height: 1 ,
     backgroundColor: 'white',
     borderRadius: 50,
     marginTop: 30,
-    marginBottom: '10%'
+    marginBottom: 30,
   },
   opcao: {
     backgroundColor: '#5d6d89',

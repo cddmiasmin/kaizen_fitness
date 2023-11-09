@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput, Avatar, IconButton } from 'react-native-paper';
+import { TextInput as NativeTextInput } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -70,7 +71,7 @@ export default function MyData() {
         >
           Os dados de nome, sobrenome, data de nascimento e {documentLabel} são inalteráveis. Para saber mais, consulte a nossa {'política de privacidade'}.
         </Text>
-        <View style={styles.information}>
+        <KeyboardAvoidingView style={styles.information}>
           <TextInput
             mode='outlined'
             label="Nome"
@@ -143,7 +144,7 @@ export default function MyData() {
                   <TextInput
                     mode='outlined'
                     label='Altura'
-                    value={'1.78'}
+                    value={'1,78'}
                     onChangeText={(text) => setHeight(text)}
                     outlineColor={'white'}
                     activeOutlineColor={color}
@@ -158,12 +159,13 @@ export default function MyData() {
                     onFocus={() => setColorTextHeight('white')}
                     onBlur={() => setColorTextHeight(color)}
                     right={<TextInput.Icon icon="pencil-outline" color={colorTextHeight}/>}
+                    render={(props) => <NativeTextInput inputMode={'decimal'} keyboardType={'decimal-pad'} {...props} />}
                   />
 
                   <TextInput
                     mode='outlined'
                     label='Peso'
-                    value={'56.9'}
+                    value={'56,9'}
                     onChangeText={(text) => setWeight(text)}
                     outlineColor={'white'}
                     activeOutlineColor={color}
@@ -178,11 +180,12 @@ export default function MyData() {
                     onFocus={() => setColorTextWeight('white')}
                     onBlur={() => setColorTextWeight(color)}
                     right={<TextInput.Icon icon="pencil-outline" color={colorTextWeight}/>}
+                    render={(props) => <NativeTextInput inputMode={'decimal'} keyboardType={'decimal-pad'} {...props} />}
                   />
               </>
            }
 
-        </View>
+        </KeyboardAvoidingView>
     </ScrollView>
   );
 }

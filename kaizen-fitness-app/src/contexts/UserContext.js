@@ -23,7 +23,7 @@ export const UserContextProvider = ({ userAuthData , children }) => {
         mediaSocial: [],
         name: "Florence",
         photo: "https://i.pinimg.com/564x/e5/40/87/e5408786edbaf21937f2caa40c0173ac.jpg",
-        topics: ["Treinamento","Medicina Alternativa"],
+        topics: ["Reabilitação"],
         state: "London",
       });
     const [userType, setUserType] = useState('consumer');

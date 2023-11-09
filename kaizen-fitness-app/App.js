@@ -35,7 +35,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [route, setRoute] = useState('Register');
+  const [route, setRoute] = useState('Profile');
   const [initializing, setInitializing] = useState(true);
   const [userAuthData, setUserAuthData] = useState('');
   const [stepNum, setStepNum] = useState(4);
