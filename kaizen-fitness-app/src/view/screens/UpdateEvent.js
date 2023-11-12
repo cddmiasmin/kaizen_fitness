@@ -19,7 +19,6 @@ import { mainColor } from '../../colors/colors';
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
 
-import  EventController  from '../../controller/EventController';
 
 import ModalEventTopics from '../components/RegisterEvent/ModalEventTopics';
 import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
@@ -30,8 +29,6 @@ import _ from 'lodash';
 import DialogAlert from '../components/DialogAlert';
 
 export default function UpdateEvent() {
-
-    const eventController = new EventController();
 
     const route = useRoute();
     const navigation = useNavigation()
@@ -102,7 +99,7 @@ export default function UpdateEvent() {
         else console.log('check');
     }
 
-    const buildContentDialog = async (alert) => {
+    const buildContentDialog = (alert) => {
 
         const message = (
             <View>
@@ -242,7 +239,7 @@ export default function UpdateEvent() {
 
     }
 
-    const whatDataHasChanged = async () => {
+    const whatDataHasChanged = () => {
         let changes = {};
 
         if(data.modality === 'Online') changes = whatOnlineEventDataHasChanged();

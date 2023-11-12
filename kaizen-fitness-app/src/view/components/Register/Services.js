@@ -49,28 +49,28 @@ export default function Services() {
         setData(dataAux);
         setStepNum(stepNum + 1);
       }
+    } else setStepNum(stepNum + 1);
+    // } else {
 
-    } else {
+    //   if(topics.length === 0 ){
+    //     setMessageSnackbar('É obrigatório definir tópicos que represente seus interesses.');
+    //     setErrorSnackBar(true);
+    //     setVisibleSnackbar(true);
+    //   }
+    //   else if (topics.length < 3){
+    //     setMessageSnackbar('É necessário escolher no minino 3 tópicos de interesse.');
+    //     setErrorSnackBar(true);
+    //     setVisibleSnackbar(true);
+    //   } else {
+    //     let dataAux = data;
+    //     dataAux.topics = topics;
 
-      if(topics.length === 0 ){
-        setMessageSnackbar('É obrigatório definir tópicos que represente seus interesses.');
-        setErrorSnackBar(true);
-        setVisibleSnackbar(true);
-      }
-      else if (topics.length < 3){
-        setMessageSnackbar('É necessário escolher no minino 3 tópicos de interesse.');
-        setErrorSnackBar(true);
-        setVisibleSnackbar(true);
-      } else {
-        let dataAux = data;
-        dataAux.topics = topics;
+    //     console.log('Aux', dataAux);
 
-        console.log('Aux', dataAux);
-
-        setData(dataAux);
-        setStepNum(stepNum + 1);
-      }
-    }
+    //     setData(dataAux);
+    //     setStepNum(stepNum + 1);
+    //   }
+    // }
   }
   
   const updateServiceSelected = (key, service) => {
@@ -79,9 +79,11 @@ export default function Services() {
     setServicesSelect(newServicesSelected);
   };
 
-  useEffect(() => {
-    setTopics(servicesSelected.filter(value => value !== undefined));
-  }, [servicesSelected]);
+  // useEffect(() => {
+  //   setTopics(servicesSelected.filter(value => value !== undefined));
+  // }, [servicesSelected]);
+
+  useEffect(() => console.log(topics), []);
 
   return (
     <View style={styles.container}>

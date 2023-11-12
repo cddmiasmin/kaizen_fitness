@@ -1,7 +1,4 @@
 import { createContext, useState, useEffect, useContext } from "react";
-
-import ProfessionalController from './../controller/ProfessionalController';
-import { createJsonObject } from "../utils/createJsonObject";
 import { UserContext } from "./UserContext";
 
 export const DataContext = createContext();
@@ -10,24 +7,25 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
     const { user, userType } = useContext(UserContext);
 
-    const professionalController = new ProfessionalController();
-
     const [data, setData] = useState({});
 
-    const [name, setName] = useState('');
-    const [familyName, setFamilyName] = useState('Welch');
-    const [photo, setPhoto] = useState('https://i.pinimg.com/564x/e5/40/87/e5408786edbaf21937f2caa40c0173ac.jpg');
-    const [dataOfBirth, setDataOfBirth] = useState(new Date());
-    const [document, setDocument] = useState('123.456.789-00');
-    const [city, setCity] = useState('England');
-    const [county, setCounty] = useState('');
-    const [state, setState] = useState('London');
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongitude] = useState('');
-    const [height, setHeight] = useState('');
-    const [weight, setWeight] = useState('');
-    const [topics, setTopics] = useState([]);
+    const [name, setName] = useState('Evan');
+    const [familyName, setFamilyName] = useState('Thomas Peters');
+    const [photo, setPhoto] = useState('https://i.pinimg.com/564x/d7/28/77/d72877b5a14a034d739b1377f0db68a7.jpg');
+    const [dataOfBirth, setDataOfBirth] = useState(new Date(1987,0,20));
+    const [document, setDocument] = useState('590.148.500-93');
+    const [city, setCity] = useState('Saint Louis');
+    const [state, setState] = useState('Missouri');
+    const [height, setHeight] = useState('1,80');
+    const [weight, setWeight] = useState('79');
+    const [topics, setTopics] = useState(["Academia", "Saúde pública", "Meditação"]);
     const [kindOfPerson, setKindOfPerson] = useState('PF');
+
+    function timestampToDate(timestamp) {
+        const date = new Date(timestamp.seconds * 1000);
+        date.setMilliseconds(timestamp.nanoseconds / 1000000);
+        return date;
+    }
 
     const clearData = () => {
         // setData({});
@@ -50,8 +48,11 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
     const myData = () => {
         if(userType === 'consumer' || user.kindOfPerson === 'PF') {
+
+            let date = new Date(timestampToDate(user.dataOfBirth));
+
             setFamilyName(user.familyName);
-            setDataOfBirth(user.dataOfBirth);
+            setDataOfBirth(date.toLocaleDateString('pt-br'));
         }
 
         if(userType === 'consumer') {
@@ -64,21 +65,8 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
         setName(user.name);
         setPhoto(user.photo);
         setDocument(user.document);
-
-        console.log('oio');
+        setData({});
     }
-
-    useEffect(() => {
-        if(stepNum === 5) console.log('a paz', data)
-    }, [stepNum]);
-
-    // useEffect(() => {
-    //     // if(Object.keys(data).length > 0) {
-    //     //     console.log("Register", data, typeof data);
-    //     //     professionalController.registerProfessional(data);
-    //     // }
-    //     console.log('data', data);
-    // }, [data]);
 
     return (
         <DataContext.Provider
@@ -93,8 +81,6 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 document, setDocument,
                 kindOfPerson, setKindOfPerson,
                 topics, setTopics,
-                latitude, setLatitude,
-                longitude, setLongitude,
                 city, setCity,
                 state, setState,
                 height, setHeight,

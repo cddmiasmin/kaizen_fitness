@@ -51,7 +51,7 @@ export default function DataBasicPerson() {
     setStepNum(stepNum + 1);
   }
 
-  useEffect(() => setDataOfBirth(new Date(maximumDateOf18YearsAgo())), []);
+  //useEffect(() => setDataOfBirth(new Date(maximumDateOf18YearsAgo())), []);
 
   return (
     <View style={styles.container}>

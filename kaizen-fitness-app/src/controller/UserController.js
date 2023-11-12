@@ -1,42 +1,40 @@
-import UserModal from "../model/UserModal";
+import { userModelSignIn, userModelSignOut, userModelSignUp } from "../model/UserModel"
+import { consumerControllerReadProfile } from "./ConsumerController";
+import { professionalControllerReadProfile } from "./ProfessionalController";
 
-class UserController {
+export const userControllerHasAProfile = async () => {
 
-    userModal = new UserModal();
+    const consumer = await consumerControllerReadProfile();
+    const professional = await professionalControllerReadProfile();
 
-    userHasAProfile = async () => {
-        return await this.userModal.userHasAProfile();
-    }
-
-    signIn = async (email, password) => {
-        return await this.userModal.signIn(email, password);
-    }
+    console.log('CONSUMER', consumer, consumer.data());
+    console.log('PROF', professional, professional.data());
     
-    signUp = async (photo, name, familyName, email, password) => {
-        const signUp = await this.userModal.signUp(email, password);
-        let updateProfile;
-
-        if(signUp.result){
-            const update = {
-                displayName: name + ' ' + familyName,
-                photoURL: photo,
-            }
-            updateProfile = await this.userModal.updateProfile(update);
-        }
-
-        return signUp;
-    }
+    if(consumer.data() !== undefined) 
+        return { userType: "consumer", data: consumer.data() };    
     
-    signOut = async () => {
-        return this.userModal.signOut();
-    }
-    
-    signInGoogle = async () => this.userModal.signInGoogle();
+    if(professional.data() !== undefined) 
+        return { userType: "professional", data: professional.data() };
 
-    forgotPassword = async (email) => {
-        return await this.userModal.forgotPassword(email);
-    }
-    
+    return { userType: "noProfile", data: [] };
 }
 
-export default UserController;
+export const userControllerSignIn = async (email, password) => {
+    return await userModelSignIn(email, password);
+}
+
+export const userControllerSignUp = async (email, password) => {
+    return await userModelSignUp(email, password);
+}
+
+export const userControllerSignOut = async () => {
+    //return await 
+}
+
+export const userControllerSignInGoogle = async () => {
+    //return await 
+}
+
+export const userControllerForgotPassword = async () => {
+    //return await 
+}

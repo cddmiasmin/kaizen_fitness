@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import auth from '@react-native-firebase/auth';
 
 import Test             from './src/view/screens/Test';
 import Topics           from './src/view/screens/Topics';
@@ -30,66 +30,89 @@ import { UserContextProvider } from './src/contexts/UserContext';
 import { DataContextProvider } from './src/contexts/DataContext';
 import { ColorContextProvider } from './src/contexts/ColorContext';
 
+import { userControllerHasAProfile } from './src/controller/UserController';
+
 import 'expo-dev-client';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [route, setRoute] = useState('UserType');
+  const [routeName, setRouteName] = useState('');
   const [initializing, setInitializing] = useState(true);
-  const [userAuthData, setUserAuthData] = useState('');
+  const [userData, setUserData] = useState('');
   const [stepNum, setStepNum] = useState(1);
 
   const onAuthStateChanged = (user) => {
-
-    setUserAuthData(user);
+    setUserData(user);
     if (initializing) setInitializing(false);
     console.log(user);
   }
 
-  // const WhatWillBeTheInitialRouteName = () => {
-  //   if(userAuthData !== null) setRoute('Home'); 
-  //   else setRoute('SignIn');
-  // }
+  const userHasAProfile = async () => {
+    const profile = await userControllerHasAProfile();
+    setUserData(profile);
 
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
+    console.log(profile)
 
-  // useEffect(() => WhatWillBeTheInitialRouteName(), [userAuthData]);
+    if(profile.userType === 'consumer') return 'HomeConsumer';
+    else if(profile.userType === 'professional') return 'HomeProfessional';
+    else return 'CreateProfile';
+  }
 
-  // if (initializing) return null;
+  const WhatWillBeTheInitialRouteName = async () => {
+    if(userData === null) setRouteName('SignIn'); 
+    //else if(userData.emailVerified === false) setRoute('EmailValidation');
+    else {
+      const routeAux = await userHasAProfile();
+      console.log(routeAux);
+      setRouteName(routeAux);
+    }
+  }
+
+  async function route() {
+    await WhatWillBeTheInitialRouteName()
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  useEffect(() => {
+    if(!initializing) route();
+  }, [initializing]);
+
+  if (initializing || routeName === '') return null;
 
   return (
-    <UserContextProvider userAuthData={userAuthData}>
+    <UserContextProvider userData={userData}>
       <ColorContextProvider>
         <DataContextProvider stepNum={stepNum} setStepNum={setStepNum}>
           <NavigationContainer>
-            <Stack.Navigator initialRouteName={route}>
+            <Stack.Navigator initialRouteName={routeName}>
+              <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/>
+              <Stack.Screen name="Topics" component={Topics} options={{ headerShown: false }}/>
               <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }}/>
               <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
               <Stack.Screen name="MyData" component={MyData} options={{ headerShown: false }}/>
-              <Stack.Screen name="MyAccount" component={MyAccount} options={{ headerShown: false }}/>
-              <Stack.Screen name="Services" component={Services} options={{ headerShown: false }}/>
               <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
               <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
-              <Stack.Screen name="KindOfEvent" component={KindOfEvent} options={{ headerShown: false }}/>
-              <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
-              <Stack.Screen name="EmailValidation" component={EmailValidation} options={{ headerShown: false }}/>
-              <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/>
-              <Stack.Screen name="Topics" component={Topics} options={{ headerShown: false }}/>
-              <Stack.Screen name="RegisterEvent" component={RegisterEvent} options={{ headerShown: false }}/>
-              <Stack.Screen name="UpdateEvent" component={UpdateEvent} options={{ headerShown: false }}/>
-              <Stack.Screen name="HomeConsumer" component={HomeConsumer} options={{ headerShown: false }}/>
-              <Stack.Screen name="HomeProfessional" component={HomeProfessional} options={{ headerShown: false }}/>
-              <Stack.Screen name="DisplayEvent" component={DisplayEvent} options={{ headerShown: false }}/>
-              <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
               <Stack.Screen name="Calendar" component={Calendar} options={{ headerShown: false }}/> 
-              <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }}/> 
+              <Stack.Screen name="Services" component={Services} options={{ headerShown: false }}/>
+              <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
+              <Stack.Screen name="MyAccount" component={MyAccount} options={{ headerShown: false }}/>
+              <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
+              <Stack.Screen name="KindOfEvent" component={KindOfEvent} options={{ headerShown: false }}/>
+              <Stack.Screen name="UpdateEvent" component={UpdateEvent} options={{ headerShown: false }}/>
+              <Stack.Screen name="DisplayEvent" component={DisplayEvent} options={{ headerShown: false }}/>
+              <Stack.Screen name="HomeConsumer" component={HomeConsumer} options={{ headerShown: false }}/>
+              <Stack.Screen name="RegisterEvent" component={RegisterEvent} options={{ headerShown: false }}/>
               <Stack.Screen name="SearchResults" component={SearchResults} options={{ headerShown: false }}/> 
               <Stack.Screen name="CreateProfile" component={CreateProfile} options={{ headerShown: false }}/> 
+              <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }}/> 
+              <Stack.Screen name="EmailValidation" component={EmailValidation} options={{ headerShown: false }}/>
+              <Stack.Screen name="HomeProfessional" component={HomeProfessional} options={{ headerShown: false }}/>
             </Stack.Navigator>
           </NavigationContainer>
         </DataContextProvider>

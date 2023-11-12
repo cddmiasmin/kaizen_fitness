@@ -30,14 +30,14 @@ export default function Footer() {
         {key: 'profile', route: 'Profile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline'}
     ]
 
-    const noUserType = [
+    const noProfile = [
         {key: 'profile', route: 'CreateProfile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline'}
     ]
 
     const setBottomTaps = () => {
         if(userType === 'professional') return professional;
-        else if (userType === 'professional') return consumer;
-        else return noUserType;
+        else if (userType === 'consumer') return consumer;
+        else return noProfile;
     }
 
     const bottomTaps = setBottomTaps();

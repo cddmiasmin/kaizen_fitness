@@ -1,25 +1,21 @@
-import ProfessionalModal from "../model/ProfessionalModal";
+import { 
+    professionalModelCreateProfile, 
+    professionalModelReadProfile, 
+    professionalModelUpdateProfile 
+} from "../model/ProfessionalModel";
 
-class ProfessionalController {
-
-    professionalModal = new ProfessionalModal();
-
-    registerProfessional = async (professional) => {
-        return await this.professionalModal.registerProfessional(professional);
-    }
-
-    getProfessional = async (idUser) => {
-         return await this.professionalModal.getProfessional(idUser);
-    }
-
-    deleteProfessional = async () => {
-         return await this.professionalModal.deleteProfessional();
-    }
-
-    updateProfessional = async ( professional ) => {
-        return await this.professionalModal.updateProfessional(professional);
-    }
-
+export const professionalControllerCreateProfile = async (professional) => {
+    return await professionalModelCreateProfile(professional);
 }
 
-export default ProfessionalController;
+export const professionalControllerReadProfile = async () => {
+    return await professionalModelReadProfile();
+}
+
+export const professionalControllerUpdateProfile = async (professional) => {
+    return await professionalModelUpdateProfile(professional);
+}
+
+export const professionalControllerDeleteProfile = async () => {
+    
+}

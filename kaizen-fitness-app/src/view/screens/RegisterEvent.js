@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Avatar, Chip, IconButton, TextInput } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,29 +12,20 @@ import {
     Image
 } from 'react-native';
 
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-
 import { StatusBar } from 'expo-status-bar';
 
 import { mainColor } from '../../colors/colors';
+import { onlinePlataforms } from '../../services/onlinePlataforms';
 import { participantsColors } from '../../services/participantsColors';
 
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
 
-import  EventController  from '../../controller/EventController';
-
 import ModalEventTopics from '../components/RegisterEvent/ModalEventTopics';
-import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
 import ModalEventWallpaper from '../components/RegisterEvent/ModalEventWallpaper';
-import { onlinePlataforms } from '../../services/onlinePlataforms';
-import ProfessionalController from '../../controller/ProfessionalController';
+import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
 
 export default function RegisterEvent() {
-
-    const eventController = new EventController();
-    const professionalController = new ProfessionalController();
 
     const route = useRoute()
     const modality = route.params === undefined ? 'inPerson' : route.params.modality;

@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { mainColor, success } from '../../colors/colors';
-import ProfessionalController from '../../controller/ProfessionalController';
-import EventController from '../../controller/EventController';
-import UserController from '../../controller/UserController';
 
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -12,9 +9,6 @@ import { UserContext } from '../../contexts/UserContext';
 export default function Test() {
  const { user } = useContext(UserContext);
 
- const event = new EventController();
- const usercontroller = new UserController();
- const professional = new ProfessionalController();
 
   const login = async () => {
     
@@ -85,7 +79,7 @@ export default function Test() {
 
     // return response;
 
-    return await event.deleteProfessionalEvents();
+    //return await event.deleteProfessionalEvents();
 
   }
 

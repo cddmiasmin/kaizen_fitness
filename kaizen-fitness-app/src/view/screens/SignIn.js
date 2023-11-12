@@ -15,9 +15,9 @@ import { grayText, mainColor } from '../../colors/colors';
 
 import { ColorContext } from '../../contexts/ColorContext';
 
-import UserController from '../../controller/UserController';
-
 import SnackBar from '../components/SnackBar';
+
+import { userControllerSignIn } from '../../controller/UserController';
 
 export default function SignIn() {
 
@@ -34,20 +34,19 @@ export default function SignIn() {
   
     const navigation = useNavigation();
 
-    const userController = new UserController();
   
     const {
       color
     } = useContext(ColorContext);
 
     const makeUserSignIn = async () => {
-      const response = await userController.signIn(email, password);
+      const response = await userControllerSignIn(email, password);
 
       setSignInResult(!response.result);
       setMessageSnackbar(response.message);
-      setVisibleSnackbar(true)
+      setVisibleSnackbar(true);
 
-      if(signInResult) navigation.navigate('Home');
+      //if(signInResult) navigation.navigate('Home');
 
     }
    

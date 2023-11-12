@@ -1,7 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Chip } from 'react-native-paper';
+
+import _ from 'lodash';
 
 import { mainColor } from '../../colors/colors';
 
@@ -13,29 +15,45 @@ import { ColorContext } from '../../contexts/ColorContext';
 
 import { availableTopics } from '../../services/availableServices';
 
-import _ from 'lodash';
+import { consumerControllerUpdateProfile } from '../../controller/ConsumerController';
+import { professionalControllerUpdateProfile } from '../../controller/ProfessionalController';
+
+import SnackBar from '../components/SnackBar';
 
 export default function Topics() {
 
     const navigation = useNavigation();
 
-    const availableTopics = [
-        "Nutrição", "Atividade Física", "Esporte", 
-        "Fisioterapia", "Reabilitação", "Massagem", "Coaching", "Terapia", 
-        "Yoga", "Meditação", "Quiropraxia",
-        "Acupuntura", "Estética", "Culinária", "Grupos de Apoio", "Técnicas de Alongamento",
-        "Academia", "Saúde Feminina", "Farmacologia", "Odontologia", "Nutrição infantil",
-        "Oftalmologia", "Saúde pública", "Nutrição para idosos"
-    ];
-
     const [topicsSelected, setTopicsSelected] = useState(new Array(availableTopics.length));
     const [saveTopicsSelected, setSaveTopicsSelected] = useState([]);
+
+    const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+    const [messageSnackBar, setMessageSnackbar] = useState('');
+    const [errorSnackBar, setErrorSnackBar] = useState(false);
 
     const { user, userType } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
     const topic = userType === 'consumer' ? 'Interesses' : 'Serviços';
     const message = userType === 'consumer' ? 'interesses' : 'serviços';
+
+    const saveChangesToTopics = async () => {
+        const data = { topics: saveTopicsSelected }
+        console.log(data);
+
+        let response = {};
+
+        if(userType === 'consumer') response = await consumerControllerUpdateProfile(data);
+        else response = await professionalControllerUpdateProfile(data);
+
+        console.log(response, response.length);
+
+        if(Object.keys(response).length !== 0) {
+            setErrorSnackBar(!response.result);
+            setMessageSnackbar(response.message);
+            setVisibleSnackbar(true);
+        }
+    }
 
     const alignSelectedTopics = () => {
         
@@ -97,10 +115,20 @@ export default function Topics() {
             </View>
             {
                 !_.isEqual(user.topics, saveTopicsSelected) &&
-                <TouchableOpacity style={[styles.saveChangesButton, { backgroundColor: color}]}>
+                <TouchableOpacity 
+                    style={[styles.saveChangesButton, { backgroundColor: color}]}
+                    onPress={() => saveChangesToTopics()}
+                >
                     <Text style={{color: 'white', fontWeight: 'bold'}}>Salvar alterações</Text>
                 </TouchableOpacity>
             }
+            <SnackBar 
+                visible={visibleSnackbar} 
+                setVisible={setVisibleSnackbar} 
+                message={messageSnackBar} 
+                error={errorSnackBar}
+                width={315} 
+            />
         </View>
     );
 }
@@ -111,6 +139,7 @@ const styles = StyleSheet.create({
         backgroundColor: mainColor,
         paddingLeft: '8%',
         paddingRight: '8%',
+        alignItems: 'center',
     },
     header: {
         marginTop: 60,
@@ -118,6 +147,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         marginBottom: 30,
+        width: '100%'
     },
     screen: {
         color: 'white',

@@ -1,9 +1,9 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import ProfessionalController from '../controller/ProfessionalController';
+import ProfessionalController from '../src/controller/ProfessionalController';
 
-class UserModal {
+class UserModel {
 
     professionalController = new ProfessionalController();
 
@@ -123,4 +123,4 @@ class UserModal {
     }
 }
 
-export default UserModal;
+export default UserModel;

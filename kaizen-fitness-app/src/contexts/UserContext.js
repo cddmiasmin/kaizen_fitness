@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext();
 
-export const UserContextProvider = ({ userAuthData , children }) => {
+export const UserContextProvider = ({ userData , children }) => {
 
     const [user, setUser] = useState({
         searchHistory: [
@@ -13,7 +13,7 @@ export const UserContextProvider = ({ userAuthData , children }) => {
         ],
         city: "England",
         document: "123.456.789-00",
-        dataOfBirth: "28/08/1986",
+        dataOfBirth: "18",
         emailUser: "Florence.welch@hotmail.com",
         emailVerified: false,
         familyName: "Welch",
@@ -23,21 +23,31 @@ export const UserContextProvider = ({ userAuthData , children }) => {
         mediaSocial: [],
         name: "Florence",
         photo: "https://i.pinimg.com/564x/e5/40/87/e5408786edbaf21937f2caa40c0173ac.jpg",
-        topics: ["Reabilitação"],
+        topics: ["Academia"],
         state: "London",
       });
     const [userType, setUserType] = useState('professional');
-    const [userBlockedFromContent, setUserBlockedFromContent] = useState(true);
-
+    
     useEffect(() => {
-        if(userAuthData) {
-            
-            if(userAuthData.emailVerified == false) setUserBlockedFromContent(true);
-           
+        if(userData) {
+            setUser(userData.data);
+            setUserType(userData.userType)
         }
-    }, [userAuthData]);
+    }, [userData]);
 
-    console.log('UserContext', user, userType, userBlockedFromContent);
+    //console.log('UserContext', user, user.dataOfBirth );
+
+    // useEffect(() => {
+    //     function timestampToDate(timestamp) {
+    //         const date = new Date(timestamp.seconds * 1000);
+    //         date.setMilliseconds(timestamp.nanoseconds / 1000000);
+    //         return date;
+    //     }
+
+    //     const date = new Date(timestampToDate(user.dataOfBirth))
+
+    //     console.log(user.dataOfBirth, date)
+    // }, [user])
 
     return (
         <UserContext.Provider

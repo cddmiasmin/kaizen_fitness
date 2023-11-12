@@ -15,12 +15,12 @@ import { grayText, mainColor  } from '../../colors/colors';
 
 import { ColorContext } from '../../contexts/ColorContext';
 
-import UserController from '../../controller/UserController';
 import SnackBar from '../components/SnackBar';
+import { userControllerSignUp } from '../../controller/UserController';
 
 export default function SignUp() {
 
-    const [email, setEmail] = useState('iasmin.dias87@gmail.com');
+    const [email, setEmail] = useState('adelmo.dias58@gmail.com');
     const [password, setPassword] = useState('123456');
     const [confirmPassword, setConfirmPassword] = useState('123456');
 
@@ -35,19 +35,17 @@ export default function SignUp() {
     const [signUpResult, setSignUpResult] = useState(true);
   
     const navigation = useNavigation();
-
-    const userController = new UserController();
   
     const {
       color
     } = useContext(ColorContext);
 
     const makeUserSignUp = async () => {
-      const response = await userController.signUp(email, password);
+      const response = await userControllerSignUp(email, password);
 
       setSignUpResult(!response.result);
       setMessageSnackbar(response.message);
-      setVisibleSnackbar(true)
+      setVisibleSnackbar(true);
 
       //if(signUpResult) navigation.navigate('Home');
 

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
@@ -10,20 +10,65 @@ import { DataContext } from './../../contexts/DataContext';
 
 import Stages                from '../components/Register/Stages';
 import Services              from '../components/Register/Services';
+import SnackBar              from '../components/SnackBar';
 import LocationUser          from '../components/Register/LocationUser';
 import DataConsumer          from '../components/Register/DataConsumer';
 import DataProfessional      from '../components/Register/DataProfessional';
 import DataBasicPerson       from '../components/Register/DataBasicPerson';
 import DataBasicProfessional from '../components/Register/DataBasicProfessional';
 
+import { consumerControllerCreateProfile } from '../../controller/ConsumerController';
+import { professionalControllerCreateProfile } from '../../controller/ProfessionalController';
+
 export default function Register() {
  
- const { userType } = useContext(UserContext);
- const { stepNum } = useContext(DataContext);
+  const { userType } = useContext(UserContext);
+  const { stepNum, data, setData } = useContext(DataContext);
 
- return (
-      <ScrollView style={styles.container}>
-        <StatusBar style='light'/>
+  const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+  const [messageSnackBar, setMessageSnackbar] = useState('');
+  const [errorSnackBar, setErrorSnackBar] = useState(false);
+
+  const consumerCreateProfile = async () => {
+    console.log(data);
+    const response = await consumerControllerCreateProfile(data);
+    
+    setErrorSnackBar(!response.result);
+    setMessageSnackbar(response.message);
+    setVisibleSnackbar(true);
+  }
+
+  const professionalCreateProfile = async () => {
+    console.log(data);
+    const response = await professionalControllerCreateProfile(data);
+    
+    setErrorSnackBar(!response.result);
+    setMessageSnackbar(response.message);
+    setVisibleSnackbar(true);
+  }
+
+  useEffect(() => {
+    
+    if(stepNum === 5) {
+     
+      if(userType === 'consumer') consumerCreateProfile();
+      else professionalCreateProfile();
+
+    }
+
+  }, [stepNum]);
+
+  useEffect(() => {
+    if(userType === 'consumer') {
+      let dataAux = data;
+      dataAux.searchHistory = [];
+      setData(dataAux);
+    }
+  }, []);
+
+  return (
+        <ScrollView style={styles.container}>
+          <StatusBar style='light'/>
           <View style={styles.stepper}>
             <Stages/>
             {
@@ -42,7 +87,14 @@ export default function Register() {
                   ||  stepNum === 5 && <Services/> 
             }
           </View>
-      </ScrollView>
+          <SnackBar 
+            visible={visibleSnackbar} 
+            setVisible={setVisibleSnackbar} 
+            message={messageSnackBar} 
+            error={errorSnackBar}
+            width={315} 
+          />
+        </ScrollView>
   );
 }
 
