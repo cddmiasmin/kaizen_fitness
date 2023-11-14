@@ -33,7 +33,7 @@ export default function Categories() {
             <StatusBar style='light'/>
             <ScrollView>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Home')} >
+                    <TouchableOpacity onPress={() => navigation.navigate('HomeConsumer')} >
                         <Ionicons name="caret-back-circle" size={24} color={color} />
                     </TouchableOpacity>
                     <Text style={{color: color, fontWeight: 'bold', fontSize: 18}}>

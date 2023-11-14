@@ -7,8 +7,8 @@ export const userControllerHasAProfile = async () => {
     const consumer = await consumerControllerReadProfile();
     const professional = await professionalControllerReadProfile();
 
-    console.log('CONSUMER', consumer, consumer.data());
-    console.log('PROF', professional, professional.data());
+    // console.log('CONSUMER', consumer, consumer.data());
+    // console.log('PROF', professional, professional.data());
     
     if(consumer.data() !== undefined) 
         return { userType: "consumer", data: consumer.data() };    
@@ -36,5 +36,9 @@ export const userControllerSignInGoogle = async () => {
 }
 
 export const userControllerForgotPassword = async () => {
+    //return await 
+}
+
+export const userControllerAuthenticationDelete = async () => {
     //return await 
 }

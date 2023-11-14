@@ -138,7 +138,7 @@ export default function Results({ search, setSearch, setActiveTextinput }) {
               onPress={() => {
                 setSearch('');
                 setActiveTextinput(false);
-                navigation.navigate('Home');
+                navigation.navigate('HomeConsumer');
               }}
           >
               <Icon 

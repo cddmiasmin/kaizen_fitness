@@ -22,13 +22,12 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 export default function Calendar() {
 
-    const { userType } = useContext(UserContext);
+    const { userType, userCalendar } = useContext(UserContext);
     const { color } = useContext(ColorContext);
  
     const route = useRoute();
     const navigation = useNavigation();
-    // const screen = route.params.screen;
-    const screen = 'Calendar';
+    const screen = route.params === undefined ? 'Calendar' : route.params.screen;
     const data = [
         {
             styleStatusBar: 'light',
@@ -161,35 +160,38 @@ export default function Calendar() {
     }
 
     const groupEventsWithTheSameDate = ( object ) => {
-        return _.groupBy(object, (obj) => obj.datatime.toDateString())
+        return _.groupBy(object, (obj) => obj.datatime.toDateString());
     }
 
     const filterDataSameDate = () => {
 
-        let onlineEvent = orderDates(temporaryModalityData[0]);
-        onlineEvent = groupEventsWithTheSameDate(onlineEvent);
-        onlineEvent = Object.entries(onlineEvent).map(([data, objects]) => ({
-            data: new Date(data),
-            objects: objects.map(obj => obj)
-        }));
-        setOnlineModalityData(onlineEvent);
+        if(temporaryModalityData.online !== undefined){
+            let onlineEvent = orderDates(temporaryModalityData.online);
+            onlineEvent = groupEventsWithTheSameDate(onlineEvent);
+            onlineEvent = Object.entries(onlineEvent).map(([data, objects]) => ({
+                data: new Date(data),
+                objects: objects.map(obj => obj)
+            }));
+            setOnlineModalityData(onlineEvent);
+        } else setOnlineModalityData(undefined);
 
-        
-        let inPersonEvent = orderDates(temporaryModalityData[1]);
-        inPersonEvent = groupEventsWithTheSameDate(inPersonEvent);
-        inPersonEvent = Object.entries(inPersonEvent).map(([data, objects]) => ({
-            data: new Date(data),
-            objects: objects.map(obj => obj)
-        }));
-        setInPersonModalityData(inPersonEvent);
+        if(temporaryModalityData.presencial !== undefined){
+            let inPersonEvent = orderDates(temporaryModalityData.presencial);
+            inPersonEvent = groupEventsWithTheSameDate(inPersonEvent);
+            inPersonEvent = Object.entries(inPersonEvent).map(([data, objects]) => ({
+                data: new Date(data),
+                objects: objects.map(obj => obj)
+            }));
+            setInPersonModalityData(inPersonEvent);
+        } else setInPersonModalityData(undefined);
     }
 
     const filterDataModality = () => {
         const groupedModalities = groupModality();
 
-        let temporaryModalityDataAux = [];
-        temporaryModalityDataAux.push(groupedModalities['Online']);
-        temporaryModalityDataAux.push(groupedModalities['Presencial']);
+        let temporaryModalityDataAux = { online: [], presencial: [] };
+        temporaryModalityDataAux.online = groupedModalities['Online'];
+        temporaryModalityDataAux.presencial = groupedModalities['Presencial'];
 
         setTemporaryModalityData(temporaryModalityDataAux);
     }
@@ -280,7 +282,7 @@ export default function Calendar() {
                     {
                         screen !== 'Calendar' &&
                         <View style={styles.screen}>
-                            <TouchableOpacity onPress={() => navigation.navigate('Home')} >
+                            <TouchableOpacity onPress={() => navigation.navigate('HomeConsumer')} >
                                 <Icon 
                                     name={'chevron-left'} 
                                     size={20} 
@@ -346,30 +348,40 @@ export default function Calendar() {
                 </View>
                 <View style={styles.body}>
                     <View style={styles.eventCards}>
-                        <FlatList
-                            style={{ marginBottom: 210 }}
-                            data={segmentedButtonsValue === 'online' ? onlineModalityData : inPersonModalityData}
-                            ItemSeparatorComponent={ItemSeparator}
-                            renderItem={({ item: event }) => 
-                                <View
-                                    style={styles.eventCard}
-                                >
-                                    <Text style={styles.eventCardTitle}>
-                                        {
-                                            event.data.getDate() + ' de ' + monthsOfTheYear[event.data.getMonth()] + '. ' + (event.data.getFullYear() === nowDate.getFullYear() ? '' : event.data.getFullYear())
-                                        }
-                                    </Text>
-                                    <View style={styles.eventCardLine} />
-                                    <View style={styles.events}>
-                                        {
-                                            event.objects?.map((event, key) => (
-                                                <EventCard key={key} data={event} orientation={'vertical'}/>
-                                            ))
-                                        }
+                        {
+                            onlineModalityData === undefined || inPersonModalityData.length === undefined
+                            ?
+                                <Text>iasmin</Text>
+                            :
+                            <FlatList
+                                style={{ marginBottom: 210 }}
+                                data={segmentedButtonsValue === 'online' ? onlineModalityData : inPersonModalityData}
+                                ItemSeparatorComponent={ItemSeparator}
+                                renderItem={({ item: event }) => 
+                                    <View
+                                        style={styles.eventCard}
+                                    >
+                                        <Text style={styles.eventCardTitle}>
+                                            {
+                                                event.data.getDate() 
+                                                + ' de ' 
+                                                + monthsOfTheYear[event.data.getMonth()] 
+                                                + '. ' 
+                                                + (event.data.getFullYear() === nowDate.getFullYear() ? '' : event.data.getFullYear())
+                                            }
+                                        </Text>
+                                        <View style={styles.eventCardLine} />
+                                        <View style={styles.events}>
+                                            {
+                                                event.objects?.map((event, key) => (
+                                                    <EventCard key={key} data={event} orientation={'vertical'}/>
+                                                ))
+                                            }
+                                        </View>
                                     </View>
-                                </View>
-                            }
-                        />   
+                                }
+                            />   
+                        }
                     </View>
                 </View>
                 <View>

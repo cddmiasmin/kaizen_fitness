@@ -48,38 +48,79 @@ export default function Test() {
 
 
   const registerEvent = async () => {
-
+    //online
     // const data = {
-    //   "name": "IASMIN Treinamento de corrida para iniciantes",
-    //   "datetime": new Date(2023, 9, 26, 10, 0),
-    //   "topics": ["Atividade Física", "Esporte"],
-    //   "modality": "presencial",
-    //   "address": "Parque Ibirapuera, São Paulo",
-    //   "latitude": -23.555555,
-    //   "longitude": -46.666667,
-    //   "about": "Este treinamento é ideal para quem quer começar a correr. Você aprenderá as técnicas básicas de corrida, como postura, respiração e alongamento.",
+    //   styleStatusBar: 'light',
+    //   wallpaper: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //   topics: ['Nutrição', 'Saúde Pública'],
+    //   name: "Conferência NutriSaúde 2023",
+    //   about: "Uma conferência online abordando temas cruciais sobre nutrição e saúde pública para promover bem-estar e qualidade de vida.",
+    //   modality: 'Online',
+    //   organizer: {
+    //     kindOfPerson: 'PJ', // Pessoa Jurídica
+    //     name: 'HealthCare Solutions Corp',
+    //   },
+    //   datetime: new Date('2023-12-05T14:30:00'),
+    //   participants: [
+    //     { idUser: 'IZZfxUCWwjNMKPk47Qf8HcfcaE55', name: 'Clara'},
+    //     { idUser: 'blacla1', name: 'Hola'},
+    //     { idUser: 'blacla2', name: 'Erika'},
+    //     { idUser: 'blacla3', name: 'Julia'},
+    //   ],
+    //   plataform: 'google-meet',
+    //   meetingLink: 'https://florenceandthemachine.net/home/',
     // }
 
+    //presencial
+    // const data = {
+    //   topics: ['Atividade Física'],
+    //   name: "Workshop de Atividade Física",
+    //   about: "Um evento dedicado a promover a importância da atividade física na saúde e no bem-estar.",
+    //   organizer: {
+    //     kindOfPerson: 'PJ',
+    //     name: 'Empresa Fitness Total',
+    //   },
+    //   datetime: new Date('2023-11-20T14:00:00'), // Data e hora do evento
+    //   modality: 'Presencial',
+    //   address: 'Avenida da Saúde, 123, Cidade Fitness',
+    //   participants: [],
+    //   styleStatusBar: 'light',
+    //   wallpaper: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    // }
+
+    const idUser = 'IZZfxEDWwjNMKPk47Qf8HcfcaE53';
+
     // const response = await firestore()
-    // .collection('ProfessionalEvent')
-    // .add(data)
-    // .then((sucesso) => {
-    //     console.log(sucesso.docs, sucesso)
-
-    //     const string = sucesso.path;
-
-    //     const afterSlash = string.split(\)[1];
-      
-    //     console.log(afterSlash)
-    //     return { result: true, message: 'Evento cadastrado com sucesso!', eventPath: sucesso.path}
-    // })
-    // .catch((error) => {
-    //     return { result: false, message: error }
-    // })
-
+    //                       .collection('Events')
+    //                       .doc(idUser)
+    //                       .set(data)
+    //                       .then(() => {
+    //                           return { result: true, message: 'Evento cadastrado com sucesso!'}
+    //                       })
+    //                       .catch((error) => {
+    //                           return { result: false, message: error }
+    //                       });
     // return response;
 
-    //return await event.deleteProfessionalEvents();
+    let response = [];
+
+    const events = await firestore()
+                              .collection("Events")
+                              .where("participants", "array-contains", idUser)
+                              .get();
+
+
+    if(!events.empty){
+      events.forEach((doc) => {
+  
+        let event = doc.data();
+        event.idDoc = doc.id;
+        response.push(event);
+        console.log(event.datatime)
+      });
+    } else response = null;
+
+    return response;
 
   }
 

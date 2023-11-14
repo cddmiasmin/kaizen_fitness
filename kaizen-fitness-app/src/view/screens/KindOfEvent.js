@@ -19,7 +19,7 @@ export default function KindOfEvent() {
 
  const { color } = useContext(ColorContext);
       
- const [buttonSelected, setButtonSelected] = useState('online');
+ const [buttonSelected, setButtonSelected] = useState('Online');
 
  const navigation = useNavigation();
 
@@ -40,13 +40,13 @@ export default function KindOfEvent() {
         </Text>
         <View style={styles.options}>
             <TouchableOpacity 
-                style={[styles.option, buttonSelected !== 'online' ? styles.optionOutOfFocus : '']} 
+                style={[styles.option, buttonSelected !== 'Online' ? styles.optionOutOfFocus : '']} 
                 onPress={() => {
-                    if(buttonSelected === 'online') return;
-                    else setButtonSelected('online')
+                    if(buttonSelected === 'Online') return;
+                    else setButtonSelected('Online')
                 }}
             >
-                { buttonSelected === 'online' &&
+                { buttonSelected === 'Online' &&
                     <>
                         <ImageBackground source={onlineEventImage} style={[StyleSheet.absoluteFillObject]}/>
                         <LinearGradient
@@ -58,13 +58,13 @@ export default function KindOfEvent() {
                 <Text style={styles.title}>Online</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-                style={[styles.option, buttonSelected !== 'inPerson' ? styles.optionOutOfFocus : '', styles.professionalOption]} 
+                style={[styles.option, buttonSelected !== 'Presencial' ? styles.optionOutOfFocus : '', styles.professionalOption]} 
                 onPress={() => {
-                    if(buttonSelected === 'inPerson') return;
-                    else setButtonSelected('inPerson')
+                    if(buttonSelected === 'Presencial') return;
+                    else setButtonSelected('Presencial')
                 }}
             >
-                    { buttonSelected === 'inPerson' &&
+                    { buttonSelected === 'Presencial' &&
                         <>
                             <ImageBackground source={inPersonEventImage} style={[StyleSheet.absoluteFillObject]}/>
                             <LinearGradient
@@ -76,7 +76,7 @@ export default function KindOfEvent() {
                 <Text style={styles.title}>Presencial</Text>
             </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('RegisterEvent', { modality: buttonSelected})} style={[styles.buttonContinue, { backgroundColor: color }]}>
+        <TouchableOpacity onPress={() => navigation.navigate('RegisterEvent', { modality: buttonSelected })} style={[styles.buttonContinue, { backgroundColor: color }]}>
             <Text style={{ color: 'white', fontWeight: 'bold'}}> Prosseguir </Text>
         </TouchableOpacity>
    </View>

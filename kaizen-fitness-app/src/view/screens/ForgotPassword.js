@@ -17,7 +17,7 @@ import { error, grayText, mainColor, success } from '../../colors/colors';
 
 import { ColorContext } from '../../contexts/ColorContext';
 
-import UserController from '../../controller/UserController';
+//import UserController from '../../controller/UserController';
 
 export default function ForgotPassword() {
 
@@ -30,14 +30,14 @@ export default function ForgotPassword() {
   
     const navigation = useNavigation();
 
-    const userController = new UserController();
+    //const userController = new UserController();
   
     const {
       color
     } = useContext(ColorContext);
 
     const forgotPassword = async () => {
-      const response = await userController.forgotPassword(email);
+      //const response = await userController.forgotPassword(email);
 
       setForgotPasswordResult(response.result);
       setMessageSnackbar(response.message);

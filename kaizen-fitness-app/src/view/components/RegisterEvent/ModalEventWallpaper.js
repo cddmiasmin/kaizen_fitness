@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, ScrollView, View, TouchableOpacity, Image } from 'react-native';
 import { Modal, TextInput } from 'react-native-paper';
 
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        height: 410
+        height: 520
     },
     message: {
         width:'100%',

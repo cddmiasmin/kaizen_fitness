@@ -15,25 +15,22 @@ import {
 import { StatusBar } from 'expo-status-bar';
 
 import { mainColor } from '../../colors/colors';
+import { onlinePlataforms } from '../../services/onlinePlataforms';
 
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
 
-
+import DialogAlert from '../components/DialogAlert';
 import ModalEventTopics from '../components/RegisterEvent/ModalEventTopics';
 import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
 import ModalEventWallpaper from '../components/RegisterEvent/ModalEventWallpaper';
-import { onlinePlataforms } from '../../services/onlinePlataforms';
 
 import _ from 'lodash';
-import DialogAlert from '../components/DialogAlert';
+import SnackBar from '../components/SnackBar';
+import { eventControllerDelete, eventControllerUpdate } from '../../controller/EventController';
 
 export default function UpdateEvent() {
-
-    const route = useRoute();
-    const navigation = useNavigation()
-    // const data = route.params.data;
-    const data = {
+    const dataAux = {
         styleStatusBar: 'light',
         wallpaper: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         topics: ["Nutrição","Saúde pública",],
@@ -57,13 +54,17 @@ export default function UpdateEvent() {
         ]
     };
 
-    const { user } = useContext(UserContext);
+    const route = useRoute();
+    const navigation = useNavigation()
+    const data = route.params === undefined ? dataAux : route.params.data;
+
+    const { user, setUserCalendar, getCalendarUser} = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
     const [eventWallpaper, setEventWallpaper] = useState(data.wallpaper);
     const [eventTopics, setEventTopics] = useState(data.topics);
     const [eventName, setEventName] = useState(data.name);
-    const [eventDateTime, setEventDateTime] = useState(new Date(data.datatime));
+    const [eventDateTime, setEventDateTime] = useState(new Date(data.datetime));
     const [eventAbout, setEventAbout] = useState(data.about || '');
     const [eventOnlinePlataform, setEventOnlinePlataform] = useState(data.plataform || '');
     const [eventLink, setEventLink] = useState(data.meetingLink || '');
@@ -84,6 +85,10 @@ export default function UpdateEvent() {
     const [changesNames, setChangesNames] = useState([]);
     const [changesData, setChangesData] = useState([]);
 
+    const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+    const [messageSnackBar, setMessageSnackbar] = useState('');
+    const [errorSnackBar, setErrorSnackBar] = useState(false);
+
     const onChange = (event, datetime) => {
         setEventDateTime(datetime);
         setDateTimePicker(false);
@@ -93,10 +98,36 @@ export default function UpdateEvent() {
     const [isModalEventTopicsActive, setModalEventTopics] = useState(false);
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
 
+    const deleteEvent = async () => {
+        const response = await eventControllerDelete(data.idDoc);
+        
+        if(response.result){
+            setUserCalendar([]);
+            getCalendarUser();
+        }
+        
+        setErrorSnackBar(!response.result);
+        setMessageSnackbar(response.message);
+        setVisibleSnackbar(true);
+    }
+
+    const updateEvent = async () => {
+        const response = await eventControllerUpdate(changesData, data.idDoc);
+        
+        if(response.result){
+            setUserCalendar([]);
+            getCalendarUser();
+        }
+        
+        setErrorSnackBar(!response.result);
+        setMessageSnackbar(response.message);
+        setVisibleSnackbar(true);
+    }
+
     const executeDialogUserChoice = () => {
         if(whoCalledTheDialog === 'chevron-left') navigation.navigate('Calendar', { screen: 'Calendar' });
-        else if(whoCalledTheDialog === 'delete') console.log('delete');
-        else console.log('check');
+        else if(whoCalledTheDialog === 'delete') deleteEvent();
+        else updateEvent();
     }
 
     const buildContentDialog = (alert) => {
@@ -622,6 +653,13 @@ export default function UpdateEvent() {
                 title={dialogTitle} 
                 message={dialogContent} 
                 response={() => executeDialogUserChoice()}
+            />
+            <SnackBar 
+                visible={visibleSnackbar} 
+                setVisible={setVisibleSnackbar} 
+                message={messageSnackBar} 
+                error={errorSnackBar}
+                width={315} 
             />           
         </SafeAreaView>
     );

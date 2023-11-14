@@ -35,6 +35,8 @@ export default function EventCard({ data, orientation }) {
         return plataformName;
     }
 
+    console.log(data.datetime)
+
     return (
         <TouchableOpacity 
             style={[styles.container, { width: orientation === 'vertical' ? '100%' : 260}]}
@@ -85,11 +87,11 @@ export default function EventCard({ data, orientation }) {
                                 color={color} 
                             />
                             <Text style={{ color: grayText }}>
-                                {
-                                    data.datatime.getDate() + ' ' + monthsOfTheYear[data.datatime.getMonth()] + ' ' + (data.datatime.getFullYear() === nowDate.getFullYear() ? '' : data.datatime.getFullYear())
+                                {/* {
+                                    data.datetime.getDate() + ' ' + monthsOfTheYear[data.datetime.getMonth()] + ' ' + (data.datetime.getFullYear() === nowDate.getFullYear() ? '' : data.datetime.getFullYear())
                                     + ' - '
-                                    + data.datatime.getHours() + 'h'+ (data.datatime.getMinutes() === 0 ? '' : data.datatime.getMinutes())
-                                }
+                                    + data.datetime.getHours() + 'h'+ (data.datetime.getMinutes() === 0 ? '' : data.datetime.getMinutes())
+                                } */}
                             </Text>
                         </View>
                     </View>
@@ -103,7 +105,7 @@ export default function EventCard({ data, orientation }) {
                             {
                                 data.modality === 'Online'
                                     ? whatIsTheOnlinePlatform(data.plataform)
-                                    : data.city + ', ' + data.state
+                                    : data.address
                             }
                         </Text>
                     </View>

@@ -44,12 +44,12 @@ export default function DisplayEvent() {
 
     const canTheMeetingLinkBeReleased = () => {
 
-        if(nowDateTime.getDate() != data.datatime.getDate()) return false;
+        if(nowDateTime.getDate() != data.datetime.getDate()) return false;
 
         const datetime = new Date(nowDateTime);
         datetime.setHours(datetime.getHours() + 1);
 
-        if(datetime.getTime() >= data.datatime.getTime()) return(true);
+        if(datetime.getTime() >= data.datetime.getTime()) return(true);
 
         return false;
     }
@@ -109,14 +109,14 @@ export default function DisplayEvent() {
                                     size={18} color={color} 
                                 />
                                 <Text style={{color: grayText, fontSize: 14}}>
-                                    {data.datatime.getDate() 
+                                    {data.datetime.getDate() 
                                         + ' ' 
-                                        + monthsOfTheYear[data.datatime.getMonth()]
-                                        + (nowDateTime.getFullYear() !== data.datatime.getFullYear() ? ' ' + data.datatime.getFullYear() : '')
+                                        + monthsOfTheYear[data.datetime.getMonth()]
+                                        + (nowDateTime.getFullYear() !== data.datetime.getFullYear() ? ' ' + data.datetime.getFullYear() : '')
                                         + ' - '
-                                        + data.datatime.getHours()
+                                        + data.datetime.getHours()
                                         + 'h'
-                                        + (data.datatime.getMinutes() === 0 ? '' : data.datatime.getMinutes())
+                                        + (data.datetime.getMinutes() === 0 ? '' : data.datetime.getMinutes())
                                     }
                                 </Text>
                             </View>

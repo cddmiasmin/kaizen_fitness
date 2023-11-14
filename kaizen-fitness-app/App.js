@@ -33,6 +33,7 @@ import { ColorContextProvider } from './src/contexts/ColorContext';
 import { userControllerHasAProfile } from './src/controller/UserController';
 
 import 'expo-dev-client';
+import CalendarAux from './src/view/screens/CalendarAux';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,7 +54,7 @@ export default function App() {
     const profile = await userControllerHasAProfile();
     setUserData(profile);
 
-    console.log(profile)
+    console.log(profile);
 
     if(profile.userType === 'consumer') return 'HomeConsumer';
     else if(profile.userType === 'professional') return 'HomeProfessional';
@@ -62,7 +63,7 @@ export default function App() {
 
   const WhatWillBeTheInitialRouteName = async () => {
     if(userData === null) setRouteName('SignIn'); 
-    //else if(userData.emailVerified === false) setRoute('EmailValidation');
+    else if(userData.emailVerified === false) setRoute('EmailValidation');
     else {
       const routeAux = await userHasAProfile();
       console.log(routeAux);
@@ -99,6 +100,7 @@ export default function App() {
               <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
               <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
               <Stack.Screen name="Calendar" component={Calendar} options={{ headerShown: false }}/> 
+              <Stack.Screen name="CalendarAux" component={CalendarAux} options={{ headerShown: false }}/> 
               <Stack.Screen name="Services" component={Services} options={{ headerShown: false }}/>
               <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
               <Stack.Screen name="MyAccount" component={MyAccount} options={{ headerShown: false }}/>

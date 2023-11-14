@@ -77,3 +77,7 @@ export const userModelForgotPassword = async () => {
 
     return response;
 }
+
+export const userControllerAuthenticationDelete = async () => {
+    //return await 
+}

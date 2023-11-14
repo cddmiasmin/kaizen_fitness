@@ -8,14 +8,14 @@ import {
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
-import { grayText, mainColor } from '../../../colors/colors';
 import { topics } from '../../../services/availableServices';
+import { grayText, mainColor } from '../../../colors/colors';
 
 import { ColorContext } from '../../../contexts/ColorContext';
 
-import Category from '../Categories/Category';
-import EventCard from '../EventCard';
 import Footer from '../Footer';
+import EventCard from '../EventCard';
+import Category from '../Categories/Category';
 
 export default function Showcase({ setActiveTextinput }) {
 

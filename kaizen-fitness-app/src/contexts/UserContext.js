@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import { eventControllerGetCalendarConsumerUser, eventControllerGetCalendarProfessionalUser } from "../controller/EventController";
 
 export const UserContext = createContext();
 
@@ -13,7 +14,7 @@ export const UserContextProvider = ({ userData , children }) => {
         ],
         city: "England",
         document: "123.456.789-00",
-        dataOfBirth: "18",
+        dataOfBirth: "24/03/2022",
         emailUser: "Florence.welch@hotmail.com",
         emailVerified: false,
         familyName: "Welch",
@@ -25,37 +26,46 @@ export const UserContextProvider = ({ userData , children }) => {
         photo: "https://i.pinimg.com/564x/e5/40/87/e5408786edbaf21937f2caa40c0173ac.jpg",
         topics: ["Academia"],
         state: "London",
-      });
-    const [userType, setUserType] = useState('professional');
+    });
+    const [userType, setUserType] = useState('consumer');
+    const [userCalendar, setUserCalendar] = useState([]);
+
+    const  getCalendarUser = async () => {
+        let events = {};
+
+        if(userType === 'consumer')
+            events = await eventControllerGetCalendarConsumerUser();
+        else 
+            events = await eventControllerGetCalendarProfessionalUser();
+        console.log('EVENTS', events)
+
+        setUserCalendar(events);
+    }
     
     useEffect(() => {
         if(userData) {
-            setUser(userData.data);
-            setUserType(userData.userType)
+            // setUser(userData.data);
+            setUserType(userData.userType);
+            //setUserType('consumer')
         }
     }, [userData]);
 
     //console.log('UserContext', user, user.dataOfBirth );
 
-    // useEffect(() => {
-    //     function timestampToDate(timestamp) {
-    //         const date = new Date(timestamp.seconds * 1000);
-    //         date.setMilliseconds(timestamp.nanoseconds / 1000000);
-    //         return date;
-    //     }
+    useEffect(() => {
+        if(userType === 'professional' || userType === 'consumer')
+            getCalendarUser();
+    }, [userType]);
 
-    //     const date = new Date(timestampToDate(user.dataOfBirth))
-
-    //     console.log(user.dataOfBirth, date)
-    // }, [user])
+    useEffect(() => console.log(userCalendar), []);
 
     return (
         <UserContext.Provider
             value={{
-                user,
-                setUser,
-                userType,
-                setUserType
+                user, setUser,
+                userType, setUserType,
+                userCalendar, setUserCalendar,
+                getCalendarUser
             }}
         >
             {children}

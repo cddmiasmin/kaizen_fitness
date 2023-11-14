@@ -24,18 +24,22 @@ import { ColorContext } from '../../contexts/ColorContext';
 import ModalEventTopics from '../components/RegisterEvent/ModalEventTopics';
 import ModalEventWallpaper from '../components/RegisterEvent/ModalEventWallpaper';
 import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
+import { eventControllerCreate } from '../../controller/EventController';
+import SnackBar from '../components/SnackBar';
 
 export default function RegisterEvent() {
 
+    const { setUserCalendar, getCalendarUser } = useContext(UserContext);
+
     const route = useRoute()
-    const modality = route.params === undefined ? 'inPerson' : route.params.modality;
+    const modality = route.params === undefined ? 'Online' : route.params.modality;
 
     const navigation = useNavigation();
 
     const inPersonData = {
-        styleStatusBar: 'light',
-        wallpaper: '',
-        topics: [],
+        styleStatusBar: 'dark',
+        wallpaper: 'https://images.unsplash.com/photo-1466979866587-05abf8ea3aec?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        topics: ['Reabilitação'],
         name: 'Reabilitação online para AVC',
         about: 'Este evento fornecerá informações e dicas sobre reabilitação online para pessoas que sofreram um AVC. Os participantes aprenderão sobre os diferentes tipos de reabilitação online disponíveis, como escolher o programa certo para suas necessidades e como aproveitar ao máximo o programa de reabilitação.',
         datetime: new Date(2023,8,19,19,0),
@@ -52,25 +56,30 @@ export default function RegisterEvent() {
         topics: ["Atividade Física", "Esporte"],
         modality: 'presencial',
         about: "Este treinamento é ideal para quem quer começar a correr. Você aprenderá as técnicas básicas de corrida, como postura, respiração e alongamento.",
+        participants: []
     }
 
     const { user } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
-    const [eventWallpaper, setEventWallpaper] = useState(modality === 'online' ? onlineData.wallpaper : inPersonData.wallpaper);
-    const [eventTopics, setEventTopics] = useState(modality === 'online' ? onlineData.topics : inPersonData.topics);
-    const [eventName, setEventName] = useState(modality === 'online' ? onlineData.name : inPersonData.name);
-    const [eventDateTime, setEventDateTime] = useState(modality === 'online' ? onlineData.datetime : inPersonData.datetime);
-    const [eventAbout, setEventAbout] = useState(modality === 'online' ? onlineData.about : inPersonData.about);
+    const [eventWallpaper, setEventWallpaper] = useState('');
+    const [eventTopics, setEventTopics] = useState('');
+    const [eventName, setEventName] = useState('');
+    const [eventDateTime, setEventDateTime] = useState('');
+    const [eventAbout, setEventAbout] = useState('');
     const [eventOnlinePlataform, setEventOnlinePlataform] = useState('');
-    const [eventLink, setEventLink] = useState('https://florenceandthemachine.net/home/');
-    const [eventAddress, setEventAddress] = useState(inPersonData.address);
+    const [eventLink, setEventLink] = useState('');
+    const [eventAddress, setEventAddress] = useState('');
 
-    const [styleStatusBar, setStyleStatusBar] = useState('light');
+    const [styleStatusBar, setStyleStatusBar] = useState(modality === 'online' ? onlineData.styleStatusBar : inPersonData.styleStatusBar);
     const [dateTimePickerMode, setDateTimePickerMode] = useState('date');
     const [plataformIndex, setPlataformIndex] = useState(0);
 
     const [isDateTimePickerActive, setDateTimePicker] = useState(false);
+
+    const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+    const [messageSnackBar, setMessageSnackbar] = useState('');
+    const [errorSnackBar, setErrorSnackBar] = useState(false);
 
     const onChange = (event, datetime) => {
         setEventDateTime(datetime);
@@ -89,45 +98,44 @@ export default function RegisterEvent() {
         }); 
     },[eventOnlinePlataform]);
 
-    // const completedRegistration = async () => {
+    const completedRegistration = async () => {
 
+        const data = {
+            styleStatusBar: styleStatusBar,
+            wallpaper: eventWallpaper,
+            topics: eventTopics,
+            name: eventName ,
+            about: eventAbout,
+            datetime: eventDateTime,
+            modality: modality,
+            participants: []
+        }
 
-    //     const data = {
-    //         styleStatusBar: styleStatusBar,
-    //         wallpaper: eventWallpaper,
-    //         topics: eventTopics,
-    //         name: eventName ,
-    //         about: eventAbout,
-    //         datatime: eventDateTime,
-    //         modality: modality,
-    //         participants: []
-    //     }
+        if(modality === 'Online') {
+            data.plataform = eventOnlinePlataform;
+            data.meetingLink = eventLink;
+        } else data.address = eventAddress;
 
-    //     if(modality === 'Online') {
-    //         data.plataform = eventOnlinePlataform;
-    //         data.meetingLink = eventLink;
-    //     } else data.address = eventAddress;
+        const professional = {
+            photo: user.photo,
+            kindOfPerson: user.kindOfPerson,
+            name: user.name
+        };
 
-    //     const professional = user;
-    //     const idUser = await auth().currentUser.uid;
+        if(user.kindOfPerson === 'PF') professional.familyName = user.familyName;
 
-    //     professional.idUser = idUser;
+        const response = await eventControllerCreate(data, professional);
+
+        if(response.result){ 
+            setUserCalendar([]);
+            getCalendarUser();
+        }
+        
+        setErrorSnackBar(!response.result);
+        setMessageSnackbar(response.message);
+        setVisibleSnackbar(true);
       
-    //     data.organizer = professional;
-      
-    //     const event = await firestore()
-    //                             .collection('ProfessionalEvent')
-    //                             .add(data)
-    //                             .then(() => {
-    //                                 return { result: true, message: 'Evento cadastrado com sucesso!'}
-    //                             })
-    //                             .catch((error) => {
-    //                                 return { result: false, message: error }
-    //                             })
-
-    //     console.log('event',event);
-    //     navigation.navigate('Home');
-    // }
+    }
 
     return (
         <SafeAreaView  style={styles.container}>
@@ -137,21 +145,21 @@ export default function RegisterEvent() {
                     {
                         eventWallpaper 
                         ?
-                            <View style={{width: '100%', height: '100%'}}>
+                        <View style={{ width: '100%', height: '100%', backgroundColor: styleStatusBar === 'dark' ? 'white' : 'black' }}>
                                 <TouchableOpacity onPress={() => setModalEventWallpaper(true)}>
-                                    <Image source={{ uri: eventWallpaper}} resizeMode="cover" style={{width: '100%', height: '100%'}}/>
-                                    <View 
-                                        style={[StyleSheet.absoluteFillObject, 
-                                                styles.eventWallpaperIcon, 
-                                                { backgroundColor: color, borderColor: mainColor}
-                                        ]}
-                                    >
-                                        <Icon 
-                                            name="image-edit" 
-                                            size={18} 
-                                            color={mainColor} 
-                                        />
-                                    </View>
+                                <Image source={{ uri: eventWallpaper }} resizeMode="cover" style={{width: '100%', height: '100%', opacity: 0.7}}/>
+                                <View 
+                                    style={[StyleSheet.absoluteFillObject, 
+                                            styles.eventWallpaperIcon, 
+                                            { backgroundColor: styleStatusBar === 'dark' ? 'black' : 'white' }
+                                    ]}
+                                >
+                                    <Icon 
+                                        name="image-edit" 
+                                        size={18} 
+                                        color={color} 
+                                    />
+                                </View>
                                 </TouchableOpacity>
                             </View>
                         : 
@@ -220,11 +228,11 @@ export default function RegisterEvent() {
                         <View style={styles.infos}>
                             <View style={styles.modality}>
                                 <Icon 
-                                    name= {modality === 'inPerson' ? 'account-group' : 'monitor-shimmer'} 
+                                    name= {modality === 'Presencial' ? 'account-group' : 'monitor-shimmer'} 
                                     size={20} color={color} 
                                 />
                                 <Text style={{color: 'white', fontSize: 14}}>
-                                    {modality === 'inPerson' ? 'Presencial' : 'Online'}
+                                    {modality}
                                 </Text>
                             </View>
                             <View style={styles.datetime}>
@@ -349,7 +357,7 @@ export default function RegisterEvent() {
                             Local
                         </Text>
                         {
-                            modality === 'online' 
+                            modality === 'Online' 
                             ?
                                 <>
                                     {
@@ -440,6 +448,13 @@ export default function RegisterEvent() {
             <ModalEventWallpaper active={isModalEventWallpaperActive} changeMyStatus={setModalEventWallpaper} chooseWallpaper={setEventWallpaper} colorStatusBar={setStyleStatusBar}/>
             <ModalEventTopics active={isModalEventTopicsActive} changeMyStatus={setModalEventTopics} changeTopics={setEventTopics}/>
             <ModalOnlinePlataforms active={isModalOnlinePlataformsActive} changeMyStatus={setModalOnlinePlataforms} choosePlatform={setEventOnlinePlataform} initialValue={eventOnlinePlataform}/>
+            <SnackBar 
+                visible={visibleSnackbar} 
+                setVisible={setVisibleSnackbar} 
+                message={messageSnackBar} 
+                error={errorSnackBar}
+                width={315} 
+            />
         </SafeAreaView >
     );
 }

@@ -29,8 +29,8 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
         const handleBackPress = () => {
             setSearch('');
 
-            if(route.name === 'Home') setActiveTextinput(false);
-            else navigation.navigate('Home');
+            if(route.name === 'HomeConsumer') setActiveTextinput(false);
+            else navigation.navigate('HomeConsumer');
 
             return true;
         };

@@ -20,13 +20,13 @@ export default function Footer() {
         {key: 'home', route: 'HomeConsumer', title: 'Home', focusedIcon: 'home-variant', unfocusedIcon: 'home-variant-outline'},
         {key: 'people', route: 'People', title: 'Pessoas', focusedIcon: 'account-group', unfocusedIcon: 'account-group-outline'},
         {key: 'place', route: 'Place', title: 'Locais', focusedIcon: 'store', unfocusedIcon: 'store-outline', color: 'green'},
-        {key: 'calendar', route: 'Calendar', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline'},
+        {key: 'calendar', route: 'CalendarAux', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline'},
         {key: 'profile', route: 'Profile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline'}
     ]
 
     const professional = [
         {key: 'home', route: 'HomeProfessional', title: 'Home', focusedIcon: 'home-variant', unfocusedIcon: 'home-variant-outline'},
-        {key: 'calendar', route: 'Calendar', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline'},
+        {key: 'calendar', route: 'CalendarAux', title: 'Agenda', focusedIcon: 'calendar-month', unfocusedIcon: 'calendar-month-outline'},
         {key: 'profile', route: 'Profile', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline'}
     ]
 
