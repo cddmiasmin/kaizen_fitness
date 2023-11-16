@@ -13,6 +13,7 @@ import { StatusBar } from 'expo-status-bar';
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { UserContext } from '../../contexts/UserContext';
+import { DataContext } from '../../contexts/DataContext';
 
 export default function UserType() {
 
@@ -21,6 +22,7 @@ export default function UserType() {
 
     const navigation = useNavigation();
     const { setUserType } = useContext(UserContext);
+    const { setStepNum } = useContext(DataContext);
 
     const consumerImage = require('./../../assets/UserType/consumer.jpg');
     const professionalImage = require('./../../assets/UserType/professional.jpg');
@@ -46,7 +48,7 @@ export default function UserType() {
                     style={[styles.option, buttonSelected !== 'consumer' ? styles.optionOutOfFocus : '']} 
                     onPress={() => {
                         if(buttonSelected === 'consumer') return;
-                        else setButtonSelected('consumer')
+                        else setButtonSelected('consumer');
                     }}
                 >
                     { buttonSelected === 'consumer' &&
@@ -69,7 +71,7 @@ export default function UserType() {
                     style={[styles.option, buttonSelected !== 'professional' ? styles.optionOutOfFocus : '', styles.professionalOption]} 
                     onPress={() => {
                         if(buttonSelected === 'professional') return;
-                        else setButtonSelected('professional')
+                        else setButtonSelected('professional');
                     }}
                 >
                         { buttonSelected === 'professional' &&
@@ -91,6 +93,7 @@ export default function UserType() {
             </View>
             <TouchableOpacity 
                 onPress={() => {
+                    setStepNum(1);
                     setUserType(buttonSelected);
                     navigation.navigate('Register');
                 }} 

@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   boxInput: {
     width: '100%',
-    marginTop: 20,
+    marginBottom: 20,
   },
   input: {
     width: '100%',

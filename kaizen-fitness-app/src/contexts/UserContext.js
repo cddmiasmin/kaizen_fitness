@@ -18,7 +18,7 @@ export const UserContextProvider = ({ userData , children }) => {
         emailUser: "Florence.welch@hotmail.com",
         emailVerified: false,
         familyName: "Welch",
-        kindOfPerson: "PF",
+        kindOfPerson: "PJ",
         latitude: "",
         longitude: "",
         mediaSocial: [],
@@ -27,7 +27,7 @@ export const UserContextProvider = ({ userData , children }) => {
         topics: ["Academia"],
         state: "London",
     });
-    const [userType, setUserType] = useState('consumer');
+    const [userType, setUserType] = useState('professional');
     const [userCalendar, setUserCalendar] = useState([]);
 
     const  getCalendarUser = async () => {

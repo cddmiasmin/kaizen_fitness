@@ -39,10 +39,10 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [routeName, setRouteName] = useState('');
+  const [routeName, setRouteName] = useState('UserType');
   const [initializing, setInitializing] = useState(true);
   const [userData, setUserData] = useState('');
-  const [stepNum, setStepNum] = useState(1);
+  const [stepNum, setStepNum] = useState(2);
 
   const onAuthStateChanged = (user) => {
     setUserData(user);

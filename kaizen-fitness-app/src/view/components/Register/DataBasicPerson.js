@@ -1,26 +1,37 @@
 import { useContext, useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { Button, Dialog, IconButton } from 'react-native-paper';
 
+import { UserContext } from '../../../contexts/UserContext';
 import { DataContext } from '../../../contexts/DataContext';
 import { ColorContext } from '../../../contexts/ColorContext';
 
 import Buttons from './Buttons';
+import ChooseAvatar from '../ChooseAvatar';
+import ModalAvatarsForProfilePicture from '../ChooseAvatar/ModalAvatarsForProfilePicture';
+
+import { mask, unMask } from 'remask';
+import { mainColor } from '../../../colors/colors';
 
 export default function DataBasicPerson() {
 
+  const [isModalActive, setIsModalActive] = useState(false);
   const [isDateTimePickerActive, setDateTimePicker] = useState(false);
+  
+  const [isDialogActive, setIsDialogActive] = useState(false);
 
   const {
-    photo, setPhoto,
+    avatar, setAvatar,
     name, setName,
     familyName, setFamilyName,
     dataOfBirth, setDataOfBirth,
     stepNum, setStepNum,
+    document, setDocument,
     data, setData
   } = useContext(DataContext);
-
   const { color } = useContext(ColorContext);
+  const { userType } = useContext(UserContext);
 
   const maximumDateOf18YearsAgo = () => {
     const today = new Date();
@@ -40,10 +51,11 @@ export default function DataBasicPerson() {
   function validateData() {
     let dataAux = data;
 
-    dataAux.photo = photo;
+    dataAux.avatar = avatar;
     dataAux.name = name;
     dataAux.familyName = familyName;
     dataAux.dataOfBirth = new Date(dataOfBirth);
+    dataAux.document = document;
 
     console.log('Aux', dataAux);
 
@@ -57,6 +69,7 @@ export default function DataBasicPerson() {
     <View style={styles.container}>
       <Text style={[styles.title, { color: color}]}>Dados Básicos</Text>
       <Text style={styles.description}>Preencha os campos abaixo com as informações solicitadas:</Text>
+      <ChooseAvatar chooseStatusModal={setIsModalActive}/>
       <View style={styles.boxInput}>
         <Text style={[styles.titleInput, { color: color }]}>Nome</Text>
         <TextInput
@@ -99,10 +112,58 @@ export default function DataBasicPerson() {
             minimumDate={new Date(minimumDateOf120YearsAgo())}
           />
         )}
-
       </View>
 
+      {
+        userType === 'consumer' &&
+          <View style={styles.boxInput}>
+            <Text style={[styles.titleInput, { color: color } ]}>CPF</Text>
+            <View style={{
+              justifyContent: 'space-around', flexDirection: 'row', backgroundColor: 'white'
+            }}>
+              <TextInput
+                style={styles.inputDocument}
+                inputMode={'numeric'}
+                underlineColorAndroid="transparent"
+                keyboardType={'number-pad'}
+                onChangeText={(text) => setDocument(mask(unMask(text),'999.999.999-99'))}
+                value={document}
+                
+              />
+              <IconButton 
+                icon="information"
+                iconColor={'white'}
+                style={{ backgroundColor: color }}
+                size={18}
+                onPress={() => setIsDialogActive(true)}
+              /> 
+            </View>
+          </View>
+      }
       <Buttons validateData={() => validateData()}/>
+      <Dialog 
+            visible={isDialogActive} 
+            onDismiss={() => setIsDialogActive(false)}
+            style={{ backgroundColor: mainColor }}
+        >
+            <Dialog.Icon icon="information" color={color}/>
+            <Dialog.Title style={{ color: color, fontWeight: 'bold', textAlign: 'center'}}>CPF</Dialog.Title>
+            <Dialog.Content>
+                <Text style={{textAlign: 'center', color: 'white'}}>
+                Estamos solicitando o seu CPF apenas para verificar que você é uma pessoa real.
+                O seu dado será usado exclusivamente para este fim e não será compartilhado com terceiros.
+                </Text>
+            </Dialog.Content>
+            <Dialog.Actions>
+                <Button onPress={() => setIsDialogActive(false)} textColor={color}>Ok</Button>
+            </Dialog.Actions>
+      </Dialog>
+      <ModalAvatarsForProfilePicture
+        active={isModalActive}
+        changeMyStatus={setIsModalActive}
+        chooseAvatar={setAvatar}
+        initialValue={avatar}
+      />
     </View>
   );
 }
@@ -120,7 +181,7 @@ const styles = StyleSheet.create({
   description: {
     color: 'white',
     marginTop: 15,
-    marginBottom: 10,
+    marginBottom: 15,
     textAlign: 'center'
   },
   titleInput:{
@@ -129,10 +190,16 @@ const styles = StyleSheet.create({
   },
   boxInput: {
     width: '100%',
-    marginTop: 20,
+    marginBottom: 20,
   },
   input: {
     width: '100%',
+    height: 45,
+    backgroundColor: 'white',
+    paddingLeft: 15
+  },
+  inputDocument: {
+    width: '85%',
     height: 45,
     backgroundColor: 'white',
     paddingLeft: 15

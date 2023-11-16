@@ -159,6 +159,6 @@ const styles = StyleSheet.create({
   },
   boxInput: {
     width: '100%',
-    marginTop: 15,
+    marginBottom: 15,
   }
 });

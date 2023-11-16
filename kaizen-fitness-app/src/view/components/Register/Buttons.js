@@ -30,7 +30,7 @@ export default function Buttons({ validateData }) {
 
 const styles = StyleSheet.create({
     container: {
-       marginTop: 50,
+
        width: '100%',
        justifyContent: 'center',
        flexDirection: 'row',

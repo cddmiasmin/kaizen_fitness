@@ -11,7 +11,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
     const [name, setName] = useState('Evan');
     const [familyName, setFamilyName] = useState('Thomas Peters');
-    const [photo, setPhoto] = useState('https://i.pinimg.com/564x/d7/28/77/d72877b5a14a034d739b1377f0db68a7.jpg');
+    const [avatar, setAvatar] = useState([]);
     const [dataOfBirth, setDataOfBirth] = useState(new Date(1987,0,20));
     const [document, setDocument] = useState('590.148.500-93');
     const [city, setCity] = useState('Saint Louis');
@@ -19,7 +19,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const [height, setHeight] = useState('1,80');
     const [weight, setWeight] = useState('79');
     const [topics, setTopics] = useState(["Academia", "Saúde pública", "Meditação"]);
-    const [kindOfPerson, setKindOfPerson] = useState('PF');
+    const [kindOfPerson, setKindOfPerson] = useState('PJ');
 
     function timestampToDate(timestamp) {
         const date = new Date(timestamp.seconds * 1000);
@@ -63,7 +63,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
         if(userType === 'professional') setKindOfPerson(user.kindOfPerson);
 
         setName(user.name);
-        setPhoto(user.photo);
+        setAvatar(user.avatar);
         setDocument(user.document);
         setData({});
     }
@@ -76,7 +76,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 stepNum, setStepNum,
                 name, setName,
                 familyName, setFamilyName,
-                photo, setPhoto,
+                avatar, setAvatar,
                 dataOfBirth, setDataOfBirth,
                 document, setDocument,
                 kindOfPerson, setKindOfPerson,
