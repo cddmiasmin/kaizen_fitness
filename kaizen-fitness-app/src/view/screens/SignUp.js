@@ -16,11 +16,12 @@ import { grayText, mainColor  } from '../../colors/colors';
 import { ColorContext } from '../../contexts/ColorContext';
 
 import SnackBar from '../components/SnackBar';
+
 import { userControllerSignUp } from '../../controller/UserController';
 
 export default function SignUp() {
 
-    const [email, setEmail] = useState('adelmo.dias58@gmail.com');
+    const [email, setEmail] = useState('ximixah651@marksia.com');
     const [password, setPassword] = useState('123456');
     const [confirmPassword, setConfirmPassword] = useState('123456');
 
@@ -30,9 +31,9 @@ export default function SignUp() {
     const [secureTextEntryForConfirmPassword, setSecureTextEntryForConfirmPassword] = useState(true);
 
     const [visibleSnackbar, setVisibleSnackbar] = useState(false);
-    const [messageSnackBar, setMessageSnackbar] = useState('iasmin');
+    const [messageSnackBar, setMessageSnackbar] = useState('');
 
-    const [signUpResult, setSignUpResult] = useState(true);
+    const [signUpResult, setSignUpResult] = useState(null);
   
     const navigation = useNavigation();
   
@@ -40,14 +41,20 @@ export default function SignUp() {
       color
     } = useContext(ColorContext);
 
+    const onDismissSnackBar = async () => {
+
+      setVisibleSnackbar(false);
+
+      if(!signUpResult) navigation.navigate('EmailValidation');
+    
+    }
+
     const makeUserSignUp = async () => {
       const response = await userControllerSignUp(email, password);
 
       setSignUpResult(!response.result);
       setMessageSnackbar(response.message);
       setVisibleSnackbar(true);
-
-      //if(signUpResult) navigation.navigate('Home');
 
     }
    
@@ -163,7 +170,7 @@ export default function SignUp() {
           </View>
           <SnackBar
             visible={visibleSnackbar} 
-            setVisible={setVisibleSnackbar} 
+            setVisible={onDismissSnackBar} 
             message={messageSnackBar} 
             error={signUpResult} 
             width={350}

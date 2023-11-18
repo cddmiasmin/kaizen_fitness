@@ -18,10 +18,11 @@ import { ColorContext } from '../../contexts/ColorContext';
 import SnackBar from '../components/SnackBar';
 
 import { userControllerSignIn } from '../../controller/UserController';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function SignIn() {
 
-    const [email, setEmail] = useState('florence.welch@hotmail.com');
+    const [email, setEmail] = useState('ximixah651@marksia.com');
     const [password, setPassword] = useState('123456');
 
     const [colorTextPassword, setColorTextPassword] = useState(color);
@@ -30,14 +31,29 @@ export default function SignIn() {
     const [visibleSnackbar, setVisibleSnackbar] = useState(false);
     const [messageSnackBar, setMessageSnackbar] = useState('');
 
-    const [signInResult, setSignInResult] = useState(true);
+    const [signInResult, setSignInResult] = useState(null);
   
     const navigation = useNavigation();
 
-  
+    const {
+      WhatWillBeMyRouteNameNow
+    } = useContext(UserContext);
+
     const {
       color
     } = useContext(ColorContext);
+
+    const onDismissSnackBar = async () => {
+
+      setVisibleSnackbar(false);
+
+      if(!signInResult){
+        const route = await WhatWillBeMyRouteNameNow();
+
+        navigation.navigate(route);
+      }
+
+    }
 
     const makeUserSignIn = async () => {
       const response = await userControllerSignIn(email, password);
@@ -46,7 +62,7 @@ export default function SignIn() {
       setMessageSnackbar(response.message);
       setVisibleSnackbar(true);
 
-      //if(signInResult) navigation.navigate('Home');
+      console.log(!signInResult);
 
     }
    
@@ -153,7 +169,7 @@ export default function SignIn() {
           </View>
           <SnackBar
             visible={visibleSnackbar} 
-            setVisible={setVisibleSnackbar} 
+            setVisible={onDismissSnackBar} 
             message={messageSnackBar} 
             error={signInResult} 
             width={350}

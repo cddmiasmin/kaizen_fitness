@@ -1,6 +1,14 @@
-import { userModelSignIn, userModelSignOut, userModelSignUp } from "../model/UserModel"
+import { 
+    userModelAuth,
+    userModelEmailValidation,
+    userModelSignIn, userModelSignOut, userModelSignUp 
+} from "../model/UserModel"
 import { consumerControllerReadProfile } from "./ConsumerController";
 import { professionalControllerReadProfile } from "./ProfessionalController";
+
+export const userControllerAuth = async () => {
+    return await userModelAuth();
+}
 
 export const userControllerHasAProfile = async () => {
 
@@ -24,7 +32,9 @@ export const userControllerSignIn = async (email, password) => {
 }
 
 export const userControllerSignUp = async (email, password) => {
-    return await userModelSignUp(email, password);
+    const signUp = await userModelSignUp(email, password);
+    const emailValidation = await userControllerEmailValidation();
+    return signUp;
 }
 
 export const userControllerSignOut = async () => {
@@ -41,4 +51,8 @@ export const userControllerForgotPassword = async () => {
 
 export const userControllerAuthenticationDelete = async () => {
     //return await 
+}
+
+export const userControllerEmailValidation = async () => {
+    return await userModelEmailValidation();
 }

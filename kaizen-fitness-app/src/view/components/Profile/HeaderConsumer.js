@@ -12,7 +12,21 @@ export default function HeaderConsumer() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Avatar.Image size={80} source={{ uri: user.photo }} />
+                {
+                    user.avatar && user.avatar.photo
+                    ?                        
+                        <Avatar.Image
+                            size={80} 
+                            source= {{ uri: (user.avatar.photo) }} 
+                        />
+                    : 
+                        <Avatar.Icon 
+                            size={80} 
+                            icon="account-circle" 
+                            color={'white'}
+                            style={{ backgroundColor: color }}
+                        />
+                }
                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16, textAlign: 'center'}}>
                     {user.name + ' ' + user.familyName}
                 </Text>

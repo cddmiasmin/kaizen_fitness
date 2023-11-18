@@ -1,6 +1,10 @@
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+export const userModelAuth = async () => {
+    const response = auth().currentUser;
+    return response;
+}
 
 export const userModelSignIn = async (email, password) => {
 
@@ -78,6 +82,30 @@ export const userModelForgotPassword = async () => {
     return response;
 }
 
-export const userControllerAuthenticationDelete = async () => {
+export const userModelAuthenticationDelete = async () => {
     //return await 
+}
+
+export const userModelEmailValidation = async () => {
+
+    const user = auth().currentUser;
+    
+    const response = user.sendEmailVerification()
+                        .then((user) => {
+                            console.log(user);
+                            return {
+                                result: true,
+                                message: `Validação enviada para o seu e-mail`
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            return {
+                                result: false,
+                                message: error.code + ': ' + error
+                            }
+                        }); 
+    
+    return response;
+
 }

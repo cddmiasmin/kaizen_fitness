@@ -227,8 +227,8 @@ export default function MyData() {
             />
               <Avatar.Image
                   size={110} 
-                  source={{uri:(user.photo)}}
-                  style={{zIndex: 1}}
+                  source={{uri: (user.avatar.photo) }}
+                  style={{ zIndex: 1 }}
               />
             </View>
         </View>
@@ -277,7 +277,7 @@ export default function MyData() {
               <TextInput
               mode='outlined'
               label='Data de nascimento'
-              value={dataOfBirth}
+              value={dataOfBirth.toLocaleDateString('pt-br')}
               outlineColor={'white'}
               textColor={color}
               style={{ backgroundColor: mainColor }}

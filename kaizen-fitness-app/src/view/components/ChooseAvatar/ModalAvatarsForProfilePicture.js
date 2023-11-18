@@ -28,6 +28,7 @@ export default function ModalAvatarsForProfilePicture({ active, changeMyStatus, 
                 {
                     avatarsForProfilePicture.map((avatarObj, key) => (
                         <TouchableOpacity
+                            key={`avatar#${key}`}
                             style={[styles.avatar,
                                 avatarObj.value === avatar.value ? styles.selected : '',
                                 avatarObj.value === avatar.value ? { backgroundColor: color } : '',

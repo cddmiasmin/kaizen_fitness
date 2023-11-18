@@ -1,12 +1,10 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-const consumerAuth = auth().currentUser;
-
 export const consumerModelCreateProfile = async (consumer) => {
     
-    const idUser = consumerAuth.uid;
-    const emailUser = consumerAuth.email;
+    const idUser = auth().currentUser.uid;
+    const emailUser = auth().currentUser.email;
 
     consumer.emailUser = emailUser;
 
@@ -27,7 +25,7 @@ export const consumerModelCreateProfile = async (consumer) => {
 
 export const consumerModelReadProfile = async () => {
 
-    const idUser = consumerAuth.uid;
+    const idUser = auth().currentUser.uid;
     const response = await firestore()
                             .collection('ConsumerUsers')
                             .doc(idUser)
@@ -37,7 +35,7 @@ export const consumerModelReadProfile = async () => {
 
 export const consumerModelUpdateProfile = async (consumer) => {
 
-    const idUser = consumerAuth.uid;
+    const idUser = auth().currentUser.uid;
     const response = await firestore()
                             .collection('ConsumerUsers')
                             .doc(idUser)

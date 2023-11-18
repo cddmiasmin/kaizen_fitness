@@ -19,10 +19,13 @@ import DataBasicProfessional from '../components/Register/DataBasicProfessional'
 
 import { consumerControllerCreateProfile } from '../../controller/ConsumerController';
 import { professionalControllerCreateProfile } from '../../controller/ProfessionalController';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Register() {
+
+  const navigation = useNavigation();
  
-  const { userType } = useContext(UserContext);
+  const { userType, getProfile } = useContext(UserContext);
   const { stepNum, data, setData } = useContext(DataContext);
 
   const [visibleSnackbar, setVisibleSnackbar] = useState(false);
@@ -36,6 +39,11 @@ export default function Register() {
     setErrorSnackBar(!response.result);
     setMessageSnackbar(response.message);
     setVisibleSnackbar(true);
+
+    if(response.result){
+      getProfile();
+      navigation.navigate('HomeConsumer');
+    }
   }
 
   const professionalCreateProfile = async () => {
@@ -45,6 +53,11 @@ export default function Register() {
     setErrorSnackBar(!response.result);
     setMessageSnackbar(response.message);
     setVisibleSnackbar(true);
+
+    if(response.result){
+      getProfile();
+      navigation.navigate('HomeProfessional');
+    }
   }
 
   useEffect(() => {

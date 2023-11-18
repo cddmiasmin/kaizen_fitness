@@ -8,7 +8,7 @@ export default function SnackBar({ visible, setVisible, message, error, width })
         <Snackbar
             visible={visible}
             onDismiss={() => setVisible(false)}
-            duration={4000}
+            duration={2000}
             action={{
                 label: 'Ok',
                 textColor: error === true ? 'black' : 'white',

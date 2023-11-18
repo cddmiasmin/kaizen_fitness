@@ -33,13 +33,14 @@ import { ColorContextProvider } from './src/contexts/ColorContext';
 import { userControllerHasAProfile } from './src/controller/UserController';
 
 import 'expo-dev-client';
+
 import CalendarAux from './src/view/screens/CalendarAux';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [routeName, setRouteName] = useState('UserType');
+  const [routeName, setRouteName] = useState('');
   const [initializing, setInitializing] = useState(true);
   const [userData, setUserData] = useState('');
   const [stepNum, setStepNum] = useState(2);
@@ -54,7 +55,7 @@ export default function App() {
     const profile = await userControllerHasAProfile();
     setUserData(profile);
 
-    console.log(profile);
+    console.log('Profile', profile);
 
     if(profile.userType === 'consumer') return 'HomeConsumer';
     else if(profile.userType === 'professional') return 'HomeProfessional';
@@ -63,7 +64,7 @@ export default function App() {
 
   const WhatWillBeTheInitialRouteName = async () => {
     if(userData === null) setRouteName('SignIn'); 
-    else if(userData.emailVerified === false) setRoute('EmailValidation');
+    else if(userData.emailVerified === false) setRouteName('EmailValidation');
     else {
       const routeAux = await userHasAProfile();
       console.log(routeAux);

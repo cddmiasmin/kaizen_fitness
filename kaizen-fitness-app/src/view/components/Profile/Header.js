@@ -15,19 +15,25 @@ export default function HeaderProfessional() {
                     ? user.name + ' ' + user.familyName 
                     : user.name;
 
-    const photo = user 
-                    ? {uri:(user.photo)} 
-                    : {uri:('https://i.pinimg.com/564x/6a/27/ab/6a27ab62c11c4bb972fedb8307bc8a25.jpg')};
-
     return (
         <View style={styles.container}>
             <View style={styles.started}>
                 <View style={styles.avatar}>
-                    <Avatar.Image
-                        size={110} 
-                        source={photo}
-                        style={{backgroundColor: color}}
-                    />
+                    {
+                        user.avatar && user.avatar.photo
+                        ?                        
+                            <Avatar.Image
+                                size={110} 
+                                source={{ uri: (user.avatar.photo) }}
+                            />
+                        : 
+                            <Avatar.Icon 
+                                size={110} 
+                                icon="account-circle" 
+                                color={'white'}
+                                style={{ backgroundColor: color }}
+                            />
+                    }
                 </View>
                 <Text style={styles.username}>{name}</Text>
             </View>    

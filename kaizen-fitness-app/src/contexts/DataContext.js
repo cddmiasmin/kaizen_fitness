@@ -8,10 +8,11 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const { user, userType } = useContext(UserContext);
 
     const [data, setData] = useState({});
+    const [profileCreated, setProfileCreated] = useState(false);
 
     const [name, setName] = useState('Evan');
     const [familyName, setFamilyName] = useState('Thomas Peters');
-    const [avatar, setAvatar] = useState([]);
+    const [avatar, setAvatar] = useState({});
     const [dataOfBirth, setDataOfBirth] = useState(new Date(1987,0,20));
     const [document, setDocument] = useState('590.148.500-93');
     const [city, setCity] = useState('Saint Louis');
@@ -19,13 +20,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const [height, setHeight] = useState('1,80');
     const [weight, setWeight] = useState('79');
     const [topics, setTopics] = useState(["Academia", "Saúde pública", "Meditação"]);
-    const [kindOfPerson, setKindOfPerson] = useState('PJ');
-
-    function timestampToDate(timestamp) {
-        const date = new Date(timestamp.seconds * 1000);
-        date.setMilliseconds(timestamp.nanoseconds / 1000000);
-        return date;
-    }
+    const [kindOfPerson, setKindOfPerson] = useState('PF');
 
     const clearData = () => {
         // setData({});
@@ -48,11 +43,8 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
     const myData = () => {
         if(userType === 'consumer' || user.kindOfPerson === 'PF') {
-
-            let date = new Date(timestampToDate(user.dataOfBirth));
-
             setFamilyName(user.familyName);
-            setDataOfBirth(date.toLocaleDateString('pt-br'));
+            setDataOfBirth(new Date(user.dataOfBirth));
         }
 
         if(userType === 'consumer') {
@@ -80,6 +72,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 dataOfBirth, setDataOfBirth,
                 document, setDocument,
                 kindOfPerson, setKindOfPerson,
+                profileCreated, setProfileCreated,
                 topics, setTopics,
                 city, setCity,
                 state, setState,

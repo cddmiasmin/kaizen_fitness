@@ -1,5 +1,8 @@
 import { createContext, useState, useEffect } from "react";
 import { eventControllerGetCalendarConsumerUser, eventControllerGetCalendarProfessionalUser } from "../controller/EventController";
+import { userControllerAuth, userControllerHasAProfile } from "../controller/UserController";
+import { professionalControllerReadProfile } from "../controller/ProfessionalController";
+import { consumerControllerReadProfile } from "../controller/ConsumerController";
 
 export const UserContext = createContext();
 
@@ -30,6 +33,42 @@ export const UserContextProvider = ({ userData , children }) => {
     const [userType, setUserType] = useState('professional');
     const [userCalendar, setUserCalendar] = useState([]);
 
+    const getProfile = async () => {
+        let user = {};
+
+        if(userType === 'professional'){
+            user = await professionalControllerReadProfile();
+        } else {
+            user = await consumerControllerReadProfile();
+        }
+
+        setUser(user);
+    }
+
+    const userHasAProfile = async () => {
+        const profile = await userControllerHasAProfile();
+        setUser(profile.data);
+        setUserType(userData.userType);
+    
+        console.log('UserContext - Profile', profile);
+    
+        if(profile.userType === 'consumer') return 'HomeConsumer';
+        else if(profile.userType === 'professional') return 'HomeProfessional';
+        else return 'CreateProfile';
+    }
+
+    const WhatWillBeMyRouteNameNow = async () => {
+        const userAuth = await userControllerAuth();
+
+        if(userAuth.emailVerified === false) return 'EmailValidation';
+        else {
+            const route = await userHasAProfile();
+            console.log('UserContext - Route', route);
+            return route;
+        }
+        
+    }
+
     const  getCalendarUser = async () => {
         let events = {};
 
@@ -37,27 +76,26 @@ export const UserContextProvider = ({ userData , children }) => {
             events = await eventControllerGetCalendarConsumerUser();
         else 
             events = await eventControllerGetCalendarProfessionalUser();
-        console.log('EVENTS', events)
+        console.log('EVENTS', events);
 
         setUserCalendar(events);
     }
     
     useEffect(() => {
         if(userData) {
-            // setUser(userData.data);
+            setUser(userData.data);
             setUserType(userData.userType);
-            //setUserType('consumer')
         }
     }, [userData]);
 
-    //console.log('UserContext', user, user.dataOfBirth );
-
     useEffect(() => {
-        if(userType === 'professional' || userType === 'consumer')
+        if((userType === 'professional' || userType === 'consumer') && user.length !== 0)
             getCalendarUser();
-    }, [userType]);
+    }, [userType, user]);
 
-    useEffect(() => console.log(userCalendar), []);
+    useEffect(() => console.log('UserContext - UserCalendar', userCalendar), [userCalendar]);
+
+    useEffect(() => console.log('UserContext - User', user), [user]);
 
     return (
         <UserContext.Provider
@@ -65,7 +103,9 @@ export const UserContextProvider = ({ userData , children }) => {
                 user, setUser,
                 userType, setUserType,
                 userCalendar, setUserCalendar,
-                getCalendarUser
+                getCalendarUser,
+                WhatWillBeMyRouteNameNow,
+                getProfile
             }}
         >
             {children}

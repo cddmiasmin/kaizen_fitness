@@ -21,14 +21,21 @@ export default function HeaderProfessional() {
                     <Text style={styles.textMotivacional}>Vamos transformar a vida das pessoas!</Text>
                 </View>
                 <View style={styles.avatar}>
-                    <Avatar.Image
-                        size={60} 
-                        source={
-                        !user 
-                        ? {uri: ('https://i.pinimg.com/564x/6a/27/ab/6a27ab62c11c4bb972fedb8307bc8a25.jpg')}
-                        : {uri: (user.photo)}
-                    } 
-                    />
+                    {
+                        user.avatar && user.avatar.photo
+                        ?                        
+                            <Avatar.Image
+                                size={60} 
+                                source={{ uri: (user.avatar.photo) }}
+                            />
+                        : 
+                            <Avatar.Icon 
+                                size={60} 
+                                icon="account-circle" 
+                                color={'white'}
+                                style={{ backgroundColor: color }}
+                            />
+                    }
                 </View>
             </View>
             <Footer />

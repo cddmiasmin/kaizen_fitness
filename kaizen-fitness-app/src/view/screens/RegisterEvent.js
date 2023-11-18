@@ -21,11 +21,12 @@ import { participantsColors } from '../../services/participantsColors';
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
 
+import SnackBar from '../components/SnackBar';
 import ModalEventTopics from '../components/RegisterEvent/ModalEventTopics';
 import ModalEventWallpaper from '../components/RegisterEvent/ModalEventWallpaper';
 import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
+
 import { eventControllerCreate } from '../../controller/EventController';
-import SnackBar from '../components/SnackBar';
 
 export default function RegisterEvent() {
 

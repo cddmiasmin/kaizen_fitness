@@ -1,12 +1,10 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-const professionalAuth = auth().currentUser;
-
 export const professionalModelCreateProfile = async (professional) => {
 
-    const idUser = professionalAuth.uid;
-    const emailUser = professionalAuth.email;
+    const idUser = auth().currentUser.uid;
+    const emailUser = auth().currentUser.email;
 
     professional.emailUser = emailUser;
 
@@ -27,7 +25,7 @@ export const professionalModelCreateProfile = async (professional) => {
 
 export const professionalModelReadProfile = async () => {
 
-    const idUser = professionalAuth.uid;
+    const idUser = auth().currentUser.uid;
     const response = await firestore()
                             .collection('ProfessionalUsers')
                             .doc(idUser)
@@ -36,7 +34,8 @@ export const professionalModelReadProfile = async () => {
 }
 
 export const professionalModelUpdateProfile = async (professional) => {
-    const idUser = professionalAuth.uid;
+    
+    const idUser = auth().currentUser.uid;
 
     const response = await firestore()
                             .collection('ProfessionalUsers')
