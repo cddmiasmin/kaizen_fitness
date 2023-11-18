@@ -25,7 +25,7 @@ export default function DataBasicPerson() {
     avatar, setAvatar,
     name, setName,
     familyName, setFamilyName,
-    dataOfBirth, setDataOfBirth,
+    dateOfBirth, setDateOfBirth,
     stepNum, setStepNum,
     document, setDocument,
     data, setData
@@ -44,7 +44,7 @@ export default function DataBasicPerson() {
   }
 
   const onChange = (event, datetime) => {
-    setDataOfBirth(datetime);
+    setDateOfBirth(datetime);
     setDateTimePicker(false);
   };
 
@@ -54,7 +54,7 @@ export default function DataBasicPerson() {
     dataAux.avatar = avatar;
     dataAux.name = name;
     dataAux.familyName = familyName;
-    dataAux.dataOfBirth = new Date(dataOfBirth);
+    dataAux.dateOfBirth = new Date(dateOfBirth);
     dataAux.document = document;
 
     console.log('Aux', dataAux);
@@ -63,7 +63,7 @@ export default function DataBasicPerson() {
     setStepNum(stepNum + 1);
   }
 
-  //useEffect(() => setDataOfBirth(new Date(maximumDateOf18YearsAgo())), []);
+  //useEffect(() => setDateOfBirth(new Date(maximumDateOf18YearsAgo())), []);
 
   return (
     <View style={styles.container}>
@@ -98,12 +98,12 @@ export default function DataBasicPerson() {
               setDateTimePicker(true);
           }}
         >
-          <Text>{dataOfBirth.toLocaleDateString('pt-BR')}</Text>
+          <Text>{dateOfBirth?.toLocaleDateString('pt-BR')}</Text>
         </TouchableOpacity>
                                 
         {isDateTimePickerActive  && (
           <DateTimePicker
-            value={dataOfBirth}
+            value={dateOfBirth}
             mode={'date'}
             display={'spinner'}
             is24Hour={true}

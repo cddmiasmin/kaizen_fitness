@@ -2,14 +2,28 @@ import {
     consumerModelCreateProfile, 
     consumerModelReadProfile, 
     consumerModelUpdateProfile 
-} from "../model/ConsumerModel"
+} from "../model/ConsumerModel";
+
+const timestampToDate = (timestamp) => {
+    const date = new Date(timestamp.seconds * 1000);
+    date.setMilliseconds(timestamp.nanoseconds / 1000000);
+    return new Date(date);
+}
 
 export const consumerControllerCreateProfile = async (consumer) => {
     return await consumerModelCreateProfile(consumer);
 }
 
 export const consumerControllerReadProfile = async () => {
-    return await consumerModelReadProfile();
+    const response = await consumerModelReadProfile();
+    let consumer = response.data();
+
+    if(consumer !== undefined){
+        const datetime = timestampToDate(consumer.dateOfBirth);
+        consumer.dateOfBirth = datetime;
+    }
+
+    return consumer;
 }
 
 export const consumerControllerUpdateProfile = async (consumer) => {

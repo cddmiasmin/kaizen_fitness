@@ -6,12 +6,31 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { UserContext } from '../../contexts/UserContext';
 
+
 export default function Test() {
- const { user } = useContext(UserContext);
 
+  const date = new Date();
+  console.log(date, typeof date);
 
-  const login = async () => {
-    
+  const timestampToDate = (timestamp) => {
+    const date = new Date(timestamp.seconds * 1000);
+    date.setMilliseconds(timestamp.nanoseconds / 1000000);
+    return new Date(date);
+  }
+
+  const user = async () => {
+    const idUser = 'Ryqa8zTxtiee6LcMfMSecKoLaat1';
+
+    const response = await firestore()
+                            .collection('ProfessionalUsers')
+                            .doc(idUser)
+                            .get();
+    console.log('Fist', response.data());
+
+    const dateAux = timestampToDate(response.data().dateOfBirth);
+    const date = new Date(dateAux)
+
+    console.log(date, typeof date, date.toDateString(), date.toTimeString());
   }
 
   const register = async () => {
@@ -19,7 +38,7 @@ export default function Test() {
       name: "Florence Welch",
       familyName: "Welch",
       photo: "https://i.pinimg.com/564x/d3/07/90/d3079067600690197995318a82994358.jpg",
-      dataOfBirth: "28/08/1986",
+      dateOfBirth: "28/08/1986",
       document: "123.456.789-00",
       city: "London",
       county: "England",
@@ -142,7 +161,7 @@ export default function Test() {
         >Professional</Text>
         <Text
             onPress={async () => {
-              login();
+              user();
             }}
         >User</Text>
     </View>

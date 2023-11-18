@@ -20,7 +20,6 @@ import { grayText, mainColor } from '../../colors/colors';
 import { monthsOfTheYear } from '../../services/monthsOfTheYear';
 import { onlinePlataforms } from '../../services/onlinePlataforms';
 
-
 export default function DisplayEvent() {
 
     const route = useRoute();

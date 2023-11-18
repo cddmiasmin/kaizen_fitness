@@ -13,7 +13,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const [name, setName] = useState('Evan');
     const [familyName, setFamilyName] = useState('Thomas Peters');
     const [avatar, setAvatar] = useState({});
-    const [dataOfBirth, setDataOfBirth] = useState(new Date(1987,0,20));
+    const [dateOfBirth, setDateOfBirth] = useState(new Date(1987,0,20));
     const [document, setDocument] = useState('590.148.500-93');
     const [city, setCity] = useState('Saint Louis');
     const [state, setState] = useState('Missouri');
@@ -27,7 +27,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
         // setName('');
         // setFamilyName('');
         // setPhoto('');
-        // setDataOfBirth('');
+        // setDateOfBirth('');
         // setDocument('');
         // setCity('');
         // setCounty('');
@@ -44,7 +44,8 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const myData = () => {
         if(userType === 'consumer' || user.kindOfPerson === 'PF') {
             setFamilyName(user.familyName);
-            setDataOfBirth(new Date(user.dataOfBirth));
+            const datetime = new Date(user.dateOfBirth);
+            setDateOfBirth(datetime.toLocaleDateString('pt-br'));
         }
 
         if(userType === 'consumer') {
@@ -69,7 +70,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 name, setName,
                 familyName, setFamilyName,
                 avatar, setAvatar,
-                dataOfBirth, setDataOfBirth,
+                dateOfBirth, setDateOfBirth,
                 document, setDocument,
                 kindOfPerson, setKindOfPerson,
                 profileCreated, setProfileCreated,

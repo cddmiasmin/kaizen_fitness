@@ -18,11 +18,11 @@ export const userControllerHasAProfile = async () => {
     // console.log('CONSUMER', consumer, consumer.data());
     // console.log('PROF', professional, professional.data());
     
-    if(consumer.data() !== undefined) 
-        return { userType: "consumer", data: consumer.data() };    
+    if(consumer !== undefined) 
+        return { userType: "consumer", data: consumer };    
     
-    if(professional.data() !== undefined) 
-        return { userType: "professional", data: professional.data() };
+    if(professional !== undefined) 
+        return { userType: "professional", data: professional };
 
     return { userType: "noProfile", data: [] };
 }

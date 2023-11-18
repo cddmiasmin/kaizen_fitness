@@ -66,7 +66,7 @@ export default function RegisterEvent() {
     const [eventWallpaper, setEventWallpaper] = useState('');
     const [eventTopics, setEventTopics] = useState('');
     const [eventName, setEventName] = useState('');
-    const [eventDateTime, setEventDateTime] = useState('');
+    const [eventDateTime, setEventDateTime] = useState(new Date());
     const [eventAbout, setEventAbout] = useState('');
     const [eventOnlinePlataform, setEventOnlinePlataform] = useState('');
     const [eventLink, setEventLink] = useState('');
@@ -107,7 +107,7 @@ export default function RegisterEvent() {
             topics: eventTopics,
             name: eventName ,
             about: eventAbout,
-            datetime: eventDateTime,
+            datetime: new Date(eventDateTime),
             modality: modality,
             participants: []
         }
@@ -221,9 +221,9 @@ export default function RegisterEvent() {
                             textColor={'white'}
                             style={{ backgroundColor: mainColor }}
                             theme={{
-                            colors: {
-                                onSurfaceVariant: 'white'
-                            }
+                                colors: {
+                                    onSurfaceVariant: 'white'
+                                }
                             }}
                         />
                         <View style={styles.infos}>
@@ -341,7 +341,7 @@ export default function RegisterEvent() {
                             Organizador
                         </Text>
                         <View style={styles.professional}>
-                            <Avatar.Image size={60} source={{ uri: user.photo }} />
+                            <Avatar.Image size={60} source={{ uri: user?.avatar.photo }} />
                             <View style={styles.professionalData}>
                                 <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
                                     {user.name}{user.kindOfPerson === 'PF' ? ' ' + user.familyName : ''}

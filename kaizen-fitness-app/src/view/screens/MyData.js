@@ -44,7 +44,7 @@ export default function MyData() {
   const { color } = useContext(ColorContext);
   const { user, userType } = useContext(UserContext);
   const { 
-    myData, photo, setPhoto, height, setHeight, weight, setWeight, data, setData, dataOfBirth
+    myData, photo, setPhoto, height, setHeight, weight, setWeight, data, setData, dateOfBirth
   } = useContext(DataContext);
   
   const documentLabel = userType === 'consumer' || user.kindOfPerson === 'PF' 
@@ -277,7 +277,7 @@ export default function MyData() {
               <TextInput
               mode='outlined'
               label='Data de nascimento'
-              value={dataOfBirth.toLocaleDateString('pt-br')}
+              value={dateOfBirth}
               outlineColor={'white'}
               textColor={color}
               style={{ backgroundColor: mainColor }}
