@@ -177,7 +177,7 @@ export default function DisplayEvent() {
                             Organizador
                         </Text>
                         <View style={styles.professional}>
-                            <Avatar.Image size={60} source={{ uri: data.organizer.photo }} />
+                            <Avatar.Image size={60} source={{ uri: data.organizer.avatar.photo }} />
                             <View style={styles.professionalData}>
                                 <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
                                     {data.organizer.name}{data.organizer.kindOfPerson === 'PF' ? ' ' + data.organizer.familyName : ''}

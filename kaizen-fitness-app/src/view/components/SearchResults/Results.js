@@ -30,7 +30,7 @@ export default function Results({ search, setSearch, setActiveTextinput }) {
             familyName: 'Welch',
             photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
         },
-        datatime: new Date(2023, 9, 25, 19, 30),
+        datetime: new Date(2023, 9, 25, 19, 30),
         modality: 'Online',
         participants: [
             { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
@@ -44,7 +44,7 @@ export default function Results({ search, setSearch, setActiveTextinput }) {
         styleStatusBar: 'light',
         wallpaper: 'https://images.unsplash.com/photo-1522543558187-768b6df7c25c?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         name: "Semana da Saúde Feminina",
-        datatime: new Date(2024, 0, 2, 10, 30),
+        datetime: new Date(2024, 0, 2, 10, 30),
         topics: ["Saúde Pública", "Saúde Feminina"],
         modality: "Presencial",
         address: "Rua Frei João, 123",
@@ -95,7 +95,7 @@ export default function Results({ search, setSearch, setActiveTextinput }) {
             familyName: 'Welch',
             photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
         },
-        datatime: new Date(2023, 9, 25, 19, 0),
+        datetime: new Date(2023, 9, 25, 19, 0),
         modality: 'Online',
         participants: [
             { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
@@ -118,7 +118,7 @@ export default function Results({ search, setSearch, setActiveTextinput }) {
             familyName: 'Welch',
             photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
         },
-        datatime: new Date(2023, 10, 3, 2, 58),
+        datetime: new Date(2023, 10, 3, 2, 58),
         modality: 'Online',
         participants: [
             { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},

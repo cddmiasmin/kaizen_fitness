@@ -93,7 +93,7 @@ export default function DataBasicPerson() {
       <View style={styles.boxInput}>
         <Text style={[styles.titleInput, { color: color }]}>Data de nascimento</Text>                               
         <TouchableOpacity
-          style={styles.datatime} 
+          style={styles.datetime} 
           onPress={() => {
               setDateTimePicker(true);
           }}
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingLeft: 15
   },
-  datatime: {
+  datetime: {
     backgroundColor: 'white',
     alignItems: 'flex-start',
     justifyContent: 'center',

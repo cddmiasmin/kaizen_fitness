@@ -1,5 +1,8 @@
 import { createContext, useState, useEffect } from "react";
-import { eventControllerGetCalendarConsumerUser, eventControllerGetCalendarProfessionalUser } from "../controller/EventController";
+import { 
+    eventControllerGetCalendarConsumerUser, 
+    eventControllerGetCalendarProfessionalUser 
+} from "../controller/EventController";
 import { userControllerAuth, userControllerHasAProfile } from "../controller/UserController";
 import { professionalControllerReadProfile } from "../controller/ProfessionalController";
 import { consumerControllerReadProfile } from "../controller/ConsumerController";
@@ -9,8 +12,8 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ userData , children }) => {
 
     const [user, setUser] = useState([]);
-    const [userType, setUserType] = useState('professional');
-    const [userCalendar, setUserCalendar] = useState([]);
+    const [userType, setUserType] = useState('noProfile');
+    const [userCalendar, setUserCalendar] = useState(null);
 
     const getProfile = async () => {
         let user = {};
@@ -70,6 +73,8 @@ export const UserContextProvider = ({ userData , children }) => {
     useEffect(() => {
         if((userType === 'professional' || userType === 'consumer') && user.length !== 0)
             getCalendarUser();
+
+        console.log('UserContext', userType)
     }, [userType, user]);
 
     useEffect(() => console.log('UserContext - UserCalendar', userCalendar), [userCalendar]);

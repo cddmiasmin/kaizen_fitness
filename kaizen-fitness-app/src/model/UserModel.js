@@ -51,7 +51,7 @@ export const userModelSignOut = async () => {
     const response = await auth()
                             .signOut()
                             .then(() => {
-                                return { result: true, message: 'Cadastro concluído com sucesso. Obrigado por se juntar a nós!'}
+                                return { result: true, message: 'Saída executada com sucesso. Até logo!'}
                             })
                             .catch(error => {
                                 return { result: false, message: error.code + ': ' + error }
@@ -61,6 +61,26 @@ export const userModelSignOut = async () => {
 }
 
 export const userModelSignInGoogle = async () => {
+
+    GoogleSignin.configure({
+        webClientId: '118581849503-fu90sd5l1hd5as2vekqve80elqmdbuj0.apps.googleusercontent.com',
+    });
+
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    
+    const { idToken } = await GoogleSignin.signIn();
+  
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+  
+    const userSingIn = auth().signInWithCredential(googleCredential);
+
+    userSingIn.then((user) => {
+        console.log(user);
+        return { result: true, message: 'Conexão com o Google bem-sucedida. Bem-vindo!'}
+    })
+    .catch((error) => {
+        return { result: false, message: error.code + ': ' + error}
+    });
 
 }
 

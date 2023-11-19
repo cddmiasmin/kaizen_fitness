@@ -44,7 +44,7 @@ export default function UpdateEvent() {
             familyName: 'Welch',
             photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
         },
-        datatime: new Date(2023, 9, 25, 19, 30),
+        datetime: new Date(2023, 9, 25, 19, 30),
         modality: 'Online',
         participants: [
             { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
@@ -152,7 +152,7 @@ export default function UpdateEvent() {
     const thereWereChangesInTheDataForTheOnlineEvent = () => {
         return eventName                === data.name
             && eventWallpaper               === data.wallpaper 
-            && eventDateTime.toISOString()  === data.datatime.toISOString()
+            && eventDateTime.toISOString()  === data.datetime.toISOString()
             && eventAbout                   === data.about
             && eventLink                    === data.meetingLink
             && eventOnlinePlataform         === data.plataform
@@ -162,7 +162,7 @@ export default function UpdateEvent() {
     const thereWereChangesInTheDataForTheInPerson = () => {
         return eventName                === data.name
             && eventWallpaper               === data.wallpaper 
-            && eventDateTime.toISOString()  === data.datatime.toISOString()
+            && eventDateTime.toISOString()  === data.datetime.toISOString()
             && eventAbout                   === data.about
             && eventAddress                 === data.address
             && _.isEqual(data.topics, eventTopics);
@@ -196,13 +196,13 @@ export default function UpdateEvent() {
             changesData.about = eventAbout;
         }
 
-        if(eventDateTime.toISOString() !== data.datatime.toISOString()){
-            changesData.datatime = eventDateTime;
+        if(eventDateTime.toISOString() !== data.datetime.toISOString()){
+            changesData.datetime = eventDateTime;
 
-            if(eventDateTime.toDateString() !== data.datatime.toDateString())
+            if(eventDateTime.toDateString() !== data.datetime.toDateString())
                 changesNames.push("Data");
             
-            if(eventDateTime.toTimeString() !== data.datatime.toTimeString())
+            if(eventDateTime.toTimeString() !== data.datetime.toTimeString())
                 changesNames.push("Hora");
 
         }
@@ -245,13 +245,13 @@ export default function UpdateEvent() {
             changesData.about = eventAbout;
         }
 
-        if(eventDateTime.toISOString() !== data.datatime.toISOString()){
-            changesData.datatime = eventDateTime;
+        if(eventDateTime.toISOString() !== data.datetime.toISOString()){
+            changesData.datetime = eventDateTime;
 
-            if(eventDateTime.toDateString() !== data.datatime.toDateString())
+            if(eventDateTime.toDateString() !== data.datetime.toDateString())
                 changesNames.push("Data");
             
-            if(eventDateTime.toTimeString() !== data.datatime.toTimeString())
+            if(eventDateTime.toTimeString() !== data.datetime.toTimeString())
                 changesNames.push("Hora");
 
         }
@@ -562,7 +562,7 @@ export default function UpdateEvent() {
                             Organizador
                         </Text>
                         <View style={styles.professional}>
-                            <Avatar.Image size={60} source={{ uri: user.photo }} />
+                            <Avatar.Image size={60} source={{ uri: user.avatar.photo }} />
                             <View style={styles.professionalData}>
                                 <Text style={{color: 'white', fontWeight: 'bold', fontSize: 14}}>
                                     {user.name}{user.kindOfPerson === 'PF' ? ' ' + user.familyName : ''}

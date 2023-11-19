@@ -135,7 +135,7 @@ export default function Test() {
         let event = doc.data();
         event.idDoc = doc.id;
         response.push(event);
-        console.log(event.datatime)
+        console.log(event.datetime)
       });
     } else response = null;
 

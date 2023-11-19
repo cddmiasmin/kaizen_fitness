@@ -14,10 +14,16 @@ import { ColorContext } from '../../contexts/ColorContext';
 import { UserContext } from '../../contexts/UserContext';
 
 import { StatusBar } from 'expo-status-bar';
+import SnackBar from '../components/SnackBar';
+import { userControllerSignOut } from '../../controller/UserController';
 
 export default function Perfil() {
 
   const navigation = useNavigation();
+
+  const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+  const [messageSnackBar, setMessageSnackbar] = useState('');
+  const [errorSnackBar, setErrorSnackBar] = useState(false);
 
   const [visible, setVisible] = useState(false);
   const [whoCalledTheDialog, setWhoCalledTheDialog] = useState('');
@@ -36,11 +42,25 @@ export default function Perfil() {
     { key: 'topics', name: topicName, icon: topicIcon },
     { key: 'deleteAccount', name: 'Excluir conta', icon: 'delete' },
     { key: 'exit', name: 'Sair', icon: 'exit-to-app' }
-  ]
+  ];
 
-  const executeDialogUserChoice = () => {
+  const onDismissSnackBar = async () => {
+
+    setVisibleSnackbar(false);
+
+    if(!errorSnackBar) navigation.navigate('SignIn');
+    
+  }
+
+  const executeDialogUserChoice = async () => {
     if(whoCalledTheDialog === 'deleteAccount') console.log('delete');
-    else console.log('exit');
+    else {
+      const response = await userControllerSignOut();
+
+      setErrorSnackBar(!response.result);
+      setMessageSnackbar(response.message);
+      setVisibleSnackbar(true);
+    }
   }
 
   const optionPressed = (key) => {
@@ -95,6 +115,13 @@ export default function Perfil() {
         title={dialogTitle} 
         message={dialogContent} 
         response={() => executeDialogUserChoice()}
+      />
+      <SnackBar 
+        visible={visibleSnackbar} 
+        setVisible={onDismissSnackBar} 
+        message={messageSnackBar} 
+        error={errorSnackBar}
+        width={315} 
       />
     </View>
   )

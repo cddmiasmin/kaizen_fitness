@@ -21,14 +21,7 @@ import { _ } from 'lodash';
 const ItemSeparator = () => <View style={styles.separator} />;
 
 export default function Calendar() {
-
-    const { userType, userCalendar } = useContext(UserContext);
-    const { color } = useContext(ColorContext);
- 
-    const route = useRoute();
-    const navigation = useNavigation();
-    const screen = route.params === undefined ? 'Calendar' : route.params.screen;
-    const data = [
+     const dataAux = [
         {
             styleStatusBar: 'light',
             wallpaper: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -43,7 +36,7 @@ export default function Calendar() {
                 familyName: 'Welch',
                 photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
             },
-            datatime: new Date(2023, 9, 25, 19, 30),
+            datetime: new Date(2023, 9, 25, 19, 30),
             modality: 'Online',
             participants: [
                 { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
@@ -53,47 +46,47 @@ export default function Calendar() {
                 { photo: 'https://i.pinimg.com/564x/17/54/b8/1754b8ff13cbbb0d7fefbae61a0bbc49.jpg'},
             ]
         },
-        {
-            styleStatusBar: 'light',
-            wallpaper: 'https://images.unsplash.com/photo-1522543558187-768b6df7c25c?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            name: "Semana da Saúde Feminina",
-            datatime: new Date(2024, 0, 2, 10, 30),
-            topics: ["Saúde Pública", "Saúde Feminina"],
-            modality: "Presencial",
-            address: "Rua Frei João, 123",
-            city: "Rio GRande do Norte",
-            state: "RN",
-            latitude: -22.90956,
-            longitude: -43.17632,
-            organizer: {
-              kindOfPerson: 'PJ',
-              name: 'Florence',
-              familyName: 'Welch',
-              photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
-            },
-            about: "Participe da Semana da Saúde Feminina, um evento dedicado à promoção da saúde da mulher. Teremos palestras, workshops e consultas gratuitas.",
-            participants: [
-              { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
-              { photo: 'https://i.pinimg.com/564x/68/4b/c3/684bc340f3b189650bfbc7994f0f4261.jpg'},
-              { photo: 'https://i.pinimg.com/564x/d1/e1/3b/d1e13b7cebfbb1b90ddf1d4243efd317.jpg'},
-              { photo: 'https://i.pinimg.com/564x/17/54/b8/1754b8ff13cbbb0d7fefbae61a0bbc49.jpg'},
-              { photo: 'https://i.pinimg.com/564x/f7/a6/bc/f7a6bc0999bae0e3148ff8f3d660358e.jpg'},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-              { photo: ''},
-            ]
-        },
+        // {
+        //     styleStatusBar: 'light',
+        //     wallpaper: 'https://images.unsplash.com/photo-1522543558187-768b6df7c25c?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        //     name: "Semana da Saúde Feminina",
+        //     datetime: new Date(2024, 0, 2, 10, 30),
+        //     topics: ["Saúde Pública", "Saúde Feminina"],
+        //     modality: "Presencial",
+        //     address: "Rua Frei João, 123",
+        //     city: "Rio GRande do Norte",
+        //     state: "RN",
+        //     latitude: -22.90956,
+        //     longitude: -43.17632,
+        //     organizer: {
+        //       kindOfPerson: 'PJ',
+        //       name: 'Florence',
+        //       familyName: 'Welch',
+        //       photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
+        //     },
+        //     about: "Participe da Semana da Saúde Feminina, um evento dedicado à promoção da saúde da mulher. Teremos palestras, workshops e consultas gratuitas.",
+        //     participants: [
+        //       { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
+        //       { photo: 'https://i.pinimg.com/564x/68/4b/c3/684bc340f3b189650bfbc7994f0f4261.jpg'},
+        //       { photo: 'https://i.pinimg.com/564x/d1/e1/3b/d1e13b7cebfbb1b90ddf1d4243efd317.jpg'},
+        //       { photo: 'https://i.pinimg.com/564x/17/54/b8/1754b8ff13cbbb0d7fefbae61a0bbc49.jpg'},
+        //       { photo: 'https://i.pinimg.com/564x/f7/a6/bc/f7a6bc0999bae0e3148ff8f3d660358e.jpg'},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //       { photo: ''},
+        //     ]
+        // },
         {
             styleStatusBar: 'light',
             wallpaper: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -108,7 +101,7 @@ export default function Calendar() {
                 familyName: 'Welch',
                 photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
             },
-            datatime: new Date(2023, 9, 25, 19, 0),
+            datetime: new Date(2023, 9, 25, 19, 0),
             modality: 'Online',
             participants: [
                 { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
@@ -131,7 +124,7 @@ export default function Calendar() {
                 familyName: 'Welch',
                 photo: 'https://i.pinimg.com/236x/f3/c8/0b/f3c80b40df9078e806a716dcad0cc962.jpg'
             },
-            datatime: new Date(2023, 10, 3, 2, 58),
+            datetime: new Date(2023, 10, 3, 2, 58),
             modality: 'Online',
             participants: [
                 { photo: 'https://i.pinimg.com/564x/33/2a/ef/332aef0424ff607799f45cfe9909167b.jpg'},
@@ -142,25 +135,35 @@ export default function Calendar() {
             ]
         },
     ];
-    
+
+    const { userType, userCalendar } = useContext(UserContext);
+    const { color } = useContext(ColorContext);
+ 
+    const route = useRoute();
+    const navigation = useNavigation();
+    const screen = route.params.screen === undefined ? 'Calendar' : route.params.screen;
+    const data = route.params.data === undefined ? dataAux : route.params.data;
+
     const nowDate = new Date();
 
+    const [eventData, setEventData] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [segmentedButtonsValue, setSegmentedButtonsValue] = useState('online');
     const [temporaryModalityData, setTemporaryModalityData] = useState([]);
-    const [onlineModalityData, setOnlineModalityData] = useState([]);
-    const [inPersonModalityData, setInPersonModalityData] = useState([]);
+    const [onlineModalityData, setOnlineModalityData] = useState(null);
+    const [inPersonModalityData, setInPersonModalityData] = useState(null);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     const groupModality = () => {
-        return _.groupBy(data, 'modality');
+        return _.groupBy(eventData, 'modality');
     }
 
     const orderDates = ( object ) => {
-        return _.orderBy(object ,  [ 'datatime' ] ,  [ 'asc' ]);
+        return _.orderBy(object ,  [ 'datetime' ] ,  [ 'asc' ]);
     }
 
     const groupEventsWithTheSameDate = ( object ) => {
-        return _.groupBy(object, (obj) => obj.datatime.toDateString());
+        return _.groupBy(object, (obj) => obj.datetime.toDateString());
     }
 
     const filterDataSameDate = () => {
@@ -168,22 +171,23 @@ export default function Calendar() {
         if(temporaryModalityData.online !== undefined){
             let onlineEvent = orderDates(temporaryModalityData.online);
             onlineEvent = groupEventsWithTheSameDate(onlineEvent);
-            onlineEvent = Object.entries(onlineEvent).map(([data, objects]) => ({
-                data: new Date(data),
+            onlineEvent = Object.entries(onlineEvent).map(([date, objects]) => ({
+                date: new Date(date),
                 objects: objects.map(obj => obj)
             }));
             setOnlineModalityData(onlineEvent);
-        } else setOnlineModalityData(undefined);
+        } else setOnlineModalityData([]);
 
         if(temporaryModalityData.presencial !== undefined){
             let inPersonEvent = orderDates(temporaryModalityData.presencial);
             inPersonEvent = groupEventsWithTheSameDate(inPersonEvent);
-            inPersonEvent = Object.entries(inPersonEvent).map(([data, objects]) => ({
-                data: new Date(data),
+            inPersonEvent = Object.entries(inPersonEvent).map(([date, objects]) => ({
+                date: new Date(date),
                 objects: objects.map(obj => obj)
             }));
             setInPersonModalityData(inPersonEvent);
-        } else setInPersonModalityData(undefined);
+        } else setInPersonModalityData([]);
+
     }
 
     const filterDataModality = () => {
@@ -199,10 +203,20 @@ export default function Calendar() {
     const periodOfEvents = () => {
         
         const data = segmentedButtonsValue === 'online' ? onlineModalityData : inPersonModalityData;
-        let datesWhitelist = [{
-            start: data[0].data,
-            end: data[data.length - 1].data,
-        }];
+        let datesWhitelist = [];
+        let date = new Date();
+
+        if(data.length !== 0) {
+            datesWhitelist = [{
+                start: data[0].date,
+                end: data[data.length - 1].date,
+            }];
+        } else {
+            datesWhitelist = [{
+                start: date,
+                end: date,
+            }];
+        }
 
         return datesWhitelist;
 
@@ -211,13 +225,15 @@ export default function Calendar() {
     const datesWithNoEvent = () => {
 
         const data = segmentedButtonsValue === 'online' ? onlineModalityData : inPersonModalityData;
-
         let datesWithNoEvent = [];
-        const date = new Date(data[0].data);
+
+        if(data.length === 0 ) return datesWithNoEvent;
+
+        const date = new Date(data[0].date);
     
         for(let obj = 0; obj < data.length; obj++)
         {
-            while(date < data[obj].data){
+            while(date < data[obj].date){
                 datesWithNoEvent.push(new Date(date));
                 date.setDate( date.getDate() + 1);
             }
@@ -233,9 +249,11 @@ export default function Calendar() {
         const data = segmentedButtonsValue === 'online' ? onlineModalityData : inPersonModalityData;
         let markedDatesArray = [];
 
+        if(data.length === 0 ) return markedDatesArray;
+
         data.forEach((event) => {
             markedDatesArray.push({
-                date: event.data,
+                date: event.date,
                 dots: [
                   {
                     color: 'white',
@@ -249,15 +267,70 @@ export default function Calendar() {
     }
 
     useEffect(() => {
-        filterDataModality();
-    },[]);
+        if(screen === 'Calendar') setEventData(userCalendar); 
+        else setEventData(data);
+    }, []);
+
+    useEffect(() => {
+        if(screen === 'Calendar') {
+            if(userCalendar !== null && userCalendar !== undefined) setEventData(userCalendar);
+            else setLoading(true);
+        }
+    }, [userCalendar]);
+
+    useEffect(() => {
+        if(eventData !== null && eventData !== undefined) filterDataModality();
+    }, [eventData]);
 
     useEffect(() => {
         if(temporaryModalityData.length !== 0) filterDataSameDate();
     }, [temporaryModalityData]);
 
+    useEffect(() => {
+        if(onlineModalityData !== null && inPersonModalityData !== null) setLoading(false);
+    }, [onlineModalityData, inPersonModalityData]);
 
-    if(onlineModalityData.length === 0 && inPersonModalityData.length === 0)
+    if(eventData === null && screen === 'Calendar')
+        return (
+            <View style={styles.container}> 
+                <StatusBar style='light'/>
+                <View style={styles.alertMessage}>
+                    <View style={styles.containerAlert}>
+                        <Text style={styles.alert}>
+                            Você não possui eventos 
+                        </Text>
+                        <Text style={styles.alert}>
+                            na sua agenda
+                        </Text>
+                    </View>
+                    {
+                        userType === 'professional'
+                            ?
+                                <TouchableOpacity
+                                    style={[styles.buttonAlertMessage, { backgroundColor: color }]}
+                                    onPress={() => navigation.navigate('KindOfEvent')}
+                                >
+                                    <Text style={styles.textButtonAlertMessage}>
+                                        Criar um evento
+                                    </Text>
+                                </TouchableOpacity>
+                            :
+                                <TouchableOpacity
+                                    style={[styles.buttonAlertMessage, { backgroundColor: color }]}
+                                    onPress={() => navigation.navigate('HomeConsumer')}
+                                >
+                                    <Text style={styles.textButtonAlertMessage}>
+                                        Procurar eventos
+                                    </Text>
+                                </TouchableOpacity>
+                    }
+                </View>
+                <Footer />
+            </View>
+        )
+
+
+    if(loading)
         return (
             <View style={styles.loading}> 
                 <StatusBar style='light'/>
@@ -281,16 +354,16 @@ export default function Calendar() {
                 >
                     {
                         screen !== 'Calendar' &&
-                        <View style={styles.screen}>
-                            <TouchableOpacity onPress={() => navigation.navigate('HomeConsumer')} >
-                                <Icon 
-                                    name={'chevron-left'} 
-                                    size={20} 
-                                    color={segmentedButtonsValue === 'online' ? 'white' : color} 
-                                />
-                            </TouchableOpacity>
-                            <Text style={styles.screenTitle}>{screen}</Text>
-                        </View>
+                            <View style={styles.screen}>
+                                <TouchableOpacity onPress={() => navigation.navigate('HomeConsumer')} >
+                                    <Icon 
+                                        name={'chevron-left'} 
+                                        size={20} 
+                                        color={segmentedButtonsValue === 'online' ? 'white' : color } 
+                                    />
+                                </TouchableOpacity>
+                                <Text style={styles.screenTitle}>{screen}</Text>
+                            </View>
                     }
                     <CalendarStrip
                         scrollable
@@ -317,6 +390,10 @@ export default function Calendar() {
                         <TouchableOpacity 
                             style={[styles.segmentedButton, { backgroundColor: segmentedButtonsValue === 'online' ? color : mainColor }]}
                             onPress={() => {
+
+                                if(onlineModalityData.length === 0) setSelectedDate(new Date());
+                                else setSelectedDate(new Date(onlineModalityData[0].date));
+                                
                                 setSegmentedButtonsValue('online');
                             }}
                         >
@@ -332,6 +409,10 @@ export default function Calendar() {
                         <TouchableOpacity 
                             style={[styles.segmentedButton, { backgroundColor: segmentedButtonsValue === 'inPerson' ? color : mainColor }]}
                             onPress={() => {
+
+                                if(inPersonModalityData.length === 0) setSelectedDate(new Date());
+                                else setSelectedDate(new Date(inPersonModalityData[0].date));
+
                                 setSegmentedButtonsValue('inPerson');
                             }}
                         >
@@ -349,38 +430,54 @@ export default function Calendar() {
                 <View style={styles.body}>
                     <View style={styles.eventCards}>
                         {
-                            onlineModalityData === undefined || inPersonModalityData.length === undefined
-                            ?
-                                <Text>iasmin</Text>
-                            :
-                            <FlatList
-                                style={{ marginBottom: 210 }}
-                                data={segmentedButtonsValue === 'online' ? onlineModalityData : inPersonModalityData}
-                                ItemSeparatorComponent={ItemSeparator}
-                                renderItem={({ item: event }) => 
-                                    <View
-                                        style={styles.eventCard}
-                                    >
-                                        <Text style={styles.eventCardTitle}>
+                            (segmentedButtonsValue === 'online' && onlineModalityData.length === 0)  
+                                || (segmentedButtonsValue === 'inPerson' && inPersonModalityData.length === 0) 
+                                    ?
+                                        <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', gap: 15}}>
+                                            <Text style={{ color: 'white', fontWeight: 'bold'}}>
+                                                Você não possui eventos { segmentedButtonsValue === 'online' ? 'online' : 'presenciais'}
+                                            </Text>
                                             {
-                                                event.data.getDate() 
-                                                + ' de ' 
-                                                + monthsOfTheYear[event.data.getMonth()] 
-                                                + '. ' 
-                                                + (event.data.getFullYear() === nowDate.getFullYear() ? '' : event.data.getFullYear())
-                                            }
-                                        </Text>
-                                        <View style={styles.eventCardLine} />
-                                        <View style={styles.events}>
-                                            {
-                                                event.objects?.map((event, key) => (
-                                                    <EventCard key={key} data={event} orientation={'vertical'}/>
-                                                ))
+                                                userType === 'consumer' &&
+                                                    <TouchableOpacity
+                                                        style={[styles.buttonAlertMessage, { backgroundColor: color }]}
+                                                        onPress={() => navigation.navigate('HomeConsumer')}
+                                                    >
+                                                        <Text style={styles.textButtonAlertMessage}>
+                                                            Procurar eventos
+                                                        </Text>
+                                                    </TouchableOpacity>
                                             }
                                         </View>
-                                    </View>
-                                }
-                            />   
+                                    :
+                                        <FlatList
+                                            style={{ marginBottom: 210 }}
+                                            data={segmentedButtonsValue === 'online' ? onlineModalityData : inPersonModalityData}
+                                            ItemSeparatorComponent={ItemSeparator}
+                                            renderItem={({ item: event }) => 
+                                                <View
+                                                    style={styles.eventCard}
+                                                >
+                                                    <Text style={styles.eventCardTitle}>
+                                                        {
+                                                            event.date.getDate() 
+                                                            + ' de ' 
+                                                            + monthsOfTheYear[event.date.getMonth()] 
+                                                            + '. ' 
+                                                            + (event.date.getFullYear() === nowDate.getFullYear() ? '' : event.date.getFullYear())
+                                                        }
+                                                    </Text>
+                                                    <View style={styles.eventCardLine} />
+                                                    <View style={styles.events}>
+                                                        {
+                                                            event.objects?.map((event, key) => (
+                                                                <EventCard key={key} data={event} orientation={'vertical'}/>
+                                                            ))
+                                                        }
+                                                    </View>
+                                                </View>
+                                            }
+                                        />   
                         }
                     </View>
                 </View>
@@ -391,16 +488,16 @@ export default function Calendar() {
                 }
                 {
                     screen === 'Calendar' && userType === 'professional' &&
-                    <View style={styles.registerEvent}> 
-                        <IconButton
-                            icon="calendar-plus"
-                            iconColor={'white'}
-                            mode='contained'
-                            containerColor={color}
-                            size={24}
-                            onPress={() => navigation.navigate('KindOfEvent')}
-                        />
-                    </View>
+                        <View style={styles.registerEvent}> 
+                            <IconButton
+                                icon="calendar-plus"
+                                iconColor={'white'}
+                                mode='contained'
+                                containerColor={color}
+                                size={24}
+                                onPress={() => navigation.navigate('KindOfEvent')}
+                            />
+                        </View>
                 }
             </View>
         );
@@ -497,5 +594,31 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 75,
         left: 330
+    },
+    alertMessage: {
+        justifyContent: 'center',
+        alignItems: 'center', 
+        width: '100%',
+        height: '100%',
+        paddingBottom: 60,
+        flexDirection: 'column',
+        gap: 20
+    },
+    alert: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 18,
+        textAlign: 'center'
+    },
+    buttonAlertMessage: {
+        width: 190,
+        height: 35,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5 
+    },
+    textButtonAlertMessage: {
+        color: 'white',
+        fontWeight: 'bold',
     }
 });

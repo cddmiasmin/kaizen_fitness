@@ -37,28 +37,28 @@ export default function RegisterEvent() {
 
     const navigation = useNavigation();
 
-    const inPersonData = {
-        styleStatusBar: 'dark',
-        wallpaper: 'https://images.unsplash.com/photo-1466979866587-05abf8ea3aec?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        topics: ['Reabilitação'],
-        name: 'Reabilitação online para AVC',
-        about: 'Este evento fornecerá informações e dicas sobre reabilitação online para pessoas que sofreram um AVC. Os participantes aprenderão sobre os diferentes tipos de reabilitação online disponíveis, como escolher o programa certo para suas necessidades e como aproveitar ao máximo o programa de reabilitação.',
-        datetime: new Date(2023,8,19,19,0),
-        address: "Parque Ibirapuera, São Paulo",
-        modality: 'online',
-        participants: []
-    }
+    // const inPersonData = {
+    //     styleStatusBar: 'dark',
+    //     wallpaper: 'https://images.unsplash.com/photo-1466979866587-05abf8ea3aec?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    //     topics: ['Reabilitação'],
+    //     name: 'Reabilitação online para AVC',
+    //     about: 'Este evento fornecerá informações e dicas sobre reabilitação online para pessoas que sofreram um AVC. Os participantes aprenderão sobre os diferentes tipos de reabilitação online disponíveis, como escolher o programa certo para suas necessidades e como aproveitar ao máximo o programa de reabilitação.',
+    //     datetime: new Date(2023,8,19,19,0),
+    //     address: "Parque Ibirapuera, São Paulo",
+    //     modality: 'online',
+    //     participants: []
+    // }
 
-    const onlineData = {
-        styleStatusBar: 'light',
-        wallpaper: 'https://images.unsplash.com/photo-1603102859961-64b17d43580d?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1932',
-        name: "Treinamento de corrida para iniciantes",
-        datetime: new Date(2023, 9, 26, 10, 0),
-        topics: ["Atividade Física", "Esporte"],
-        modality: 'presencial',
-        about: "Este treinamento é ideal para quem quer começar a correr. Você aprenderá as técnicas básicas de corrida, como postura, respiração e alongamento.",
-        participants: []
-    }
+    // const onlineData = {
+    //     styleStatusBar: 'light',
+    //     wallpaper: 'https://images.unsplash.com/photo-1603102859961-64b17d43580d?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&w=1932',
+    //     name: "Treinamento de corrida para iniciantes",
+    //     datetime: new Date(2023, 9, 26, 10, 0),
+    //     topics: ["Atividade Física", "Esporte"],
+    //     modality: 'presencial',
+    //     about: "Este treinamento é ideal para quem quer começar a correr. Você aprenderá as técnicas básicas de corrida, como postura, respiração e alongamento.",
+    //     participants: []
+    // }
 
     const { user } = useContext(UserContext);
     const { color } = useContext(ColorContext);
@@ -72,7 +72,7 @@ export default function RegisterEvent() {
     const [eventLink, setEventLink] = useState('');
     const [eventAddress, setEventAddress] = useState('');
 
-    const [styleStatusBar, setStyleStatusBar] = useState(modality === 'online' ? onlineData.styleStatusBar : inPersonData.styleStatusBar);
+    const [styleStatusBar, setStyleStatusBar] = useState('light');
     const [dateTimePickerMode, setDateTimePickerMode] = useState('date');
     const [plataformIndex, setPlataformIndex] = useState(0);
 
@@ -118,7 +118,7 @@ export default function RegisterEvent() {
         } else data.address = eventAddress;
 
         const professional = {
-            photo: user.photo,
+            avatar: user.avatar,
             kindOfPerson: user.kindOfPerson,
             name: user.name
         };
@@ -128,7 +128,7 @@ export default function RegisterEvent() {
         const response = await eventControllerCreate(data, professional);
 
         if(response.result){ 
-            setUserCalendar([]);
+            setUserCalendar(undefined);
             getCalendarUser();
         }
         

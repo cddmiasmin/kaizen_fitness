@@ -14,9 +14,9 @@ export default function EventCard({ data, orientation }) {
 
     const navigation = useNavigation();
 
-    navigation.setOptions({
-        persistedState: false,
-    });
+    // navigation.setOptions({
+    //     persistedState: false,
+    // });
 
     const { userType } = useContext(UserContext);
     const { color } = useContext(ColorContext);
@@ -34,8 +34,6 @@ export default function EventCard({ data, orientation }) {
 
         return plataformName;
     }
-
-    console.log(data.datetime)
 
     return (
         <TouchableOpacity 
@@ -87,11 +85,11 @@ export default function EventCard({ data, orientation }) {
                                 color={color} 
                             />
                             <Text style={{ color: grayText }}>
-                                {/* {
+                                {
                                     data.datetime.getDate() + ' ' + monthsOfTheYear[data.datetime.getMonth()] + ' ' + (data.datetime.getFullYear() === nowDate.getFullYear() ? '' : data.datetime.getFullYear())
                                     + ' - '
                                     + data.datetime.getHours() + 'h'+ (data.datetime.getMinutes() === 0 ? '' : data.datetime.getMinutes())
-                                } */}
+                                }
                             </Text>
                         </View>
                     </View>
