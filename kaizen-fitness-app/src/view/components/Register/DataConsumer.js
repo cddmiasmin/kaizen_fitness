@@ -1,9 +1,13 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 
 import { ColorContext } from '../../../contexts/ColorContext';
 import { DataContext } from '../../../contexts/DataContext';
+
 import Buttons from './Buttons';
+
+import { mask, unMask } from 'remask';
+import { consumerControllerIMC, consumerControllerWater } from '../../../controller/ConsumerController';
 
 export default function DataConsumer() {
 
@@ -13,11 +17,19 @@ export default function DataConsumer() {
     weight, setWeight,
     data, setData, 
     stepNum,  setStepNum, 
+    heightAux, setHeightAux,
+    weightAux, setWeightAux
   } = useContext(DataContext);
 
   function validateData() {
     let dataAux = data;
+    const imc = consumerControllerIMC(heightAux, weightAux);
+    const water = consumerControllerWater(weightAux);
 
+    console.log(imc, water);
+
+    dataAux.imc = imc;
+    dataAux.dailyWaterConsumption = water;
     dataAux.height = height;
     dataAux.weight = weight;
 
@@ -39,7 +51,10 @@ export default function DataConsumer() {
           inputMode={'decimal'}
           keyboardType={'decimal-pad'}
           underlineColorAndroid="transparent"
-          onChangeText={(value) => setHeight(value)}
+          onChangeText={(value) => {
+            setHeight(mask(unMask(value), '9,99'));
+            setHeightAux(mask(unMask(value), '9.99'));
+          }}
           value={height}
         />
       </View>
@@ -50,7 +65,10 @@ export default function DataConsumer() {
           inputMode={'decimal'}
           keyboardType={'decimal-pad'}
           underlineColorAndroid="transparent"
-          onChangeText={(value) => setWeight(value)}
+          onChangeText={(value) => {
+            setWeight(mask(unMask(value), ['9,9', '99,9', '999,9']));
+            setWeightAux(mask(unMask(value), ['9.9', '99.9', '999.9']));
+          }}
           value={weight}
         />
       </View>

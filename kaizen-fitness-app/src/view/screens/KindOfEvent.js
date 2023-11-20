@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, 
     Text, 
     View,
@@ -30,7 +30,7 @@ export default function KindOfEvent() {
    <View style={styles.container}>
         <StatusBar style='light'/>
         <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Calendar'})} >
+            <TouchableOpacity onPress={() => navigation.goBack()} >
                 <AntDesign name="left" size={20} color="white" />
             </TouchableOpacity>
             <Text style={styles.screen}>Modalidade do Evento</Text>

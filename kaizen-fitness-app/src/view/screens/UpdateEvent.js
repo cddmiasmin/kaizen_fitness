@@ -12,21 +12,21 @@ import {
     Image
 } from 'react-native';
 
+import _ from 'lodash';
+
 import { StatusBar } from 'expo-status-bar';
 
 import { mainColor } from '../../colors/colors';
-import { onlinePlataforms } from '../../services/onlinePlataforms';
 
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
 
+import SnackBar from '../components/SnackBar';
 import DialogAlert from '../components/DialogAlert';
 import ModalEventTopics from '../components/RegisterEvent/ModalEventTopics';
 import ModalOnlinePlataforms from '../components/RegisterEvent/ModalOnlinePlataforms';
 import ModalEventWallpaper from '../components/RegisterEvent/ModalEventWallpaper';
 
-import _ from 'lodash';
-import SnackBar from '../components/SnackBar';
 import { eventControllerDelete, eventControllerUpdate } from '../../controller/EventController';
 
 export default function UpdateEvent() {
@@ -65,13 +65,11 @@ export default function UpdateEvent() {
     const [eventTopics, setEventTopics] = useState(data.topics);
     const [eventName, setEventName] = useState(data.name);
     const [eventDateTime, setEventDateTime] = useState(new Date(data.datetime));
-    const [eventAbout, setEventAbout] = useState(data.about || '');
+    const [eventAbout, setEventAbout] = useState(data.about);
     const [eventOnlinePlataform, setEventOnlinePlataform] = useState(data.plataform || '');
     const [eventLink, setEventLink] = useState(data.meetingLink || '');
     const [eventAddress, setEventAddress] = useState(data.address || '');
     const [styleStatusBar, setStyleStatusBar] = useState(data.styleStatusBar);
-
-    const [plataformIndex, setPlataformIndex] = useState(0);
     
     const [dateTimePickerMode, setDateTimePickerMode] = useState('date');
     const [isDateTimePickerActive, setDateTimePicker] = useState(false);
@@ -98,11 +96,19 @@ export default function UpdateEvent() {
     const [isModalEventTopicsActive, setModalEventTopics] = useState(false);
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
 
+    const onDismissSnackBar = async () => {
+
+        setVisibleSnackbar(false);
+  
+        if(!errorSnackBar) navigation.goBack();
+        
+    }
+
     const deleteEvent = async () => {
         const response = await eventControllerDelete(data.idDoc);
         
         if(response.result){
-            setUserCalendar([]);
+            setUserCalendar(undefined);
             getCalendarUser();
         }
         
@@ -115,7 +121,7 @@ export default function UpdateEvent() {
         const response = await eventControllerUpdate(changesData, data.idDoc);
         
         if(response.result){
-            setUserCalendar([]);
+            setUserCalendar(undefined);
             getCalendarUser();
         }
         
@@ -310,15 +316,6 @@ export default function UpdateEvent() {
         eventLink, eventOnlinePlataform, eventAddress,  eventTopics
     ]);
 
-    // useEffect(() => console.log('CHANGES', changes), [changes])
-
-    useEffect(() => {
-        onlinePlataforms.forEach((plataform) => {
-            if (plataform.value === eventOnlinePlataform) {
-                setPlataformIndex(onlinePlataforms.indexOf(plataform))
-            }
-        }); 
-    },[eventOnlinePlataform]);
 
     return (
         <SafeAreaView  style={styles.container}>
@@ -355,7 +352,7 @@ export default function UpdateEvent() {
                                     setWhoCalledTheDialog('chevron-left');
                                     whatDataHasChanged();
                                 }
-                                else navigation.navigate('Calendar', { screen: 'Calendar' });
+                                else navigation.goBack();
                             }}
                         />
                         <IconButton
@@ -586,12 +583,12 @@ export default function UpdateEvent() {
                                         <View style={styles.plataformInfo}>
                                             <Image 
                                                 style={{width: 75, height: 75}} 
-                                                source={onlinePlataforms[plataformIndex].icon}
+                                                source={eventOnlinePlataform.icon}
                                             />
                                             <Text 
                                                 style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginTop: 2}}
                                             >
-                                                {onlinePlataforms[plataformIndex].name} 
+                                                {eventOnlinePlataform.name} 
                                             </Text>
                                         </View>
                                         <IconButton
@@ -656,7 +653,7 @@ export default function UpdateEvent() {
             />
             <SnackBar 
                 visible={visibleSnackbar} 
-                setVisible={setVisibleSnackbar} 
+                setVisible={onDismissSnackBar} 
                 message={messageSnackBar} 
                 error={errorSnackBar}
                 width={315} 

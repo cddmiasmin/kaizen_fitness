@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { TextInput, Avatar, IconButton } from 'react-native-paper';
+import { TextInput, IconButton, ActivityIndicator } from 'react-native-paper';
 import { TextInput as NativeTextInput } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
@@ -15,10 +15,14 @@ import Line from '../components/Line';
 import { DataContext } from '../../contexts/DataContext';
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
+
 import { consumerControllerUpdateProfile } from '../../controller/ConsumerController';
 import { professionalControllerUpdateProfile } from '../../controller/ProfessionalController';
+
 import DialogAlert from '../components/DialogAlert';
 import SnackBar from '../components/SnackBar';
+import ChooseAvatar from '../components/ChooseAvatar';
+import ModalAvatarsForProfilePicture from '../components/ChooseAvatar/ModalAvatarsForProfilePicture';
 
 export default function MyData() {
 
@@ -41,10 +45,19 @@ export default function MyData() {
   const [messageSnackBar, setMessageSnackbar] = useState('');
   const [errorSnackBar, setErrorSnackBar] = useState(false);
 
+  //Modal
+  const [isModalActive, setIsModalActive] = useState(false);
+
   const { color } = useContext(ColorContext);
-  const { user, userType } = useContext(UserContext);
+  const { user, setUser, userType, getProfile } = useContext(UserContext);
   const { 
-    myData, photo, setPhoto, height, setHeight, weight, setWeight, data, setData, dateOfBirth
+    myData, dateOfBirth,
+    avatar, setAvatar, 
+    height, setHeight, 
+    weight, setWeight, 
+    data, setData, 
+    heightAux, setHeightAux,
+    weightAux, setWeightAux
   } = useContext(DataContext);
   
   const documentLabel = userType === 'consumer' || user.kindOfPerson === 'PF' 
@@ -65,6 +78,11 @@ export default function MyData() {
       setErrorSnackBar(!response.result);
       setMessageSnackbar(response.message);
       setVisibleSnackbar(true);
+
+      if(response.result){
+        setUser([]);
+        getProfile();
+      }
     }
   }
 
@@ -93,13 +111,13 @@ export default function MyData() {
   }
 
   const thereWasAChangeInConsumerData  = () => {
-    return  photo  === user.photo
+    return  avatar === user.avatar
       &&    height === user.height
       &&    weight === user.weight;
   }
 
   const thereWasAChangeInProfessionalData  = () => {
-    return  photo  === user.photo;
+    return  avatar  === user.avatar;
   }
 
   const thereWasAChange = () => {
@@ -111,9 +129,9 @@ export default function MyData() {
     let changesNames = [];
     let changesData = {};
 
-    if(photo !== user.photo){
+    if(avatar !== user.avatar){
       changesNames.push("Avatar de perfil");
-      changesData.photo = photo;
+      changesData.avatar = avatar;
     }
 
     if(height !== user.height){
@@ -133,9 +151,9 @@ export default function MyData() {
     let changesNames = [];
     let changesData = {};
 
-    if(photo !== user.photo){
+    if(avatar !== user.avatar){
       changesNames.push("Avatar de perfil");
-      changesData.photo = photo;
+      changesData.avatar = avatar;
     }
 
     return { names: changesNames, data: changesData };
@@ -154,6 +172,10 @@ export default function MyData() {
   useEffect(() => myData(), []);
 
   useEffect(() => {
+    if(user.length !== 0) myData();
+  }, [user]);
+
+  useEffect(() => {
     setColorTextHeight(color);
     setColorTextWeight(color);
   }, []);
@@ -161,7 +183,7 @@ export default function MyData() {
   useEffect(() => {
     const change = thereWasAChange();
     setNoChanges(change);
-  }, [photo, height, weight]);
+  }, [avatar, height, weight]);
 
   useEffect(() => {
 
@@ -181,7 +203,15 @@ export default function MyData() {
 
     }
 
-  }, [data, changesNames])
+  }, [data, changesNames]);
+
+  if(user.length === 0)
+    return (
+        <View style={styles.loading}> 
+            <StatusBar style='light'/>
+            <ActivityIndicator animating={true} color={color} />
+        </View>
+    )
  
   return (
     <ScrollView style={styles.container}>
@@ -206,7 +236,7 @@ export default function MyData() {
                 icon="check-bold"
                 iconColor={color}
                 style={styles.button}
-                containerColor={'white'}
+                containerColor={mainColor}
                 size={18}
                 disabled={noChanges}
                 onPress={() => {
@@ -216,22 +246,7 @@ export default function MyData() {
             />
           </View>
         </View>
-        <View style={styles.containerPhoto}>
-            <View style={styles.avatar}>                    
-            <IconButton
-                icon="image-plus"
-                iconColor={'white'}
-                style={[{backgroundColor: color}, styles.icon]}
-                size={15}
-                onPress={() => console.log('Pressed')}
-            />
-              <Avatar.Image
-                  size={110} 
-                  source={{uri: (user.avatar.photo) }}
-                  style={{ zIndex: 1 }}
-              />
-            </View>
-        </View>
+        <ChooseAvatar chooseStatusModal={setIsModalActive} size={90}/>
         <Line width={'100%'} height={'0.3%'} top={'7%'} bottom={'5%'}/>
         <Text 
           style={[styles.message, {color: color}]}
@@ -312,7 +327,10 @@ export default function MyData() {
                     mode='outlined'
                     label='Altura'
                     value={height}
-                    onChangeText={(text) => setHeight(text)}
+                    onChangeText={(value) => {
+                      setHeight(mask(unMask(value), '9,99'));
+                      setHeightAux(mask(unMask(value), '9.99'));
+                    }}
                     outlineColor={'white'}
                     activeOutlineColor={color}
                     textColor={colorTextHeight}
@@ -333,7 +351,10 @@ export default function MyData() {
                     mode='outlined'
                     label='Peso'
                     value={weight}
-                    onChangeText={(text) => setWeight(text)}
+                    onChangeText={(value) => {
+                      setWeight(mask(unMask(value), ['9,9', '99,9', '999,9']));
+                      setWeightAux(mask(unMask(value), ['9.9', '99.9', '999.9']));
+                    }}
                     outlineColor={'white'}
                     activeOutlineColor={color}
                     textColor={colorTextWeight}
@@ -365,12 +386,24 @@ export default function MyData() {
           message={messageSnackBar} 
           error={errorSnackBar}
           width={315} 
-        /> 
+        />
+        <ModalAvatarsForProfilePicture
+          active={isModalActive}
+          changeMyStatus={setIsModalActive}
+          chooseAvatar={setAvatar}
+          initialValue={avatar}
+       /> 
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    backgroundColor: mainColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container:{
     flex: 1,
     backgroundColor: mainColor,
@@ -392,10 +425,6 @@ const styles = StyleSheet.create({
   },
   headerRight:{
     alignItems: 'flex-end',
-    alignItems: 'center',
-  },
-  containerPhoto: {
-    width: '100%',
     alignItems: 'center',
   },
   screen: {

@@ -1,20 +1,21 @@
 import { useContext, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { List } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { mainColor } from '../../colors/colors';
 
 import Footer from '../components/Footer';
-import HeaderProfessional from '../components/Profile/Header';
-import HeaderConsumer from '../components/Profile/HeaderConsumer';
+import SnackBar from '../components/SnackBar';
 import DialogAlert from '../components/DialogAlert';
+import HeaderConsumer from '../components/Profile/HeaderConsumer';
+import HeaderProfessional from '../components/Profile/Header';
 
-import { ColorContext } from '../../contexts/ColorContext';
 import { UserContext } from '../../contexts/UserContext';
+import { ColorContext } from '../../contexts/ColorContext';
 
 import { StatusBar } from 'expo-status-bar';
-import SnackBar from '../components/SnackBar';
+
 import { userControllerSignOut } from '../../controller/UserController';
 
 export default function Perfil() {
@@ -31,7 +32,7 @@ export default function Perfil() {
   const [dialogContent, setDialogContent] = useState('');
 
   const { color } = useContext(ColorContext);
-  const { userType } = useContext(UserContext);
+  const { userType, setUserType, setUser, setUserCalendar } = useContext(UserContext);
 
   const topicName = userType === 'consumer' ? 'Interesses' : 'Serviços';
   const topicIcon = userType === 'consumer' ? 'thumb-up' : 'briefcase';
@@ -48,7 +49,14 @@ export default function Perfil() {
 
     setVisibleSnackbar(false);
 
-    if(!errorSnackBar) navigation.navigate('SignIn');
+    if(!errorSnackBar) {
+      if(whoCalledTheDialog === 'exit') {
+        setUser([]);
+        setUserType('noProfile'); 
+        setUserCalendar(undefined);
+        navigation.navigate('SignIn');
+      }
+    }
     
   }
 

@@ -13,7 +13,7 @@ export default function ModalOnlinePlataforms({ active, changeMyStatus, choosePl
 
     const { color } = useContext(ColorContext);
 
-    const [plataformSelected, setPlataformSelected] = useState(initialValue === '' ? 'zoom' : initialValue );
+    const [plataformSelected, setPlataformSelected] = useState(initialValue.length === 0 ? onlinePlataforms[0] : initialValue);
 
     return (
         <Modal 
@@ -34,14 +34,14 @@ export default function ModalOnlinePlataforms({ active, changeMyStatus, choosePl
                                 style={styles.plataform} 
                                 key={`plataform#${key}`}
                                 onPress={() => {
-                                    setPlataformSelected(plataform.value);
+                                    setPlataformSelected(plataform);
                                 }}
                             >
                                 <Image 
                                     style={[
-                                        {width: 75, height: 75}, 
-                                        plataformSelected === plataform.value ? styles.plataformSelected : '',
-                                        plataformSelected === plataform.value ? { borderColor: color } : ''
+                                        { width: 75, height: 75 }, 
+                                        plataformSelected === plataform ? styles.plataformSelected : '',
+                                        plataformSelected === plataform ? { borderColor: color } : ''
                                     ]} 
                                     source={plataform.icon}/>
                                 <Text 

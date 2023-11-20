@@ -1,5 +1,6 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useContext } from "react";
 import { UserContext } from "./UserContext";
+import { mask, unMask } from 'remask';
 
 export const DataContext = createContext();
 
@@ -12,15 +13,18 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
 
     const [name, setName] = useState('Evan');
     const [familyName, setFamilyName] = useState('Thomas Peters');
-    const [avatar, setAvatar] = useState({});
+    const [avatar, setAvatar] = useState([]);
     const [dateOfBirth, setDateOfBirth] = useState(new Date(1987,0,20));
     const [document, setDocument] = useState('590.148.500-93');
     const [city, setCity] = useState('Saint Louis');
     const [state, setState] = useState('Missouri');
-    const [height, setHeight] = useState('1,80');
-    const [weight, setWeight] = useState('79');
+    const [height, setHeight] = useState('');
+    const [weight, setWeight] = useState('');
     const [topics, setTopics] = useState(["Academia", "Saúde pública", "Meditação"]);
     const [kindOfPerson, setKindOfPerson] = useState('PF');
+
+    const [heightAux, setHeightAux] = useState('');
+    const [weightAux, setWeightAux] = useState('');
 
     const clearData = () => {
         // setData({});
@@ -51,6 +55,8 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
         if(userType === 'consumer') {
             setHeight(user.height);
             setWeight(user.weight);
+            setHeightAux(mask(unMask(user.height), ['9.9', '99.9', '999.9']));
+            setWeightAux(mask(unMask(user.weight), ['9.9', '99.9', '999.9']));
         }
 
         if(userType === 'professional') setKindOfPerson(user.kindOfPerson);
@@ -78,7 +84,9 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 city, setCity,
                 state, setState,
                 height, setHeight,
-                weight, setWeight
+                weight, setWeight,
+                heightAux, setHeightAux,
+                weightAux, setWeightAux
             }}
         >
             {children}

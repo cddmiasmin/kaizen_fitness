@@ -14,11 +14,14 @@ import { StatusBar } from 'expo-status-bar';
 import { grayText, mainColor } from '../../colors/colors';
 
 import { ColorContext } from '../../contexts/ColorContext';
+import { UserContext } from '../../contexts/UserContext';
 
 import SnackBar from '../components/SnackBar';
 
-import { userControllerSignIn } from '../../controller/UserController';
-import { UserContext } from '../../contexts/UserContext';
+import { 
+  userControllerSignIn, 
+  userControllerSignInGoogle 
+} from '../../controller/UserController';
 
 export default function SignIn() {
 
@@ -61,9 +64,14 @@ export default function SignIn() {
       setSignInResult(!response.result);
       setMessageSnackbar(response.message);
       setVisibleSnackbar(true);
+    }
 
-      console.log(!signInResult);
+    const makeUserSignInGoogle = async () => {
+      const response = await userControllerSignInGoogle();
 
+      setSignInResult(!response.result);
+      setMessageSnackbar(response.message);
+      setVisibleSnackbar(true);
     }
    
     return (
@@ -77,7 +85,7 @@ export default function SignIn() {
             <KeyboardAvoidingView style={styles.keyboardArea}>
               <TouchableOpacity 
                 style={styles.google}
-                // onPress={() => setVisibleSnackbar(true)}
+                onPress={() => makeUserSignInGoogle()}
               >
                 <Image
                   style={{ width: 20, height: 20}} 

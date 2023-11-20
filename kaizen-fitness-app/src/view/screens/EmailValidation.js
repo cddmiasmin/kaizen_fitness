@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 
 import { useContext, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { 
     Image, SafeAreaView, 
     StyleSheet, Text, 
@@ -13,11 +14,11 @@ import { ColorContext } from '../../contexts/ColorContext';
 
 import SnackBar from '../components/SnackBar';
 
-import { 
-    userControllerAuth, userControllerEmailValidation 
-} from '../../controller/UserController';
+import { userControllerEmailValidation } from '../../controller/UserController';
 
 export default function Register() {
+
+    const navigation = useNavigation();
 
     const { color } = useContext(ColorContext);
 
@@ -34,25 +35,17 @@ export default function Register() {
 
         setVisibleSnackbar(false);
 
-        if(validated) {
-            navigation.navigate('SignIn');
-        }
+        if(validated) navigation.navigate('SignIn');
 
     }
 
     const isTheUserAlreadyValidated = async () => {
-        const user = await userControllerAuth();
 
-        if(user.emailVerified === false) {
-            setErrorSnackBar(true);
-            setMessageSnackbar('Seu e-mail ainda não foi verificado. Por favor, verique sua caixa de e-mail ou reevie a validação');
-        } else {
-            setErrorSnackBar(false);
-            setMessageSnackbar('Seu e-mail está validado no nosso sistema. Obrigado por fazer parte do Kaizen Fitness!');
-            setValidated(true);
-        }
-        
+        setValidated(true);
+        setErrorSnackBar(false);
+        setMessageSnackbar('Por favor, entre com suas credenciais na tela de login! Obrigada.');
         setVisibleSnackbar(true);
+        
     }
     
     const sendEmailVerification = async () => {

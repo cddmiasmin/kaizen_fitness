@@ -72,16 +72,15 @@ export const userModelSignInGoogle = async () => {
   
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
   
-    const userSingIn = auth().signInWithCredential(googleCredential);
+    const userSingIn = auth().signInWithCredential(googleCredential)
+                            .then(() => {
+                                return { result: true, message: 'Conexão com o Google bem-sucedida. Bem-vindo!'}
+                            })
+                            .catch((error) => {
+                                return { result: false, message: error.code + ': ' + error}
+                            });
 
-    userSingIn.then((user) => {
-        console.log(user);
-        return { result: true, message: 'Conexão com o Google bem-sucedida. Bem-vindo!'}
-    })
-    .catch((error) => {
-        return { result: false, message: error.code + ': ' + error}
-    });
-
+    return userSingIn;
 }
 
 export const userModelForgotPassword = async () => {

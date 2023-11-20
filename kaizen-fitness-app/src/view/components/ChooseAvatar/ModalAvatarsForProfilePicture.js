@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Avatar, Modal } from "react-native-paper";
-import { StyleSheet, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { mainColor } from "../../../colors/colors";
 import { avatarsForProfilePicture } from "../../../services/avatarsForProfilePicture";

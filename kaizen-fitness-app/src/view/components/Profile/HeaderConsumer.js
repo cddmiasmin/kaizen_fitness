@@ -39,15 +39,15 @@ export default function HeaderConsumer() {
                     />
                     <View style={styles.frameText}>
                         <Text style={{ color: color, fontWeight: 'bold', fontSize: 14}}>IMC</Text>
-                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>Normal</Text>
-                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>23,1</Text>
+                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>{user.imc.classification}</Text>
+                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>{user.imc.value}</Text>
                     </View>
                 </View>
 
                 <View style={styles.frame}>
                     <View style={styles.frameText}>
                         <Text style={{ color: color, fontWeight: 'bold', fontSize: 14}}>ÁGUA</Text>
-                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>2,2 Litros</Text>
+                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>{`${user.dailyWaterConsumption} Litros`}</Text>
                         <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>por dia</Text>
                     </View>
                     <Image 

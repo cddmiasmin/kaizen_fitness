@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Chip } from 'react-native-paper';
+import { ActivityIndicator, Chip, IconButton } from 'react-native-paper';
 
 import _ from 'lodash';
 
@@ -31,7 +31,11 @@ export default function Topics() {
     const [messageSnackBar, setMessageSnackbar] = useState('');
     const [errorSnackBar, setErrorSnackBar] = useState(false);
 
-    const { user, userType } = useContext(UserContext);
+    const { 
+        user, setUser,
+        userType, getProfile,
+        setUserCalendar, getCalendarUser
+    } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
     const topic = userType === 'consumer' ? 'Interesses' : 'Serviços';
@@ -52,6 +56,16 @@ export default function Topics() {
             setErrorSnackBar(!response.result);
             setMessageSnackbar(response.message);
             setVisibleSnackbar(true);
+
+            if(response.result){
+                setUser([]);
+                getProfile();
+            }
+
+            if(response.result && userType === 'consumer'){
+                setUserCalendar(undefined);
+                getCalendarUser();
+            }
         }
     }
 
@@ -75,18 +89,45 @@ export default function Topics() {
 
     useEffect(() => alignSelectedTopics(), []);
 
+    useEffect(() => { 
+        if(user.length !== 0) alignSelectedTopics();
+    }, [user]);
+
     useEffect(() => {
         setSaveTopicsSelected(topicsSelected.filter(value => value !== undefined));
     }, [topicsSelected]);
+
+    if(user.length === 0)
+        return (
+            <View style={styles.loading}> 
+                <StatusBar style='light'/>
+                <ActivityIndicator animating={true} color={color} />
+            </View>
+        )
 
     return (
         <View style={styles.container}>
             <StatusBar style='light'/>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-                    <AntDesign name="left" size={20} color="white" />
-                </TouchableOpacity>
-                <Text style={styles.screen}>Meus {topic}</Text>
+                <View style={styles.headerLeft}>
+                    <TouchableOpacity 
+                        onPress={() => navigation.navigate('Profile')}
+                    >
+                        <AntDesign name="left" size={20} color="white" />
+                    </TouchableOpacity>
+                    <Text style={styles.screen}>Meus {topic}</Text>
+                </View>
+                <View style={styles.headerRight}>
+                    <IconButton
+                        icon="check-bold"
+                        iconColor={color}
+                        style={styles.button}
+                        containerColor={mainColor}
+                        size={18}
+                        disabled={_.isEqual(user.topics, saveTopicsSelected)}
+                        onPress={() => saveChangesToTopics()}
+                    />
+                </View>
             </View>
             <Text 
                 style={[styles.message, {color: color}]}
@@ -113,15 +154,6 @@ export default function Topics() {
                     ))
                 }
             </View>
-            {
-                !_.isEqual(user.topics, saveTopicsSelected) &&
-                <TouchableOpacity 
-                    style={[styles.saveChangesButton, { backgroundColor: color}]}
-                    onPress={() => saveChangesToTopics()}
-                >
-                    <Text style={{color: 'white', fontWeight: 'bold'}}>Salvar alterações</Text>
-                </TouchableOpacity>
-            }
             <SnackBar 
                 visible={visibleSnackbar} 
                 setVisible={setVisibleSnackbar} 
@@ -134,6 +166,12 @@ export default function Topics() {
 }
 
 const styles = StyleSheet.create({
+    loading: {
+        flex: 1,
+        backgroundColor: mainColor,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     container: {
         flex: 1,
         backgroundColor: mainColor,
@@ -142,12 +180,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     header: {
-        marginTop: 60,
-        justifyContent: 'flex-start',
+        marginTop: 45,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 15,
+        flexDirection: 'row',
+        width: '100%',
+    },
+    headerLeft:{
+        justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        marginBottom: 30,
-        width: '100%'
+    },
+    headerRight:{
+        alignItems: 'flex-end',
+        alignItems: 'center',
     },
     screen: {
         color: 'white',

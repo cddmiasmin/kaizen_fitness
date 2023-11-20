@@ -6,11 +6,12 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { UserContext } from '../../contexts/UserContext';
 
+import { mask, unMask } from 'remask';
 
 export default function Test() {
 
   const date = new Date();
-  console.log(date, typeof date);
+  // console.log(date, typeof date);
 
   const timestampToDate = (timestamp) => {
     const date = new Date(timestamp.seconds * 1000);
@@ -142,6 +143,12 @@ export default function Test() {
     return response;
 
   }
+
+  const a = '21,6';
+
+  const b = mask(unMask(a), ['9.9', '99.9', '999.9']);
+
+  console.log(b)
 
  return (
     <View style={styles.container}>

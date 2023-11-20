@@ -36,7 +36,7 @@ export default function DataBasicCompany() {
     <View style={styles.container}>
       <Text style={[styles.title, { color: color}]}>Dados Básicos</Text>
       <Text style={styles.description}>Preencha os campos abaixo com as informações solicitadas:</Text>
-      <ChooseAvatar chooseStatusModal={setIsModalActive}/>
+      <ChooseAvatar chooseStatusModal={setIsModalActive} size={85}/>
       <View style={styles.boxInput}>
         <Text style={[styles.titleInput, { color: color }]}>Nome</Text>
         <TextInput

@@ -15,7 +15,6 @@ import {
 import { StatusBar } from 'expo-status-bar';
 
 import { mainColor } from '../../colors/colors';
-import { onlinePlataforms } from '../../services/onlinePlataforms';
 import { participantsColors } from '../../services/participantsColors';
 
 import { UserContext } from '../../contexts/UserContext';
@@ -68,13 +67,12 @@ export default function RegisterEvent() {
     const [eventName, setEventName] = useState('');
     const [eventDateTime, setEventDateTime] = useState(new Date());
     const [eventAbout, setEventAbout] = useState('');
-    const [eventOnlinePlataform, setEventOnlinePlataform] = useState('');
+    const [eventOnlinePlataform, setEventOnlinePlataform] = useState([]);
     const [eventLink, setEventLink] = useState('');
     const [eventAddress, setEventAddress] = useState('');
 
     const [styleStatusBar, setStyleStatusBar] = useState('light');
     const [dateTimePickerMode, setDateTimePickerMode] = useState('date');
-    const [plataformIndex, setPlataformIndex] = useState(0);
 
     const [isDateTimePickerActive, setDateTimePicker] = useState(false);
 
@@ -91,13 +89,13 @@ export default function RegisterEvent() {
     const [isModalEventTopicsActive, setModalEventTopics] = useState(false);
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
 
-    useEffect(() => {
-        onlinePlataforms.forEach((plataform) => {
-            if (plataform.value === eventOnlinePlataform) {
-                setPlataformIndex(onlinePlataforms.indexOf(plataform))
-            }
-        }); 
-    },[eventOnlinePlataform]);
+    const onDismissSnackBar = async () => {
+
+        setVisibleSnackbar(false);
+  
+        if(!errorSnackBar) navigation.navigate('Calendar');
+        
+    }
 
     const completedRegistration = async () => {
 
@@ -381,12 +379,12 @@ export default function RegisterEvent() {
                                                     <View style={styles.plataformInfo}>
                                                         <Image 
                                                             style={{width: 75, height: 75}} 
-                                                            source={onlinePlataforms[plataformIndex].icon}
+                                                            source={eventOnlinePlataform.icon}
                                                         />
                                                         <Text 
                                                             style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginTop: 2}}
                                                         >
-                                                            {onlinePlataforms[plataformIndex].name} 
+                                                            {eventOnlinePlataform.name} 
                                                         </Text>
                                                     </View>
                                                     <IconButton
@@ -451,7 +449,7 @@ export default function RegisterEvent() {
             <ModalOnlinePlataforms active={isModalOnlinePlataformsActive} changeMyStatus={setModalOnlinePlataforms} choosePlatform={setEventOnlinePlataform} initialValue={eventOnlinePlataform}/>
             <SnackBar 
                 visible={visibleSnackbar} 
-                setVisible={setVisibleSnackbar} 
+                setVisible={onDismissSnackBar} 
                 message={messageSnackBar} 
                 error={errorSnackBar}
                 width={315} 
@@ -557,7 +555,6 @@ const styles = StyleSheet.create({
     plataform: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: 95,
     },
     plataformInfo:{
         flexDirection: 'row',

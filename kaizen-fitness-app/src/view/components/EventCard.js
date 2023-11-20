@@ -1,4 +1,4 @@
-import { useContext, useMemo, useEffect } from 'react';
+import { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ColorContext } from '../../contexts/ColorContext';
 
 import { monthsOfTheYear } from '../../services/monthsOfTheYear';
-import { onlinePlataforms } from '../../services/onlinePlataforms';
 import { grayText } from '../../colors/colors';
 import { UserContext } from '../../contexts/UserContext';
 
@@ -22,18 +21,6 @@ export default function EventCard({ data, orientation }) {
     const { color } = useContext(ColorContext);
 
     const nowDate = new Date();
-
-    const whatIsTheOnlinePlatform = (plataformValue) => {
-        let plataformName = '';
-
-        onlinePlataforms.forEach((plataform) => {
-            if (plataform.value === plataformValue) {
-                plataformName = plataform.name;
-            }
-        }); 
-
-        return plataformName;
-    }
 
     return (
         <TouchableOpacity 
@@ -102,7 +89,7 @@ export default function EventCard({ data, orientation }) {
                         <Text style={{ color: grayText}}>
                             {
                                 data.modality === 'Online'
-                                    ? whatIsTheOnlinePlatform(data.plataform)
+                                    ? data.plataform.name
                                     : data.address
                             }
                         </Text>

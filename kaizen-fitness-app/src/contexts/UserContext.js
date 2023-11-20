@@ -13,7 +13,7 @@ export const UserContextProvider = ({ userData , children }) => {
 
     const [user, setUser] = useState([]);
     const [userType, setUserType] = useState('noProfile');
-    const [userCalendar, setUserCalendar] = useState(null);
+    const [userCalendar, setUserCalendar] = useState(undefined);
 
     const getProfile = async () => {
         let user = {};
@@ -74,7 +74,6 @@ export const UserContextProvider = ({ userData , children }) => {
         if((userType === 'professional' || userType === 'consumer') && user.length !== 0)
             getCalendarUser();
 
-        console.log('UserContext', userType)
     }, [userType, user]);
 
     useEffect(() => console.log('UserContext - UserCalendar', userCalendar), [userCalendar]);

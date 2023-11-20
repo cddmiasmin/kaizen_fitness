@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { 
     SafeAreaView, 
     ScrollView, 
@@ -18,7 +18,6 @@ import { ColorContext } from '../../contexts/ColorContext';
 import { grayText, mainColor } from '../../colors/colors';
 
 import { monthsOfTheYear } from '../../services/monthsOfTheYear';
-import { onlinePlataforms } from '../../services/onlinePlataforms';
 
 export default function DisplayEvent() {
 
@@ -29,17 +28,7 @@ export default function DisplayEvent() {
 
     const { color } = useContext(ColorContext);
 
-    const nowDateTime = new Date();
-
-    const [plataformIndex, setPlataformIndex] = useState(0);
-    
-    useEffect(() => {
-        onlinePlataforms.forEach((plataform) => {
-            if (plataform.value === data.plataform) {
-                setPlataformIndex(onlinePlataforms.indexOf(plataform))
-            }
-        }); 
-    },[]);
+    const nowDateTime = new Date();    
 
     const canTheMeetingLinkBeReleased = () => {
 
@@ -198,12 +187,12 @@ export default function DisplayEvent() {
                                     <View style={styles.plataform}>
                                         <Image 
                                             style={{width: 75, height: 75}} 
-                                            source={onlinePlataforms[plataformIndex].icon}
+                                            source={data.plataform.icon}
                                         />
                                         <Text 
                                             style={{color: 'white', fontWeight: 'bold', textAlign: 'center', marginTop: 2}}
                                         >
-                                            {onlinePlataforms[plataformIndex].name} 
+                                            {data.plataform.name} 
                                         </Text>
                                     </View>
                                     {
