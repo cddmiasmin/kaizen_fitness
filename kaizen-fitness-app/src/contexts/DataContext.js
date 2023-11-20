@@ -11,20 +11,20 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const [data, setData] = useState({});
     const [profileCreated, setProfileCreated] = useState(false);
 
-    const [name, setName] = useState('Evan');
-    const [familyName, setFamilyName] = useState('Thomas Peters');
+    const [name, setName] = useState('');
+    const [familyName, setFamilyName] = useState('');
     const [avatar, setAvatar] = useState([]);
-    const [dateOfBirth, setDateOfBirth] = useState(new Date(1987,0,20));
-    const [document, setDocument] = useState('590.148.500-93');
-    const [city, setCity] = useState('Saint Louis');
-    const [state, setState] = useState('Missouri');
-    const [height, setHeight] = useState('1,57');
-    const [weight, setWeight] = useState('47,1');
-    const [topics, setTopics] = useState(["Academia", "Saúde pública", "Meditação"]);
+    const [dateOfBirth, setDateOfBirth] = useState(new Date());
+    const [document, setDocument] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [height, setHeight] = useState('');
+    const [weight, setWeight] = useState('');
+    const [topics, setTopics] = useState([]);
     const [kindOfPerson, setKindOfPerson] = useState('PF');
 
-    const [heightAux, setHeightAux] = useState('1.57');
-    const [weightAux, setWeightAux] = useState('47.1');
+    const [heightAux, setHeightAux] = useState('');
+    const [weightAux, setWeightAux] = useState('');
 
     const clearData = () => {
         // setData({});
