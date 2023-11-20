@@ -18,13 +18,13 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const [document, setDocument] = useState('590.148.500-93');
     const [city, setCity] = useState('Saint Louis');
     const [state, setState] = useState('Missouri');
-    const [height, setHeight] = useState('');
-    const [weight, setWeight] = useState('');
+    const [height, setHeight] = useState('1,57');
+    const [weight, setWeight] = useState('47,1');
     const [topics, setTopics] = useState(["Academia", "Saúde pública", "Meditação"]);
     const [kindOfPerson, setKindOfPerson] = useState('PF');
 
-    const [heightAux, setHeightAux] = useState('');
-    const [weightAux, setWeightAux] = useState('');
+    const [heightAux, setHeightAux] = useState('1.57');
+    const [weightAux, setWeightAux] = useState('47.1');
 
     const clearData = () => {
         // setData({});

@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { List } from 'react-native-paper';
+import { ActivityIndicator, List } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { mainColor } from '../../colors/colors';
@@ -32,7 +32,7 @@ export default function Perfil() {
   const [dialogContent, setDialogContent] = useState('');
 
   const { color } = useContext(ColorContext);
-  const { userType, setUserType, setUser, setUserCalendar } = useContext(UserContext);
+  const { user, userType, setUserType, setUser, setUserCalendar } = useContext(UserContext);
 
   const topicName = userType === 'consumer' ? 'Interesses' : 'Serviços';
   const topicIcon = userType === 'consumer' ? 'thumb-up' : 'briefcase';
@@ -88,6 +88,15 @@ export default function Perfil() {
     }
   }
 
+  if(user.length === 0)
+    return (
+        <View style={styles.loading}> 
+            <StatusBar style='light'/>
+            <ActivityIndicator animating={true} color={color} />
+            <Footer />
+        </View>
+    )
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -136,6 +145,12 @@ export default function Perfil() {
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    backgroundColor: mainColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: mainColor,

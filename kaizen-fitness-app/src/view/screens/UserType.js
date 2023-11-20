@@ -62,9 +62,9 @@ export default function UserType() {
                     }
                     <Text style={styles.title}>Consumidor</Text>
                     <View style={styles.details}>
-                        <Text style={styles.detail}>Sell Goods</Text>
-                        <Text style={styles.detail}>Followers</Text>
-                        <Text style={styles.detail}>Feature</Text>
+                        <Text style={styles.detail}>Busca e Descoberta</Text>
+                        <Text style={styles.detail}>Inscrição e Participação</Text>
+                        <Text style={styles.detail}>Aprendizado e Conexão Comunitária</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity 
@@ -85,9 +85,9 @@ export default function UserType() {
                         }
                     <Text style={styles.title}>Profissional</Text>
                     <View style={styles.details}>
-                        <Text style={styles.detail}>Sell Goods</Text>
-                        <Text style={styles.detail}>Followers</Text>
-                        <Text style={styles.detail}>Feature</Text>
+                        <Text style={styles.detail}>Criação de Conteúdo</Text>
+                        <Text style={styles.detail}>Networking Profissional</Text>
+                        <Text style={styles.detail}>Visibilidade e Marketing</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -155,11 +155,11 @@ const styles = StyleSheet.create({
     title: {
         color: 'white',
         fontWeight: 'bold',
-        marginLeft: 25,
+        marginLeft: 20,
         fontSize: 16
     },
     details: {
-        marginLeft: 25,
+        marginLeft: 20,
         marginBottom: 30,
         marginTop: 10,
         gap: 2

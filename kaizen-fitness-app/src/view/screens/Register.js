@@ -25,39 +25,46 @@ export default function Register() {
 
   const navigation = useNavigation();
  
-  const { userType, getProfile } = useContext(UserContext);
+  const { setUser, userType, getProfile } = useContext(UserContext);
   const { stepNum, data, setData } = useContext(DataContext);
 
   const [visibleSnackbar, setVisibleSnackbar] = useState(false);
   const [messageSnackBar, setMessageSnackbar] = useState('');
   const [errorSnackBar, setErrorSnackBar] = useState(false);
 
+  const onDismissSnackBar = async () => {
+
+    setVisibleSnackbar(false);
+
+    if(!errorSnackBar){
+      setUser([]);
+      getProfile();
+      if(userType === 'consumer') navigation.navigate('HomeConsumer');
+      else navigation.navigate('HomeProfessional');
+    }
+
+  }
+
   const consumerCreateProfile = async () => {
-    console.log(data);
-    const response = await consumerControllerCreateProfile(data);
+    let dataAux = data;
+    dataAux.created = new Date();
+
+    const response = await consumerControllerCreateProfile(dataAux);
     
     setErrorSnackBar(!response.result);
     setMessageSnackbar(response.message);
     setVisibleSnackbar(true);
-
-    if(response.result){
-      getProfile();
-      navigation.navigate('HomeConsumer');
-    }
   }
 
   const professionalCreateProfile = async () => {
-    console.log(data);
-    const response = await professionalControllerCreateProfile(data);
+    let dataAux = data;
+    dataAux.created = new Date();
+    
+    const response = await professionalControllerCreateProfile(dataAux);
     
     setErrorSnackBar(!response.result);
     setMessageSnackbar(response.message);
     setVisibleSnackbar(true);
-
-    if(response.result){
-      getProfile();
-      navigation.navigate('HomeProfessional');
-    }
   }
 
   useEffect(() => {
@@ -102,7 +109,7 @@ export default function Register() {
           </View>
           <SnackBar 
             visible={visibleSnackbar} 
-            setVisible={setVisibleSnackbar} 
+            setVisible={onDismissSnackBar} 
             message={messageSnackBar} 
             error={errorSnackBar}
             width={315} 

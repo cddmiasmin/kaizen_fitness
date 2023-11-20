@@ -31,6 +31,8 @@ export default function Topics() {
     const [messageSnackBar, setMessageSnackbar] = useState('');
     const [errorSnackBar, setErrorSnackBar] = useState(false);
 
+    const [loading, setLoaging] = useState(true);
+
     const { 
         user, setUser,
         userType, getProfile,
@@ -87,7 +89,9 @@ export default function Topics() {
         setTopicsSelected(topicsSelectedAux);
     };
 
-    useEffect(() => alignSelectedTopics(), []);
+    useEffect(() => {
+       if(user.length !== 0) alignSelectedTopics();
+    }, []);
 
     useEffect(() => { 
         if(user.length !== 0) alignSelectedTopics();
