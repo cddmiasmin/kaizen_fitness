@@ -24,7 +24,6 @@ export const eventModelCreate = async (event, professional) => {
 
 export const eventModelGetCalendarConsumerUser = async () => {
     const idUser = user.uid;
-    console.log(idUser);
     const response = await firestore()
                             .collection("Events")
                             .where("participants", "array-contains", idUser)
@@ -43,27 +42,49 @@ export const eventModelGetCalendarProfessionalUser = async () => {
     return response;
 }
 
-export const eventModelGetShowcaseForYou = async () => {
-
+export const eventModelGetShowcaseForYou = async (topics) => {
+    const response = await firestore()
+                            .collection("Events")
+                            // .where(          
+                            //     firestore.Filter.and(
+                            //         firestore.Filter('topics', 'array-contains', topics),
+                            //         firestore.Filter('datetime', '>', currentDate),
+                            //     )
+                            // )
+                            .where('topics', 'array-contains', topics)
+                            .orderBy("datetime", "asc")
+                            .limit(20)
+                            .get();
+    return response;
 }
 
 export const eventModelGetShowcaseRecentlyCreated = async () => {
 
+    const response = await firestore()
+                            .collection("Events")
+                            .orderBy([
+                                ["created", "desc"],
+                                ["datetime", "asc"]
+                            ])
+                            .limit(20)
+                            .get();
+    return response;
 }
 
-export const eventModelGetShowcaseUpcomingEvents = async (startDate, endDate) => {
+export const eventModelGetShowcaseUpcomingEvents = async (startDate) => {
 
     const response = await firestore()
                             .collection("Events")
-                            .where(          
-                                firestore.Filter.and(
-                                    firestore.Filter('datetime', '>=', startDate),
-                                    firestore.Filter('datetime', '<=', endDate),
-                                )
-                            )
-                            .get({
-                                limit: 15,
-                            });
+                            // .where(          
+                            //     firestore.Filter.and(
+                            //         firestore.Filter('datetime', '>=', startDate),
+                            //         firestore.Filter('datetime', '<=', endDate),
+                            //     )
+                            // )
+                            .where('datetime', '>=', startDate)
+                            .orderBy("datetime", "asc")
+                            .limit(20)
+                            .get();
     return response;
 }
 
@@ -137,7 +158,6 @@ export const eventModelSearch = async (search) => {
                                     firestore.Filter('organizer.familyName', '==', search)
                                 )
                             )
-                            // .where('name', '==', search)
                             .get();
     return response;
 
