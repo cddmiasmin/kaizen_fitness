@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { 
     SafeAreaView, 
     ScrollView, 
@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     Image, Linking 
 } from 'react-native';
-import { Avatar, Chip, TextInput } from 'react-native-paper';
+import { ActivityIndicator, Avatar, Chip, IconButton, TextInput } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -18,6 +18,10 @@ import { ColorContext } from '../../contexts/ColorContext';
 import { grayText, mainColor } from '../../colors/colors';
 
 import { monthsOfTheYear } from '../../services/monthsOfTheYear';
+import { userControllerAuth } from '../../controller/UserController';
+import { UserContext } from '../../contexts/UserContext';
+import { eventControllerUpdate } from '../../controller/EventController';
+import SnackBar from '../components/SnackBar';
 
 export default function DisplayEvent() {
 
@@ -26,9 +30,66 @@ export default function DisplayEvent() {
 
     const navigation = useNavigation();
 
-    const { color } = useContext(ColorContext);
+    const [loading, setLoading] = useState(true);
+    const [participantOfThisEvent, setParticipantOfThisEvent] = useState(true);
+    //SnackBar
+    const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+    const [messageSnackBar, setMessageSnackbar] = useState('');
+    const [errorSnackBar, setErrorSnackBar] = useState(false);
 
-    const nowDateTime = new Date();    
+    const nowDateTime = new Date();  
+
+    const { color } = useContext(ColorContext);
+    const { userCalendar, setUserCalendar, getCalendarUser } = useContext(UserContext);
+
+    const updateEvent = async (array) => {
+        const update = { participants: array };
+
+        const response = await eventControllerUpdate(update, data.idDoc);
+
+        setErrorSnackBar(!response.result);
+        setMessageSnackbar(response.message);
+        setVisibleSnackbar(true);
+    
+        if(response.result){
+            setUserCalendar(undefined);
+            getCalendarUser();
+            setLoading(true);
+            setParticipantOfThisEvent(null);
+            data.participants = array;
+        }
+        
+    }
+
+    const changeUserCalendar = async () => {
+        const userAuth = await userControllerAuth();
+
+        let participants = [];
+
+        if(participantOfThisEvent) {
+            const participantsAux = data.participants.filter(participant => participant !== userAuth.uid);
+            console.log('true', participantsAux)
+            participants = participantsAux;
+        }
+        else {
+            participants = data.participants;
+            participants.push(userAuth.uid);
+        }
+
+        console.log('result', participants)
+
+        updateEvent(participants);
+    }
+
+    const checkIfTheUserParticipatesInThisEvent = () => {
+        if(userCalendar === null) setParticipantOfThisEvent(false);
+        else {
+            const filter = userCalendar.filter(event => event.id === data.id);
+
+            if(filter.length !== 0) setParticipantOfThisEvent(true);
+            else setParticipantOfThisEvent(false);
+        }
+    }
 
     const canTheMeetingLinkBeReleased = () => {
 
@@ -42,6 +103,57 @@ export default function DisplayEvent() {
         return false;
     }
 
+    useEffect(() => {
+        if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
+    }, []);
+
+    useEffect(() => {
+        if(participantOfThisEvent !== null) setLoading(false);
+    }, [participantOfThisEvent]);
+
+    useEffect(() => {
+        if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
+    }, [userCalendar]);
+
+    if(loading)
+        return(
+            <SafeAreaView  style={styles.container}>
+                <StatusBar style='light'/>
+                <View style={[styles.header, { backgroundColor: color }]}>
+                    <ActivityIndicator animating={true} color={'white'} />
+                    <View style={[styles.buttons, StyleSheet.absoluteFillObject]}>
+                        <IconButton
+                            mode='contained'
+                            icon="chevron-left"
+                            iconColor={color}
+                            style={[styles.button]}
+                            containerColor={'white'}
+                            size={24}
+                            onPress={() => navigation.goBack()}
+                        />
+                        <IconButton
+                            mode='contained'
+                            icon='calendar-plus'
+                            iconColor={color}
+                            style={[styles.button, { marginLeft: 270 }]}
+                            containerColor={'white'}
+                            disabled={true}
+                            size={20}
+                        />
+                    </View>
+                </View>
+                <View style={styles.body}>
+                    <View style={{ height: 40}} />
+                </View>
+                <View 
+                    style={[StyleSheet.absoluteFillObject, 
+                        { flex: 1,  paddingTop: 260, justifyContent: 'center', alignItems: 'center' }
+                    ]}>
+                        <ActivityIndicator animating={true} color={color} />
+                </View>
+            </SafeAreaView>
+        )
+
     return (
         <SafeAreaView  style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -49,18 +161,24 @@ export default function DisplayEvent() {
                 <View style={[styles.header, { backgroundColor: data.styleStatusBar === 'dark' ? 'white' : 'black' }]}>
                     <Image source={{ uri: data.wallpaper}} resizeMode="cover" style={{ width: '100%', height: '100%', opacity: 0.7}}/>
                     <View style={[styles.buttons, StyleSheet.absoluteFillObject]}>
-                        <TouchableOpacity 
-                            style={[styles.button, { backgroundColor: data.styleStatusBar === 'dark' ? 'black' : 'white' }]}
-                            onPress={() => navigation.navigate('Home')}
-                        >
-                            <Icon name= {'chevron-left'} size={20} color={color} />
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={[styles.button, { backgroundColor: data.styleStatusBar === 'dark' ? 'black' : 'white' }]}
-                            onPress={() => console.log('amém')}
-                        >
-                            <Icon name= {'calendar-plus'} size={18} color={color} />
-                        </TouchableOpacity>
+                        <IconButton
+                            mode='contained'
+                            icon="chevron-left"
+                            iconColor={color}
+                            style={[styles.button,  { backgroundColor: data.styleStatusBar === 'dark' ? 'black' : 'white' }]}
+                            containerColor={'white'}
+                            size={24}
+                            onPress={() => navigation.goBack()}
+                        />
+                        <IconButton
+                            mode='contained'
+                            icon={participantOfThisEvent ? 'calendar-check' : 'calendar-plus'}
+                            iconColor={color}
+                            style={[styles.button, { marginLeft: 270, backgroundColor: data.styleStatusBar === 'dark' ? 'black' : 'white' }]}
+                            containerColor={'white'}
+                            size={20}
+                            onPress={() => changeUserCalendar()}
+                        />
                     </View>                 
                 </View>
                 <View style={styles.body}>
@@ -121,11 +239,13 @@ export default function DisplayEvent() {
                                             key={`viewIcon#${key}`}  
                                             style={[key !== 0 ? {marginLeft: -15} : '', { borderWidth: 2, borderRadius: 50, borderColor: mainColor}]}
                                         >
-                                            <Avatar.Image
-                                                key={`icon#${key}`} 
+                                            <Avatar.Icon
                                                 size={32} 
+                                                label=""
                                                 style={{ backgroundColor: color }}
-                                                
+                                                icon={() => (
+                                                    <Icon name="account" size={20} color={mainColor} />
+                                                )}
                                             />
                                         </View>
                                     : 
@@ -133,7 +253,7 @@ export default function DisplayEvent() {
                                 ))
                             : 
                                 <View  
-                                    style={[{borderWidth: 2, borderRadius: 50, borderColor: mainColor}]}
+                                    style={[{borderWidth: 2, borderRadius: 50, borderColor: mainColor }]}
                                 >
                                     <Avatar.Icon
                                         size={32} 
@@ -247,6 +367,13 @@ export default function DisplayEvent() {
                     </View>
                 </View>
             </ScrollView>
+            <SnackBar 
+                visible={visibleSnackbar} 
+                setVisible={setVisibleSnackbar} 
+                message={messageSnackBar} 
+                error={errorSnackBar}
+                width={315} 
+            />
         </SafeAreaView >
     );
 }
@@ -345,7 +472,6 @@ const styles = StyleSheet.create({
         paddingTop: 45,
         paddingLeft: 20,
         paddingRight: 20,
-        gap: 290
     },
     button: {
         width: 32,
