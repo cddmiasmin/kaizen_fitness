@@ -7,10 +7,11 @@ import firestore from '@react-native-firebase/firestore';
 import { UserContext } from '../../contexts/UserContext';
 
 import { mask, unMask } from 'remask';
+import { eventControllerSearch } from '../../controller/EventController';
 
 export default function Test() {
 
-  const date = new Date();
+  //const date = new Date();
   // console.log(date, typeof date);
 
   const timestampToDate = (timestamp) => {
@@ -108,47 +109,45 @@ export default function Test() {
     //   wallpaper: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     // }
 
-    const idUser = 'IZZfxEDWwjNMKPk47Qf8HcfcaE53';
+    // const idUser = 'IZZfxEDWwjNMKPk47Qf8HcfcaE53';
 
-    // const response = await firestore()
-    //                       .collection('Events')
-    //                       .doc(idUser)
-    //                       .set(data)
-    //                       .then(() => {
-    //                           return { result: true, message: 'Evento cadastrado com sucesso!'}
-    //                       })
-    //                       .catch((error) => {
-    //                           return { result: false, message: error }
-    //                       });
+    // // const response = await firestore()
+    // //                       .collection('Events')
+    // //                       .doc(idUser)
+    // //                       .set(data)
+    // //                       .then(() => {
+    // //                           return { result: true, message: 'Evento cadastrado com sucesso!'}
+    // //                       })
+    // //                       .catch((error) => {
+    // //                           return { result: false, message: error }
+    // //                       });
+    // // return response;
+
+    // let response = [];
+
+    // const events = await firestore()
+    //                           .collection("Events")
+    //                           .where("participants", "array-contains", idUser)
+    //                           .get();
+
+
+    // if(!events.empty){
+    //   events.forEach((doc) => {
+  
+    //     let event = doc.data();
+    //     event.idDoc = doc.id;
+    //     response.push(event);
+    //     console.log(event.datetime)
+    //   });
+    // } else response = null;
+
     // return response;
 
-    let response = [];
+    const response = await eventControllerSearch('Evan');
 
-    const events = await firestore()
-                              .collection("Events")
-                              .where("participants", "array-contains", idUser)
-                              .get();
-
-
-    if(!events.empty){
-      events.forEach((doc) => {
-  
-        let event = doc.data();
-        event.idDoc = doc.id;
-        response.push(event);
-        console.log(event.datetime)
-      });
-    } else response = null;
-
-    return response;
+    return response
 
   }
-
-  const a = '21,6';
-
-  const b = mask(unMask(a), ['9.9', '99.9', '999.9']);
-
-  console.log(b)
 
  return (
     <View style={styles.container}>

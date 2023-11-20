@@ -137,6 +137,7 @@ export const eventModelSearch = async (search) => {
                                     firestore.Filter('organizer.familyName', '==', search)
                                 )
                             )
+                            // .where('name', '==', search)
                             .get();
     return response;
 
@@ -148,7 +149,7 @@ export const eventModelSearchByCategory = async (category) => {
                             .collection("Events")
                             .where('topics', 'array-contains', category)
                             .get({
-                            limit: 10,
+                                limit: 10,
                             })
     return response;
 }

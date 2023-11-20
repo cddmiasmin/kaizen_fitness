@@ -80,9 +80,35 @@ export const eventControllerDeleteProfessionalUserEvents = async (doc) => {
 }
 
 export const eventControllerSearch = async (search) => {
-    return await eventModelSearch(search);
+    let response = [];
+    const events = await eventModelSearch(search);
+
+    if(!events.empty){
+        events.forEach((doc) => {
+            let event = doc.data();
+            let date = timestampToDate(event.datetime);
+            event.datetime = new Date(date);
+            event.idDoc = doc.id;
+            response.push(event);
+        });
+    } else response = [];
+
+    return response;
 }
 
 export const eventControllerSearchByCategory = async (category) => {
-    return await eventModelSearchByCategory(category)
+    let response = [];
+    const events = await eventModelSearchByCategory(category);
+
+    if(!events.empty){
+        events.forEach((doc) => {
+            let event = doc.data();
+            let date = timestampToDate(event.datetime);
+            event.datetime = new Date(date);
+            event.idDoc = doc.id;
+            response.push(event);
+        });
+    } else response = [];
+
+    return response;
 }

@@ -1,17 +1,21 @@
 import React, { useContext } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { useRoute } from '@react-navigation/native';
 
 import { ColorContext } from '../../../contexts/ColorContext';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Category({ category }) {
+
+    const navigation = useNavigation();
 
     const { color } = useContext(ColorContext);
 
     return (
         <TouchableOpacity
             style={[styles.category, { backgroundColor: color }]}
-            onPress={() => console.log('oi')}
+            onPress={() => {
+                navigation.navigate('SearchResults', { initialSearch: category.topic, mode: 'Category' })
+            }}
         >
             <Image 
                 source={category.icon} 

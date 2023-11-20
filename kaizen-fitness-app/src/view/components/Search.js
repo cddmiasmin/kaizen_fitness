@@ -9,6 +9,7 @@ import { grayText, mainColor } from '../../colors/colors';
 import { ColorContext } from '../../contexts/ColorContext';
 import { UserContext } from '../../contexts/UserContext';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { consumerControllerUpdateProfile } from '../../controller/ConsumerController';
 
 export default function Search({ search, setSearch, setActiveTextinput }) {
 
@@ -20,8 +21,23 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
     const { user } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
-    const [history, setHistory] = useState('iasmin');
+    const [history, setHistory] = useState('');
+    const [userHistory, setUserHistory] = useState(user.searchHistory);
     const [isDialogVisible, setIsDialogVisible] = useState(false);
+
+    const exe = () => {
+        updateUserHistory();
+    }
+
+    const updateUserHistory = async () => {
+        const data = {
+            searchHistory: userHistory
+        }
+
+        const response = await consumerControllerUpdateProfile(data);
+
+        if(response.result) user.searchHistory = userHistory;
+    }
 
     useEffect(() => refInput.current.focus(), []);
 
@@ -42,9 +58,9 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
         };
     }, []);
 
-    const removeSearchHistory = () => {
-        console.log('A paz do senhor Jesus');
-    }
+    useEffect(() => {
+        exe();
+    }, [userHistory]);
 
     return (
         <View style={styles.container}>
@@ -54,7 +70,7 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
                     onPress={() => {
                         setSearch('');
                         setActiveTextinput(false);
-                        if(route.name !== 'Home') navigation.navigate('Home');
+                        if(route.name !== 'HomeConsumer') navigation.navigate('HomeConsumer');
                     }}
                 >
                     <Icon 
@@ -84,12 +100,19 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
                         editable={true}
                         onFocus={() => setActiveTextinput(true)}
                         onBlur={() => {
-                            if(search.length){
+                            if(search.length !== 0){
                                 const searchAux = search;
+                                const historyAux = userHistory;
+                                historyAux.push({
+                                    search: searchAux,
+                                    created: new Date()
+                                });
 
+                                setUserHistory(historyAux);
                                 setSearch('');
                                 setActiveTextinput(false); 
-                                navigation.navigate('SearchResults', { initialSearch: searchAux });
+
+                                navigation.navigate('SearchResults', { initialSearch: searchAux, mode: 'Search' });
                             }
                         }}
                         render={(props) => <NativeTextInput inputMode={'search'} returnKeyType="search" {...props} />}
@@ -99,16 +122,22 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
             <View style={[styles.line, { backgroundColor: color }]}/>
             <View style={styles.body}>
                 <FlatList
-                    data={user.searchHistory}
-                    renderItem={({item: history}) =>  
+                    data={userHistory}
+                    renderItem={({item: item }) =>  
                         <TouchableOpacity 
                             onLongPress={() => {
-                                setHistory(history.search);
+                                setHistory(item);
                                 setIsDialogVisible(true);
+                            }}
+                            onPress={() => {
+                                const searchAux = item.search;
+                                setSearch('');
+                                setActiveTextinput(false); 
+                                navigation.navigate('SearchResults', { initialSearch: searchAux, mode: 'Search' })
                             }}
                         >
                             <List.Item
-                                title={history.search}
+                                title={item.search}
                                 titleStyle={{ color: grayText }}
                                 left={props => <List.Icon {...props} icon="clock-time-three-outline" color={grayText}/>}
                                 right={props => <List.Icon {...props} icon="arrow-top-left" color={grayText}/>}
@@ -117,36 +146,35 @@ export default function Search({ search, setSearch, setActiveTextinput }) {
                     }
                 />
             </View>
-            {
-                isDialogVisible &&
-                    <Dialog
-                        style={{ backgroundColor: mainColor }}
-                        visible={isDialogVisible} 
-                        onDismiss={() => setIsDialogVisible(false)}
+            <Dialog
+                style={{ backgroundColor: mainColor }}
+                visible={isDialogVisible} 
+                onDismiss={() => setIsDialogVisible(false)}
+            >
+                <Dialog.Title style={{color: 'white'}}>{history.search}</Dialog.Title>
+                <Dialog.Content>
+                    <Text style={{ color: 'white' }}>Remover do histórico de pesquisa?</Text>
+                </Dialog.Content>
+                <Dialog.Actions>
+                    <Button
+                        textColor={color} 
+                        onPress={() => setIsDialogVisible(false)}
                     >
-                        <Dialog.Title style={{color: 'white'}}>{history}</Dialog.Title>
-                        <Dialog.Content>
-                            <Text style={{ color: 'white' }}>Remover do histórico de pesquisa?</Text>
-                        </Dialog.Content>
-                        <Dialog.Actions>
-                            <Button
-                                textColor={color} 
-                                onPress={() => setIsDialogVisible(false)}
-                            >
-                                Cancelar
-                            </Button>
-                            <Button
-                                textColor={color} 
-                                onPress={() => {
-                                    removeSearchHistory();
-                                    setIsDialogVisible(false);
-                                }}
-                            >
-                                Remover
-                            </Button>
-                        </Dialog.Actions>
-                    </Dialog>
-            }
+                        Cancelar
+                    </Button>
+                    <Button
+                        textColor={color} 
+                        onPress={() => {
+                            const userHistoryAux = userHistory.filter(object => object !== history);
+                            setUserHistory(userHistoryAux);
+                            setIsDialogVisible(false);
+                        }}
+                    >
+                        Remover
+                    </Button>
+                </Dialog.Actions>
+            </Dialog>
+            
         </View>
     );
 }
