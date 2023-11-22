@@ -496,7 +496,7 @@ export default function Calendar() {
                                 mode='contained'
                                 containerColor={color}
                                 size={24}
-                                onPress={() => navigation.navigate('KindOfEvent')}
+                                onPress={() => navigation.navigate('KindOfEvent', { goBack: 'HomeProfessional' })}
                             />
                         </View>
                 }

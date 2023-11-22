@@ -5,7 +5,7 @@ import { StyleSheet,
     TouchableOpacity, 
     ImageBackground
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { mainColor } from '../../colors/colors';
 
@@ -17,11 +17,13 @@ import { ColorContext } from '../../contexts/ColorContext';
 
 export default function KindOfEvent() {
 
+ const route = useRoute();
+ const navigation = useNavigation();
+ const goBack = route.params.goBack === undefined ? 'Calendar' : route.params.goBack; 
+
  const { color } = useContext(ColorContext);
       
  const [buttonSelected, setButtonSelected] = useState('Online');
-
- const navigation = useNavigation();
 
  const onlineEventImage = require('./../../assets/KindOfEvent/onlineEvent.jpg');
  const inPersonEventImage = require('./../../assets/KindOfEvent/inPersonEvent.jpg'); 
@@ -76,7 +78,10 @@ export default function KindOfEvent() {
                 <Text style={styles.title}>Presencial</Text>
             </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('RegisterEvent', { modality: buttonSelected })} style={[styles.buttonContinue, { backgroundColor: color }]}>
+        <TouchableOpacity 
+            onPress={() => navigation.navigate('RegisterEvent', { modality: buttonSelected, goBack: 'Calendar' })} 
+            style={[styles.buttonContinue, { backgroundColor: color }]}
+        >
             <Text style={{ color: 'white', fontWeight: 'bold'}}> Prosseguir </Text>
         </TouchableOpacity>
    </View>

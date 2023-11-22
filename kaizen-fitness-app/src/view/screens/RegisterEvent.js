@@ -33,6 +33,9 @@ export default function RegisterEvent() {
 
     const route = useRoute()
     const modality = route.params === undefined ? 'Online' : route.params.modality;
+    const goBack = route.params === undefined ? 'Calendar' : route.params.goBack;
+
+    const currentDatetime = new Date();
 
     const navigation = useNavigation();
 
@@ -62,6 +65,8 @@ export default function RegisterEvent() {
     const { user } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
+    const [complete, setComplete] = useState(false);
+
     const [eventWallpaper, setEventWallpaper] = useState('');
     const [eventTopics, setEventTopics] = useState('');
     const [eventName, setEventName] = useState('');
@@ -89,11 +94,37 @@ export default function RegisterEvent() {
     const [isModalEventTopicsActive, setModalEventTopics] = useState(false);
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
 
+    const canIRegisterOnlineEvent = () => {
+        return  !eventWallpaper.length
+        &&  !eventTopics.length 
+        &&  !eventName.length
+        &&  !eventAbout.length
+        &&  !eventOnlinePlataform.length
+        &&  !eventLink.length
+        &&  eventDateTime !== currentDatetime
+    }
+
+    const canIRegisterInPersonEvent = () => {
+        return  !eventWallpaper.length
+        &&  !eventTopics.length  
+        &&  !eventName.length
+        &&  !eventAbout.length
+        &&  !eventAddress.length
+        &&  eventDateTime !== currentDatetime
+    }
+
+    const canIRegisterEvent = () => {
+       if(modality === 'Online') return canIRegisterOnlineEvent();
+       else return canIRegisterInPersonEvent();
+    }
+
     const onDismissSnackBar = async () => {
 
         setVisibleSnackbar(false);
   
-        if(!errorSnackBar) navigation.navigate('Calendar', { screen: 'Calendar' });
+        if(!errorSnackBar) 
+            if(goBack === 'Calendar') navigation.navigate('Calendar', { screen: 'Calendar' });
+            else navigation.navigate(goBack);
         
     }
 
@@ -136,11 +167,21 @@ export default function RegisterEvent() {
       
     }
 
+    useEffect(() => {
+        const can = canIRegisterEvent();
+        setComplete(can);
+    }, 
+    [
+        eventWallpaper, eventTopics, eventName, eventAbout,
+        eventDateTime, eventOnlinePlataform, eventLink, eventAddress
+    ]);
+
     return (
         <SafeAreaView  style={styles.container}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <StatusBar style={styleStatusBar}/>
                 <View style={styles.header}>
+
                     {
                         eventWallpaper 
                         ?
@@ -165,7 +206,19 @@ export default function RegisterEvent() {
                             <TouchableOpacity style={[styles.eventWallpaperButton, { backgroundColor: color }]} onPress={() => setModalEventWallpaper(true)}>
                                 <Icon name="image-plus" size={40} color="white" />
                             </TouchableOpacity>
-                    }                  
+                    }         
+                    <IconButton
+                        mode='contained'
+                        icon="chevron-left"
+                        iconColor={color}
+                        style={[StyleSheet.absoluteFillObject, { marginLeft: 15, marginTop: 50}]}
+                        containerColor={styleStatusBar === 'dark' ? 'black' : 'white'}
+                        size={16}
+                        onPress={() => {
+                            if(goBack === 'Calendar') navigation.navigate('Calendar', { screen: 'Calendar' });
+                            else navigation.navigate(goBack);
+                        }}
+                    />         
                 </View>
                 <View style={styles.body}>
                     <View style={styles.containerTopics}>
@@ -437,10 +490,11 @@ export default function RegisterEvent() {
                         }
                     </View>
                     <TouchableOpacity 
-                        style={[styles.register, { backgroundColor: color}]}
+                        style={[styles.register, { backgroundColor: complete ? '#a6a6a6' : color }]}
+                        disabled={complete}
                         onPress={() => completedRegistration()}
                     >
-                        <Text style={{color: 'white', fontWeight: 'bold'}}>Cadastrar evento</Text>
+                        <Text style={{ color: complete ? '#666666': 'white', fontWeight: 'bold'}}>Cadastrar evento</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

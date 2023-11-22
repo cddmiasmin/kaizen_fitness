@@ -93,7 +93,7 @@ export default function HeaderProfessional() {
                         ?
                             <TouchableOpacity
                                 style={[styles.buttonAlertMessage, { backgroundColor: color }]}
-                                onPress={() => navigation.navigate('KindOfEvent')}
+                                onPress={() => navigation.navigate('KindOfEvent', { goBack: 'HomeProfessional' })}
                             >
                                 <Text style={styles.textButtonAlertMessage}>
                                     Criar um evento
