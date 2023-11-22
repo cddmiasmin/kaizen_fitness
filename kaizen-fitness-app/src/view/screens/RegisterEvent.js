@@ -93,7 +93,7 @@ export default function RegisterEvent() {
 
         setVisibleSnackbar(false);
   
-        if(!errorSnackBar) navigation.navigate('Calendar');
+        if(!errorSnackBar) navigation.navigate('Calendar', { screen: 'Calendar' });
         
     }
 
@@ -144,7 +144,7 @@ export default function RegisterEvent() {
                     {
                         eventWallpaper 
                         ?
-                        <View style={{ width: '100%', height: '100%', backgroundColor: styleStatusBar === 'dark' ? 'white' : 'black' }}>
+                            <View style={{ width: '100%', height: '100%', backgroundColor: styleStatusBar === 'dark' ? 'white' : 'black' }}>
                                 <TouchableOpacity onPress={() => setModalEventWallpaper(true)}>
                                 <Image source={{ uri: eventWallpaper }} resizeMode="cover" style={{width: '100%', height: '100%', opacity: 0.7}}/>
                                 <View 

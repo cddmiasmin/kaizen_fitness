@@ -40,52 +40,52 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [routeName, setRouteName] = useState('');
+  const [routeName, setRouteName] = useState('Register');
   const [initializing, setInitializing] = useState(true);
   const [userData, setUserData] = useState({});
   const [stepNum, setStepNum] = useState(1);
 
-  const onAuthStateChanged = (user) => {
-    setUserData(user);
-    if (initializing) setInitializing(false);
-    console.log(user);
-  }
+  // const onAuthStateChanged = (user) => {
+  //   setUserData(user);
+  //   if (initializing) setInitializing(false);
+  //   console.log(user);
+  // }
 
-  const userHasAProfile = async () => {
-    const profile = await userControllerHasAProfile();
-    setUserData(profile);
+  // const userHasAProfile = async () => {
+  //   const profile = await userControllerHasAProfile();
+  //   setUserData(profile);
 
-    console.log('Profile', profile);
+  //   console.log('Profile', profile);
 
-    if(profile.userType === 'consumer') return 'HomeConsumer';
-    else if(profile.userType === 'professional') return 'HomeProfessional';
-    else return 'CreateProfile';
-  }
+  //   if(profile.userType === 'consumer') return 'HomeConsumer';
+  //   else if(profile.userType === 'professional') return 'HomeProfessional';
+  //   else return 'CreateProfile';
+  // }
 
-  const WhatWillBeTheInitialRouteName = async () => {
-    if(userData === null) setRouteName('SignIn'); 
-    else if(userData.emailVerified === false) setRouteName('EmailValidation');
-    else {
-      const routeAux = await userHasAProfile();
-      console.log(routeAux);
-      setRouteName(routeAux);
-    }
-  }
+  // const WhatWillBeTheInitialRouteName = async () => {
+  //   if(userData === null) setRouteName('SignIn'); 
+  //   else if(userData.emailVerified === false) setRouteName('EmailValidation');
+  //   else {
+  //     const routeAux = await userHasAProfile();
+  //     console.log(routeAux);
+  //     setRouteName(routeAux);
+  //   }
+  // }
 
-  async function route() {
-    await WhatWillBeTheInitialRouteName()
-  }
+  // async function route() {
+  //   await WhatWillBeTheInitialRouteName()
+  // }
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
+  // useEffect(() => {
+  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+  //   return subscriber; // unsubscribe on unmount
+  // }, []);
 
-  useEffect(() => {
-    if(!initializing) route();
-  }, [initializing]);
+  // useEffect(() => {
+  //   if(!initializing) route();
+  // }, [initializing]);
 
-  if (initializing || routeName === '') return null;
+  if (!initializing || routeName === '') return null;
 
   return (
     <UserContextProvider userData={userData}>

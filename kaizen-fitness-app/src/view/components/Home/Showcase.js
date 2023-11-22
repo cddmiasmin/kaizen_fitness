@@ -161,7 +161,7 @@ export default function Showcase({ setActiveTextinput, data }) {
                   <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>
                     Criados recentemente
                   </Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Criados recentemente'}, { data: '' })} >
+                  <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Criados recentemente' }, { data: '' })} >
                     <Text style={{color: color, fontSize: 10}}>
                       Mostrar tudo
                     </Text>

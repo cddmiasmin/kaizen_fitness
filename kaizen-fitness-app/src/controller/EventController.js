@@ -78,7 +78,7 @@ export const eventControllerGetShowcase = async (topics) => {
 
     response.forYou = forYou;
     // response.recentlyCreated = recentlyCreated;
-    response.upcomingEvents = [];
+    // response.upcomingEvents = [];
 
     return response;
 

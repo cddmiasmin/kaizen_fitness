@@ -102,8 +102,8 @@ export default function Perfil() {
       <StatusBar style="light" />
       {
         userType === 'professional'
-        ? <HeaderProfessional />
-        : <HeaderConsumer/>
+          ? <HeaderProfessional />
+          : <HeaderConsumer/>
       }
       <View style={styles.line}/>
       <FlatList
