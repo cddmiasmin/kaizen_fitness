@@ -1,24 +1,34 @@
 import { useContext, useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-import { Button, Dialog, IconButton } from 'react-native-paper';
+import { Button, Dialog, HelperText, IconButton } from 'react-native-paper';
 
 import { UserContext } from '../../../contexts/UserContext';
 import { DataContext } from '../../../contexts/DataContext';
 import { ColorContext } from '../../../contexts/ColorContext';
 
 import Buttons from './Buttons';
+import SnackBar from '../SnackBar';
 import ChooseAvatar from '../ChooseAvatar';
 import ModalAvatarsForProfilePicture from '../ChooseAvatar/ModalAvatarsForProfilePicture';
 
 import { mask, unMask } from 'remask';
+
 import { mainColor } from '../../../colors/colors';
+import { validateDocumentFormat, validateEqualDigits } from '../../../services/validateCPFAndCNPJ';
 
 export default function DataBasicPerson() {
 
+  const onlyLetterRegex = new RegExp(/^[a-zA-Z]+$/);
+
+  const [errAvatar, setErrAvatar] = useState(false);
+  const [errName, setErrName] = useState(false);
+  const [errFamilyName, setErrFamilyName] = useState(false);
+  const [errDocument, setErrDocument] = useState(false);
+
   const [isModalActive, setIsModalActive] = useState(false);
   const [isDateTimePickerActive, setDateTimePicker] = useState(false);
-  
+  const [visibleSnackbar, setVisibleSnackbar] = useState(false);
   const [isDialogActive, setIsDialogActive] = useState(false);
 
   const {
@@ -28,10 +38,30 @@ export default function DataBasicPerson() {
     dateOfBirth, setDateOfBirth,
     stepNum, setStepNum,
     document, setDocument,
-    data, setData
+    documentAux, setDocumentAux,
   } = useContext(DataContext);
   const { color } = useContext(ColorContext);
   const { userType } = useContext(UserContext);
+
+  const isDocumentValid = () => {
+    const documentFormat = validateDocumentFormat('cpf', documentAux);
+    const equalDigits = validateEqualDigits('cpf', documentAux);
+
+    if(documentFormat || equalDigits) 
+      setErrDocument(true);
+    else setErrDocument(false);
+
+  }
+
+  const isFamilyNameValid = () => {
+    const valid = onlyLetterRegex.test(familyName);
+    setErrFamilyName(!valid)
+  }
+
+  const isNameValid = () => {
+    const valid = onlyLetterRegex.test(name);
+    setErrName(!valid)
+  }
 
   const maximumDateOf18YearsAgo = () => {
     const today = new Date();
@@ -48,47 +78,84 @@ export default function DataBasicPerson() {
     setDateTimePicker(false);
   };
 
+  const canIGoToTheNextStep = () => {
+    if(avatar.length === 0) {
+      setErrAvatar(true);
+      return false;
+    }
+    else if(documentAux.length === 0){
+      setErrDocument(true);
+      return false;
+    }
+    else if(name.length === 0){
+      setErrName(true);
+      return false;
+    }
+    else if(familyName.length === 0){
+      setErrFamilyName(true);
+      return false;
+    }
+
+    return true;
+  }
+
   function validateData() {
-    let dataAux = data;
-
-    dataAux.avatar = avatar;
-    dataAux.name = name;
-    dataAux.familyName = familyName;
-    dataAux.dateOfBirth = new Date(dateOfBirth);
-    dataAux.document = document;
-
-    console.log('Aux', dataAux);
-
-    setData(dataAux);
-    setStepNum(stepNum + 1);
+    if(errAvatar || errFamilyName || errName || errDocument || !canIGoToTheNextStep()) {
+      setVisibleSnackbar(true);
+    }
+    else setStepNum(stepNum + 1);
   }
 
   useEffect(() => setDateOfBirth(new Date(maximumDateOf18YearsAgo())), []);
 
+  useEffect(() => {
+    if(errAvatar) setErrAvatar(false);
+  }, [avatar])
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { height: 650 }]}>
       <Text style={[styles.title, { color: color}]}>Dados Básicos</Text>
       <Text style={styles.description}>Preencha os campos abaixo com as informações solicitadas:</Text>
-      <ChooseAvatar chooseStatusModal={setIsModalActive} size={85}/>
+      <ChooseAvatar chooseStatusModal={setIsModalActive} size={85} err={errAvatar}/>
+      {
+        errAvatar &&
+          <HelperText type="error" visible={errAvatar} style={{ marginTop: 5}}>
+            É obrigatório a escolha de um avatar
+          </HelperText>
+      }
       <View style={styles.boxInput}>
-        <Text style={[styles.titleInput, { color: color }]}>Nome</Text>
+        <Text style={[styles.titleInput, { color: errName ? '#ba1a1a' : color }]}>Nome</Text>
         <TextInput
           style={styles.input}
           inputMode={'text'}
           underlineColorAndroid="transparent"
           onChangeText={(text) => setName(text)}
           value={name}
+          onBlur={() => isNameValid()}
         />
+        {
+          errName &&
+            <HelperText type="error" visible={errName}>
+              {name.length !== 0 ? 'O campo sobrenome só aceita letras' : 'Campo obrigatório'} 
+            </HelperText>
+        }
       </View>
       <View style={styles.boxInput}>
-        <Text style={[styles.titleInput, { color: color } ]}>Sobrenome</Text>
+        <Text style={[styles.titleInput, { color: errFamilyName ? '#ba1a1a' : color } ]}>Sobrenome</Text>
         <TextInput
           style={styles.input}
           inputMode={'text'}
           underlineColorAndroid="transparent"
           onChangeText={(text) => setFamilyName(text)}
           value={familyName}
+          onBlur={() => isFamilyNameValid()}
         />
+        {
+          errFamilyName &&
+            <HelperText type="error" visible={errFamilyName}>
+              {familyName.length !== 0 ? 'O campo sobrenome só aceita letras' : 'Campo obrigatório'} 
+            </HelperText>
+        }
       </View>
       <View style={styles.boxInput}>
         <Text style={[styles.titleInput, { color: color }]}>Data de nascimento</Text>                               
@@ -117,7 +184,7 @@ export default function DataBasicPerson() {
       {
         userType === 'consumer' &&
           <View style={styles.boxInput}>
-            <Text style={[styles.titleInput, { color: color } ]}>CPF</Text>
+            <Text style={[styles.titleInput, { color: errDocument ? '#ba1a1a' : color } ]}>CPF</Text>
             <View style={{
               justifyContent: 'space-around', flexDirection: 'row', backgroundColor: 'white'
             }}>
@@ -126,18 +193,27 @@ export default function DataBasicPerson() {
                 inputMode={'numeric'}
                 underlineColorAndroid="transparent"
                 keyboardType={'number-pad'}
-                onChangeText={(text) => setDocument(mask(unMask(text),'999.999.999-99'))}
+                onChangeText={(text) => {
+                  setDocumentAux(mask(unMask(text),'99999999999'));
+                  setDocument(mask(unMask(text),'999.999.999-99'));
+                }}
                 value={document}
-                
+                onBlur={() => isDocumentValid()}
               />
               <IconButton 
                 icon="information"
                 iconColor={'white'}
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: errDocument ? '#ba1a1a' : color }}
                 size={18}
                 onPress={() => setIsDialogActive(true)}
               /> 
             </View>
+              {
+                errDocument &&
+                  <HelperText type="error" visible={errDocument}>
+                    CPF inválido!
+                  </HelperText>
+              }
           </View>
       }
       <Buttons validateData={() => validateData()}/>
@@ -163,6 +239,13 @@ export default function DataBasicPerson() {
         changeMyStatus={setIsModalActive}
         chooseAvatar={setAvatar}
         initialValue={avatar}
+      />
+      <SnackBar 
+        visible={visibleSnackbar} 
+        setVisible={setVisibleSnackbar} 
+        message={`Preencha os campos corretamente para ir para a próxima etapa!`} 
+        error={true}
+        width={315} 
       />
     </View>
   );

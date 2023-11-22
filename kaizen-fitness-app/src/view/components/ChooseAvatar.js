@@ -5,7 +5,7 @@ import { Avatar, IconButton } from 'react-native-paper';
 import { ColorContext } from '../../contexts/ColorContext';
 import { DataContext } from '../../contexts/DataContext';
 
-export default function ChooseAvatar({ chooseStatusModal, size }) {
+export default function ChooseAvatar({ chooseStatusModal, size, err }) {
 
     const { color } = useContext(ColorContext);
     const { avatar } = useContext(DataContext);
@@ -23,9 +23,9 @@ export default function ChooseAvatar({ chooseStatusModal, size }) {
                     ? 
                         <Avatar.Icon 
                             size={size} 
-                            icon="account-circle" 
-                            color={color}
-                            style={{ backgroundColor: 'white' }}
+                            icon="account" 
+                            color={'white'}
+                            style={{ backgroundColor: err ? '#ba1a1a' : color }}
                         />
                     :
                         <Avatar.Image
@@ -35,8 +35,8 @@ export default function ChooseAvatar({ chooseStatusModal, size }) {
                 }
                 <IconButton
                     icon={icon}
-                    iconColor={'white'}
-                    style={[{ backgroundColor: color }, styles.icon]}
+                    iconColor={err ? '#ba1a1a' : color}
+                    style={[{ backgroundColor: 'white'}, styles.icon]}
                     size={15}
                     onPress={() => chooseStatusModal(true)}
                 />

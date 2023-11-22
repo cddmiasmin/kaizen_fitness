@@ -18,7 +18,7 @@ export default function Services() {
   const { color } = useContext(ColorContext);
   const { userType } = useContext(UserContext);
   const { 
-    stepNum, setStepNum, setTopics, topics, data, setData
+    stepNum, setStepNum, setTopics, topics
   } = useContext(DataContext);
 
   const [servicesSelected, setServicesSelect] = useState(new Array(availableTopics.length));
@@ -40,38 +40,22 @@ export default function Services() {
         setMessageSnackbar('É obrigatório definir um tópico que represente sua atuação.');
         setErrorSnackBar(true);
         setVisibleSnackbar(true);
-      } else {
-        let dataAux = data;
-        dataAux.topics = topics;
-
-        console.log('Aux', dataAux);
-
-        setData(dataAux);
-        setStepNum(stepNum + 1);
-      }
+      } else setStepNum(stepNum + 1);
+      
     } else {
 
-        if(topics.length === 0 ){
-          setMessageSnackbar('É obrigatório definir tópicos que represente seus interesses.');
-          setErrorSnackBar(true);
-          setVisibleSnackbar(true);
-        }
-        else if (topics.length < 3){
-          setMessageSnackbar('É necessário escolher no minino 3 tópicos de interesse.');
-          setErrorSnackBar(true);
-          setVisibleSnackbar(true);
-        } else {
-          let dataAux = data;
-          dataAux.topics = topics;
-    
-          console.log('Aux', dataAux);
-    
-          setData(dataAux);
-          setStepNum(stepNum + 1);
-        }
-
+      if(topics.length === 0 ){
+        setMessageSnackbar('É obrigatório definir tópicos que represente seus interesses.');
+        setErrorSnackBar(true);
+        setVisibleSnackbar(true);
+      }
+      else if (topics.length < 3){
+        setMessageSnackbar('É necessário escolher no minino 3 tópicos de interesse.');
+        setErrorSnackBar(true);
+        setVisibleSnackbar(true);
+      } else setStepNum(stepNum + 1);
+        
     }
-    
   }
   
   const updateServiceSelected = (key, service) => {
@@ -83,8 +67,6 @@ export default function Services() {
   useEffect(() => {
     setTopics(servicesSelected.filter(value => value !== undefined));
   }, [servicesSelected]);
-
-  useEffect(() => console.log(topics), []);
 
   return (
     <View style={styles.container}>
@@ -130,6 +112,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 15,
     alignItems: 'center',
+    height: 660
   },
   title: {
     fontWeight: 'bold',
@@ -145,6 +128,7 @@ const styles = StyleSheet.create({
   service: {
     width: '100%',
     marginTop: 20,
+    marginBottom: 30
   },
   containerChipServices: {
     width: '100%',

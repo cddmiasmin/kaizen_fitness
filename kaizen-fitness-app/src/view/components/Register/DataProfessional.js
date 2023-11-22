@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
-import { StyleSheet, Text, View, TextInput  } from 'react-native';
+import { useContext, useState } from 'react';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { HelperText } from 'react-native-paper';
 
 import { mask, unMask } from 'remask';
 
@@ -8,34 +9,50 @@ import { ColorContext } from '../../../contexts/ColorContext';
 import { DataContext } from '../../../contexts/DataContext';
 
 import Buttons from './Buttons';
+import SnackBar from '../SnackBar';
+
+import { 
+  validateDocumentFormat, validateEqualDigits 
+} from '../../../services/validateCPFAndCNPJ';
 
 export default function DataProfessional() {
-  
+
+  const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+  const [errDocument, setErrDocument] = useState(false);
+
   const { 
     kindOfPerson, setKindOfPerson,
     document, setDocument,
-    stepNum, setStepNum,
-    data, setData
+    documentAux, setDocumentAux,
+    stepNum, setStepNum
   } = useContext(DataContext);
 
   const { color } = useContext(ColorContext);
 
+  const isDocumentValid = () => {
+    const typeDocument = kindOfPerson === 'PF' ? 'cpf' : 'cnpj';
+
+    const documentFormat = validateDocumentFormat(typeDocument, documentAux);
+    const equalDigits = validateEqualDigits(typeDocument, documentAux);
+
+    if(documentFormat || equalDigits) 
+      setErrDocument(true);
+    else setErrDocument(false);
+
+  }
+
   function validateData() {
-      let dataAux = data;
-      dataAux.kindOfPerson = kindOfPerson;
-      dataAux.document = document;
+    if(documentAux.length === 0) setErrDocument(true);
 
-      console.log('Aux', dataAux);
-
-      setData(dataAux);
-      setStepNum(stepNum + 1);
+    if(errDocument || documentAux.length === 0) {
+      setVisibleSnackbar(true);
+    } else setStepNum(stepNum + 1);
   }
   
  return (
-  <View title="Accordions" style={styles.container}>
+    <View style={[styles.container, { height: 650 }]}>
       <Text style={[styles.title, { color: color}]}>Dados Profissionais</Text>
       <Text style={styles.description}>Forneça seus dados profissionais, incluindo se você é uma Pessoa Física (CPF) ou Pessoa Jurídica (CNPJ).</Text>
-
       <View style={styles.typePerson}>
         <Text style={[styles.titleInput, { color: color }]}>Pessoa:</Text>
         <Picker
@@ -44,6 +61,7 @@ export default function DataProfessional() {
           onValueChange={(value) => {
             setKindOfPerson(value);
             setDocument('');
+            setErrDocument(false);
           }}
           mode='dropdown'
           dropdownIconColor={color}
@@ -56,25 +74,45 @@ export default function DataProfessional() {
       </View>
 
       <View style={styles.document}>
-        <Text style={[styles.titleInput, { color: color}]}>{kindOfPerson === 'PF' ? 'CPF:' : 'CNPJ:'}</Text>
+        <Text style={[styles.titleInput, { color: errDocument ? '#ba1a1a' : color }]}>
+          {kindOfPerson === 'PF' ? 'CPF:' : 'CNPJ:'}
+        </Text>
         <TextInput
           style={styles.input}
           inputMode={'numeric'}
           underlineColorAndroid="transparent"
           keyboardType={'number-pad'}
-          onChangeText={(text) => setDocument(mask(unMask(text), kindOfPerson === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'))}
+          onChangeText={(text) => {
+            setDocumentAux(mask(unMask(text), kindOfPerson === 'PF' ? '99999999999' : '99999999999999'));
+            setDocument(mask(unMask(text), kindOfPerson === 'PF' ? '999.999.999-99' : '99.999.999/9999-99'));
+          }}
           value={document}
+          onBlur={() => isDocumentValid()}
         />
+        {
+          errDocument &&
+            <HelperText type="error" visible={errDocument}>
+              {kindOfPerson === 'PF' ? 'CPF' : 'CNPJ'} inválido!
+            </HelperText>
+        }
       </View>
       <Buttons validateData={() => validateData()}/>
-   </View>
+      <SnackBar 
+        visible={visibleSnackbar} 
+        setVisible={setVisibleSnackbar} 
+        message={`Insira um ${kindOfPerson === 'PF' ? 'CPF' : 'CNPJ'} válido para ir para a próxima etapa!`} 
+        error={true}
+        width={315} 
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-      marginTop: 15,
-      alignItems: 'center',
+    marginTop: 15,
+    alignItems: 'center',
+    flex: 1
   },
   title: {
     fontWeight: 'bold',

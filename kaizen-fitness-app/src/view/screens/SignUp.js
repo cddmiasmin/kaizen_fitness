@@ -6,7 +6,7 @@ import { View,
   KeyboardAvoidingView,
   TextInput as NativeTextInput
 } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, HelperText } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { StatusBar } from 'expo-status-bar';
@@ -21,162 +21,177 @@ import { userControllerSignUp } from '../../controller/UserController';
 
 export default function SignUp() {
 
-    const [email, setEmail] = useState('ximixah651@marksia.com');
-    const [password, setPassword] = useState('123456');
-    const [confirmPassword, setConfirmPassword] = useState('123456');
+  const emailRegex = new RegExp(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
-    const [colorTextPassword, setColorTextPassword] = useState(color);
-    const [secureTextEntryForPassword, setSecureTextEntryForPassword] = useState(true);
-    const [colorTextConfirmPassword, setColorTextConfirmPassword] = useState(color);
-    const [secureTextEntryForConfirmPassword, setSecureTextEntryForConfirmPassword] = useState(true);
+  const [errEmail, setErrEmail] = useState(false);
 
-    const [visibleSnackbar, setVisibleSnackbar] = useState(false);
-    const [messageSnackBar, setMessageSnackbar] = useState('');
+  const [email, setEmail] = useState('ximixah651@marksia.com');
+  const [password, setPassword] = useState('123456');
+  const [confirmPassword, setConfirmPassword] = useState('123456');
 
-    const [signUpResult, setSignUpResult] = useState(null);
+  const [colorTextPassword, setColorTextPassword] = useState(color);
+  const [secureTextEntryForPassword, setSecureTextEntryForPassword] = useState(true);
+  const [colorTextConfirmPassword, setColorTextConfirmPassword] = useState(color);
+  const [secureTextEntryForConfirmPassword, setSecureTextEntryForConfirmPassword] = useState(true);
+
+  const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+  const [messageSnackBar, setMessageSnackbar] = useState('');
+
+  const [signUpResult, setSignUpResult] = useState(null);
+
+  const navigation = useNavigation();
+
+  const {
+    color
+  } = useContext(ColorContext);
+
+  const isTheEmailCorrect = () => {
+    const valid = emailRegex.test(email);
+    setErrEmail(!valid);
+  }
+
+  const onDismissSnackBar = async () => {
+
+    setVisibleSnackbar(false);
+
+    if(!signUpResult) navigation.navigate('EmailValidation');
   
-    const navigation = useNavigation();
+  }
+
+  const makeUserSignUp = async () => {
+    const response = await userControllerSignUp(email, password);
+
+    setSignUpResult(!response.result);
+    setMessageSnackbar(response.message);
+    setVisibleSnackbar(true);
+
+  }
   
-    const {
-      color
-    } = useContext(ColorContext);
-
-    const onDismissSnackBar = async () => {
-
-      setVisibleSnackbar(false);
-
-      if(!signUpResult) navigation.navigate('EmailValidation');
-    
-    }
-
-    const makeUserSignUp = async () => {
-      const response = await userControllerSignUp(email, password);
-
-      setSignUpResult(!response.result);
-      setMessageSnackbar(response.message);
-      setVisibleSnackbar(true);
-
-    }
-   
-    return (
-      <View style={styles.container}>
-        <StatusBar style="light" />
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>Cadastro</Text>
-            <View style={[styles.headerLine,{ backgroundColor: color }]} />
-          </View>
-          <View style={styles.body}>
-            <KeyboardAvoidingView style={styles.keyboardArea}>
-              <View style={styles.containerTextInput}>
-                <View style={styles.textInput}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>Email</Text>
-                  <TextInput
-                    mode='flat'
-                    label=''
-                    value={email}
-                    onChangeText={(text) => setEmail(text)}
-                    underlineColor={'white'}
-                    activeUnderlineColor={color}
-                    textColor={grayText}
-                    editable={true}
-                    style={
-                      { backgroundColor: mainColor , width: 350, height: 35}
+  return (
+    <View style={styles.container}>
+      <StatusBar style="light" />
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Cadastro</Text>
+          <View style={[styles.headerLine,{ backgroundColor: color }]} />
+        </View>
+        <View style={styles.body}>
+          <KeyboardAvoidingView style={styles.keyboardArea}>
+            <View style={styles.containerTextInput}>
+              <View style={styles.textInput}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>Email</Text>
+                <TextInput
+                  mode='flat'
+                  label=''
+                  error={errEmail}
+                  value={email}
+                  onChangeText={(text) => setEmail(text)}
+                  underlineColor={'white'}
+                  activeUnderlineColor={color}
+                  textColor={grayText}
+                  editable={true}
+                  style={
+                    { backgroundColor: mainColor , width: 350, height: 35}
+                  }
+                  theme={{
+                    colors: {
+                        onSurfaceVariant: 'white'
                     }
-                    theme={{
-                      colors: {
-                          onSurfaceVariant: 'white'
-                      }
-                    }}
-                    render={(props) => <NativeTextInput inputMode={'email'} keyboardType={'email-address'} {...props} />}
-                  />
-                </View>
-                <View style={styles.textInput}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>Senha</Text>
-                  <TextInput
-                    mode='flat'
-                    label=''
-                    value={password}
-                    onChangeText={(text) => setPassword(text)}
-                    underlineColor={'white'}
-                    activeUnderlineColor={color}
-                    textColor={grayText}
-                    editable={true}
-                    style={
-                      { backgroundColor: mainColor , width: 350, height: 35}
-                    }
-                    theme={{
-                      colors: {
-                          onSurfaceVariant: 'white'
-                      }
-                    }}
-                    onFocus={() => setColorTextPassword(color)}
-                    onBlur={() => setColorTextPassword(grayText)}
-                    secureTextEntry={secureTextEntryForPassword}
-                    right={
-                      <TextInput.Icon 
-                        icon={secureTextEntryForPassword === true ? 'eye' : 'eye-off'} 
-                        color={colorTextPassword}
-                        onPress={() => setSecureTextEntryForPassword(!secureTextEntryForPassword)}
-                      />
-                    }
-                  />
-                </View>
-                <View style={styles.textInput}>
-                  <Text style={{color: 'white', fontWeight: 'bold'}}>Confirmar senha</Text>
-                  <TextInput
-                    mode='flat'
-                    label=''
-                    value={confirmPassword}
-                    onChangeText={(text) => setConfirmPassword(text)}
-                    underlineColor={'white'}
-                    activeUnderlineColor={color}
-                    textColor={grayText}
-                    editable={true}
-                    style={
-                      { backgroundColor: mainColor , width: 350, height: 35}
-                    }
-                    theme={{
-                      colors: {
-                          onSurfaceVariant: 'white'
-                      }
-                    }}
-                    onFocus={() => setColorTextConfirmPassword(color)}
-                    onBlur={() => setColorTextConfirmPassword(grayText)}
-                    secureTextEntry={secureTextEntryForConfirmPassword}
-                    right={
-                      <TextInput.Icon 
-                        icon={secureTextEntryForConfirmPassword === true ? 'eye' : 'eye-off'} 
-                        color={colorTextConfirmPassword}
-                        onPress={() => setSecureTextEntryForConfirmPassword(!secureTextEntryForConfirmPassword)}
-                      />
-                    }
-                  />
-                </View>
+                  }}
+                  render={(props) => <NativeTextInput inputMode={'email'} keyboardType={'email-address'} {...props} />}
+                  onBlur={() => isTheEmailCorrect()}
+                />
+                {
+                  errEmail &&
+                  <HelperText type="error" visible={errEmail}>Endereço de e-mail inválido!</HelperText>
+                }
               </View>
-              <TouchableOpacity 
-                style={[styles.signUp, { backgroundColor: color }]}
-                onPress={() => makeUserSignUp()}
-              >
-                <Text style={{color: 'white', fontWeight: 'bold'}}>Casdastrar</Text>
-              </TouchableOpacity>
-            </KeyboardAvoidingView>
+              <View style={styles.textInput}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>Senha</Text>
+                <TextInput
+                  mode='flat'
+                  label=''
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
+                  underlineColor={'white'}
+                  activeUnderlineColor={color}
+                  textColor={grayText}
+                  editable={true}
+                  style={
+                    { backgroundColor: mainColor , width: 350, height: 35}
+                  }
+                  theme={{
+                    colors: {
+                        onSurfaceVariant: 'white'
+                    }
+                  }}
+                  onFocus={() => setColorTextPassword(color)}
+                  onBlur={() => setColorTextPassword(grayText)}
+                  secureTextEntry={secureTextEntryForPassword}
+                  right={
+                    <TextInput.Icon 
+                      icon={secureTextEntryForPassword === true ? 'eye' : 'eye-off'} 
+                      color={colorTextPassword}
+                      onPress={() => setSecureTextEntryForPassword(!secureTextEntryForPassword)}
+                    />
+                  }
+                />
+              </View>
+              <View style={styles.textInput}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>Confirmar senha</Text>
+                <TextInput
+                  mode='flat'
+                  label=''
+                  value={confirmPassword}
+                  onChangeText={(text) => setConfirmPassword(text)}
+                  underlineColor={'white'}
+                  activeUnderlineColor={color}
+                  textColor={grayText}
+                  editable={true}
+                  style={
+                    { backgroundColor: mainColor , width: 350, height: 35}
+                  }
+                  theme={{
+                    colors: {
+                        onSurfaceVariant: 'white'
+                    }
+                  }}
+                  onFocus={() => setColorTextConfirmPassword(color)}
+                  onBlur={() => setColorTextConfirmPassword(grayText)}
+                  secureTextEntry={secureTextEntryForConfirmPassword}
+                  right={
+                    <TextInput.Icon 
+                      icon={secureTextEntryForConfirmPassword === true ? 'eye' : 'eye-off'} 
+                      color={colorTextConfirmPassword}
+                      onPress={() => setSecureTextEntryForConfirmPassword(!secureTextEntryForConfirmPassword)}
+                    />
+                  }
+                />
+              </View>
+            </View>
             <TouchableOpacity 
-                style={styles.newUser}
-                onPress={() => navigation.navigate('SignIn')}
+              style={[styles.signUp, { backgroundColor: color }]}
+              onPress={() => makeUserSignUp()}
             >
-                <Text style={{color: grayText, fontWeight: 'normal'}}>Já tem uma conta?</Text>
-                <Text style={{color: color, fontWeight: 'bold'}}>Entre</Text>
+              <Text style={{color: 'white', fontWeight: 'bold'}}>Casdastrar</Text>
             </TouchableOpacity>
-          </View>
-          <SnackBar
-            visible={visibleSnackbar} 
-            setVisible={onDismissSnackBar} 
-            message={messageSnackBar} 
-            error={signUpResult} 
-            width={350}
-          />
-      </View>
-    )
+          </KeyboardAvoidingView>
+          <TouchableOpacity 
+              style={styles.newUser}
+              onPress={() => navigation.navigate('SignIn')}
+          >
+              <Text style={{color: grayText, fontWeight: 'normal'}}>Já tem uma conta?</Text>
+              <Text style={{color: color, fontWeight: 'bold'}}>Entre</Text>
+          </TouchableOpacity>
+        </View>
+        <SnackBar
+          visible={visibleSnackbar} 
+          setVisible={onDismissSnackBar} 
+          message={messageSnackBar} 
+          error={signUpResult} 
+          width={350}
+        />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({

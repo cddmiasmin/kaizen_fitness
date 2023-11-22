@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Avatar, Modal } from "react-native-paper";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -6,12 +6,15 @@ import { mainColor } from "../../../colors/colors";
 import { avatarsForProfilePicture } from "../../../services/avatarsForProfilePicture";
 
 import { ColorContext } from "../../../contexts/ColorContext";
+import _ from "lodash";
 
 export default function ModalAvatarsForProfilePicture({ active, changeMyStatus, chooseAvatar, initialValue }) {
 
     const { color } = useContext(ColorContext);
 
-    const [avatar, setAvatar] = useState(initialValue);
+    const [avatar, setAvatar] = useState(null);
+
+    useEffect(() => setAvatar(initialValue), []);
 
     return (
         <Modal 
@@ -30,8 +33,8 @@ export default function ModalAvatarsForProfilePicture({ active, changeMyStatus, 
                         <TouchableOpacity
                             key={`avatar#${key}`}
                             style={[styles.avatar,
-                                avatarObj.value === avatar.value ? styles.selected : '',
-                                avatarObj.value === avatar.value ? { backgroundColor: color } : '',
+                                _.isEqual(avatarObj, avatar) ? styles.selected : '',
+                                _.isEqual(avatarObj, avatar) ? { backgroundColor: color } : '',
                             ]} 
                             onPress={() => {
                                 setAvatar(avatarObj);
@@ -67,6 +70,10 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: 'flex-start',
         alignItems: 'center',
+        position: 'absolute',
+        top: 50,
+        left: 0,
+        right: 0
     },
     message: {
         width:'100%',

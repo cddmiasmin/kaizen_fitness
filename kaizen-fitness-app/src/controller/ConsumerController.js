@@ -4,6 +4,8 @@ import {
     consumerModelUpdateProfile 
 } from "../model/ConsumerModel";
 
+import { mask, unMask } from 'remask';
+
 const timestampToDate = (timestamp) => {
     const date = new Date(timestamp.seconds * 1000);
     date.setMilliseconds(timestamp.nanoseconds / 1000000);
@@ -40,7 +42,7 @@ export const consumerControllerIMC = (height, weight) => {
     const weightFloat = parseFloat(weight);
 
     const value = weightFloat/(heightFloat * heightFloat);
-    result.value = value.toFixed(2);
+    result.value = mask(unMask(value.toFixed(2)), ['9,9', '99,9']);
 
     if (value < 18.5)    result.classification = "Abaixo do normal";
     else if (value < 25) result.classification = "Normal";
@@ -57,5 +59,5 @@ export const consumerControllerWater = (weight) => {
     const quantityWater = 35 * weightFloat;
     const liters = quantityWater / 1000;
 
-    return liters.toFixed(1);
+    return mask(unMask(liters.toFixed(1)), ['9,9']);
 }

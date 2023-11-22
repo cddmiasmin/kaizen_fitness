@@ -16,6 +16,7 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
     const [avatar, setAvatar] = useState([]);
     const [dateOfBirth, setDateOfBirth] = useState(new Date());
     const [document, setDocument] = useState('');
+    const [documentAux, setDocumentAux] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
     const [height, setHeight] = useState('');
@@ -55,15 +56,18 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
         if(userType === 'consumer') {
             setHeight(user.height);
             setWeight(user.weight);
-            setHeightAux(mask(unMask(user.height), ['9.9', '99.9', '999.9']));
-            setWeightAux(mask(unMask(user.weight), ['9.9', '99.9', '999.9']));
+            setHeightAux(mask(unMask(user.height), ['9.9','9.99']));
+            setWeightAux(mask(unMask(user.weight), ['99.9', '999.9']));
         }
 
         if(userType === 'professional') setKindOfPerson(user.kindOfPerson);
 
+
         setName(user.name);
         setAvatar(user.avatar);
         setDocument(user.document);
+        setState(user.state);
+        setCity(user.city);
         setData({});
     }
 
@@ -86,7 +90,8 @@ export const DataContextProvider = ({ stepNum, setStepNum, children }) => {
                 height, setHeight,
                 weight, setWeight,
                 heightAux, setHeightAux,
-                weightAux, setWeightAux
+                weightAux, setWeightAux,
+                documentAux, setDocumentAux
             }}
         >
             {children}

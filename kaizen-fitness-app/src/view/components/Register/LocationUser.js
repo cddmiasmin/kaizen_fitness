@@ -1,30 +1,39 @@
 import { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import { HelperText } from 'react-native-paper';
 
+import { UserContext } from '../../../contexts/UserContext';
 import { DataContext } from '../../../contexts/DataContext';
 import { ColorContext } from '../../../contexts/ColorContext';
 
 import Buttons from './Buttons';
+import SnackBar from '../SnackBar';
 
 import * as Location from 'expo-location';
 
 export default function LocationUser() {
 
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-
-  const [visibleSnackbar, setVisibleSnackbar] = useState(false);
-  const [messageSnackBar, setMessageSnackbar] = useState('');
-  const [errorSnackBar, setErrorSnackBar] = useState(false);
-
   const {
     city, setCity,
     state, setState,
     stepNum, setStepNum,
-    data, setData
   } = useContext(DataContext);
-
+  const { userType } = useContext(UserContext);
   const { color } = useContext(ColorContext);
+  
+  const onlyLetterRegex = new RegExp(/^[a-zA-Z]+$/);
+  const message = userType === 'professional'
+                      ?
+                        'Preencha os campos corretamente para concluir o cadastro!'
+                      :
+                        'Preencha os campos corretamente para ir para a próxima etapa!';
+
+  // const [location, setLocation] = useState(null);
+  // const [errorMsg, setErrorMsg] = useState(null);
+
+  const [errCity, setErrCity] = useState(false);
+  const [errState, setErrState] = useState(false);
+  const [visibleSnackbar, setVisibleSnackbar] = useState(false);
 
   // const getAdress = async () => {
 
@@ -70,15 +79,34 @@ export default function LocationUser() {
   //   getAdress();
   // }, [location])
 
+  const isCityValid = () => {
+    const valid = onlyLetterRegex.test(city);
+    setErrCity(!valid)
+  }
+
+  const isStateValid = () => {
+    const valid = onlyLetterRegex.test(state);
+    setErrState(!valid)
+  }
+
+  const canIGoToTheNextStep = () => {
+    if(state.length === 0) {
+      setErrState(true);
+      return false;
+    }
+    else if(city.length === 0){
+      setErrCity(true);
+      return false;
+    }
+
+    return true;
+  }
+
   function validateData() {
-    let dataAux = data;
-    dataAux.city = city;
-    dataAux.state = state;
-
-    console.log('Aux', dataAux);
-
-    setData(dataAux);
-    setStepNum(stepNum + 1);
+    if(errCity || errState || !canIGoToTheNextStep()) {
+      setVisibleSnackbar(true);
+    }
+    else setStepNum(stepNum + 1);
   }
 
  return (
@@ -94,36 +122,55 @@ export default function LocationUser() {
         <Text style={{color: 'white', fontWeight: 'bold'}}>Fornecer minha localização atual</Text>
       </TouchableOpacity> */}
       <View style={styles.boxInput}>
-        <Text style={[styles.titleInput, { color: color}]}>Estado</Text>
+        <Text style={[styles.titleInput, { color: errState ? '#ba1a1a' : color }]}>Estado</Text>
         <TextInput
           style={styles.input}
           inputMode={'text'}
           underlineColorAndroid="transparent"
           onChangeText={(text) => setState(text)}
           value={state}
+          onBlur={() => isStateValid()}
         />
+        {
+          errState &&
+            <HelperText type="error" visible={errState}>
+              {state.length !== 0 ? 'O campo estado só aceita letras' : 'Campo obrigatório'} 
+            </HelperText>
+        }
       </View>
       <View style={styles.boxInput}>
-        <Text style={[styles.titleInput, { color: color } ]}>Cidade</Text>
+        <Text style={[styles.titleInput, { color: errCity ? '#ba1a1a' : color } ]}>Cidade</Text>
         <TextInput
           style={styles.input}
           inputMode={'text'}
           underlineColorAndroid="transparent"
           onChangeText={(text) => setCity(text)}
           value={city}
+          onBlur={() => isCityValid()}
         />
+        {
+          errCity &&
+            <HelperText type="error" visible={errCity}>
+              {city.length !== 0 ? 'O campo estado só aceita letras' : 'Campo obrigatório'} 
+            </HelperText>
+        }
       </View>
       <Buttons validateData={() => validateData()}/>
+      <SnackBar 
+        visible={visibleSnackbar} 
+        setVisible={setVisibleSnackbar} 
+        message={message} 
+        error={true}
+        width={315} 
+      />
    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-      marginTop: 30,
-      alignItems: 'center',
-      justifyContent: 'center',
-      flex: 1
+    marginTop: 30,
+    height: 650
   },
   title: {
     fontWeight: 'bold',

@@ -21,8 +21,13 @@ export default function Buttons({ validateData }) {
         }
         <TouchableOpacity
             onPress={() => validateData()} 
-            style={[styles.button, styles.buttonNext, { backgroundColor: color}]}>
-            <Text style={styles.title}>{stepNum === 4 ? 'Concluir' : 'Prosseguir'}</Text>
+            activeOpacity={stepNum > 4 ? 1 : 0.2}
+            disabled={stepNum > 4}
+            style={[styles.button, styles.buttonNext, { backgroundColor: stepNum > 4 ? '#a6a6a6' : color }]}
+        >
+            <Text style={[styles.title, { color: stepNum > 4 ?'#666666' : 'white', fontWeight: 'bold' }]}>
+                {stepNum >= 4 ? 'Concluir' : 'Prosseguir'}
+            </Text>
         </TouchableOpacity>
    </View>
   );
@@ -30,7 +35,6 @@ export default function Buttons({ validateData }) {
 
 const styles = StyleSheet.create({
     container: {
-
        width: '100%',
        justifyContent: 'center',
        flexDirection: 'row',

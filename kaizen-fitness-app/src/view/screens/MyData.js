@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, KeyboardAvoidingView, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { TextInput, IconButton, ActivityIndicator } from 'react-native-paper';
+import { TextInput, IconButton, ActivityIndicator, HelperText } from 'react-native-paper';
 import { TextInput as NativeTextInput } from 'react-native';
+
+import { mask, unMask } from 'remask';
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -10,29 +12,38 @@ import { mainColor } from '../../colors/colors';
 
 import { AntDesign } from '@expo/vector-icons';
 
-import Line from '../components/Line';
-
 import { DataContext } from '../../contexts/DataContext';
 import { UserContext } from '../../contexts/UserContext';
 import { ColorContext } from '../../contexts/ColorContext';
 
-import { consumerControllerUpdateProfile } from '../../controller/ConsumerController';
+import { consumerControllerIMC, consumerControllerUpdateProfile, consumerControllerWater } from '../../controller/ConsumerController';
 import { professionalControllerUpdateProfile } from '../../controller/ProfessionalController';
 
-import DialogAlert from '../components/DialogAlert';
+import Line from '../components/Line';
 import SnackBar from '../components/SnackBar';
+import DialogAlert from '../components/DialogAlert';
 import ChooseAvatar from '../components/ChooseAvatar';
 import ModalAvatarsForProfilePicture from '../components/ChooseAvatar/ModalAvatarsForProfilePicture';
+import _ from 'lodash';
 
 export default function MyData() {
 
+  const onlyLetterRegex = new RegExp(/^[a-zA-Z]+$/);
+
   const navigation = useNavigation();
+
+  const [errHeight, setErrHeight] = useState(false);
+  const [errWeight, setErrWeight] = useState(false);
+  const [errCity, setErrCity] = useState(false);
+  const [errState, setErrState] = useState(false);
 
   const [noChanges, setNoChanges] = useState(true);
   const [changesNames, setChangesNames] = useState([]);
 
   const [colorTextHeight, setColorTextHeight] = useState(color);
   const [colorTextWeight, setColorTextWeight] = useState(color);
+  const [colorTextState, setColorTextState] = useState(color);
+  const [colorTextCity, setColorTextCity] = useState(color);
 
   //DialogAlert
   const [visible, setVisible] = useState(false);
@@ -55,21 +66,78 @@ export default function MyData() {
     avatar, setAvatar, 
     height, setHeight, 
     weight, setWeight, 
-    data, setData, 
+    data, setData,
+    city, setCity,
+    state, setState, 
     heightAux, setHeightAux,
     weightAux, setWeightAux
   } = useContext(DataContext);
   
-  const documentLabel = userType === 'consumer' || user.kindOfPerson === 'PF' 
-                          ? 'CPF'
-                          : 'CNPJ';
+  const documentLabel = userType === 'consumer' || user.kindOfPerson === 'PF' ? 'CPF' : 'CNPJ';
+
+  const fieldsAreRight = () => {
+    if(height.length === 0) {
+      setErrHeight(true);
+      return false;
+    }
+    else if(weight.length === 0){
+      setErrWeight(true);
+      return false;
+    }
+    else if(state.length === 0) {
+      setErrState(true);
+      return false;
+    }
+    else if(city.length === 0){
+      setErrCity(true);
+      return false;
+    }
+
+    return true;
+  }
+
+  const canISaveChanges = () => {
+    if(errHeight || errWeight || errState || errCity || !fieldsAreRight()) return false;
+
+    return true;
+  }
+
+  const isWeightValid = () => {
+    if(weight.length <= 1) 
+      setErrWeight(true);
+    else 
+      setErrWeight(false);
+  }
+
+  const isHeightValid = () => {
+    if(height.length <= 1) 
+      setErrHeight(true);
+    else 
+      setErrHeight(false);
+  }
+
+  const isCityValid = () => {
+    const valid = onlyLetterRegex.test(city);
+    setErrCity(!valid)
+  }
+
+  const isStateValid = () => {
+    const valid = onlyLetterRegex.test(state);
+    setErrState(!valid)
+  }
 
   const saveChangesForMyData = async () => {
-    console.log(data);
+    const dataUpdate = data;
+    const imc = (height !== user.height || weight !== user.weight) && userType === 'consumer'
+                  ? consumerControllerIMC(heightAux, weightAux) : null;
+    const water =  weight !== user.weight && userType === 'consumer' ? consumerControllerWater(weightAux) : null;
+
+    if(imc !== null) dataUpdate.imc = imc;
+    if(water !== null) dataUpdate.dailyWaterConsumption = water;
 
     let response = {};
 
-    if(userType === 'consumer') response = await consumerControllerUpdateProfile(data);
+    if(userType === 'consumer') response = await consumerControllerUpdateProfile(dataUpdate);
     else response = await professionalControllerUpdateProfile(data);
 
     console.log(response, response.length);
@@ -111,13 +179,17 @@ export default function MyData() {
   }
 
   const thereWasAChangeInConsumerData  = () => {
-    return  avatar === user.avatar
+    return  _.isEqual(avatar, user.avatar)
       &&    height === user.height
-      &&    weight === user.weight;
+      &&    weight === user.weight
+      &&    state  === user.state
+      &&    city   === user.city
   }
 
   const thereWasAChangeInProfessionalData  = () => {
-    return  avatar  === user.avatar;
+    return  _.isEqual(avatar, user.avatar)
+      &&    state  === user.state
+      &&    city   === user.city;
   }
 
   const thereWasAChange = () => {
@@ -129,7 +201,7 @@ export default function MyData() {
     let changesNames = [];
     let changesData = {};
 
-    if(avatar !== user.avatar){
+    if(!_.isEqual(avatar, user.avatar)){
       changesNames.push("Avatar de perfil");
       changesData.avatar = avatar;
     }
@@ -144,6 +216,16 @@ export default function MyData() {
       changesData.weight = weight;
     }
 
+    if(state !== user.state){
+      changesNames.push("Estado");
+      changesData.state = state;
+    }
+
+    if(city !== user.city){
+      changesNames.push("Cidade");
+      changesData.city = city;
+    }
+
     return { names: changesNames, data: changesData };
   }
 
@@ -151,9 +233,19 @@ export default function MyData() {
     let changesNames = [];
     let changesData = {};
 
-    if(avatar !== user.avatar){
+    if(!_.isEqual(avatar, user.avatar)) {
       changesNames.push("Avatar de perfil");
       changesData.avatar = avatar;
+    }
+
+    if(state !== user.state){
+      changesNames.push("Estado");
+      changesData.state = state;
+    }
+
+    if(city !== user.city){
+      changesNames.push("Cidade");
+      changesData.city = city;
     }
 
     return { names: changesNames, data: changesData };
@@ -165,7 +257,7 @@ export default function MyData() {
     if(userType === 'consumer') changes = whatConsumerDataHasChanged();
     else changes = whatProfessionalDataHasChanged();
 
-    setChangesNames(changes.names)
+    setChangesNames(changes.names);
     setData(changes.data);
   }
 
@@ -178,12 +270,14 @@ export default function MyData() {
   useEffect(() => {
     setColorTextHeight(color);
     setColorTextWeight(color);
+    setColorTextState(color);
+    setColorTextCity(color);
   }, []);
 
   useEffect(() => {
     const change = thereWasAChange();
     setNoChanges(change);
-  }, [avatar, height, weight]);
+  }, [avatar, height, weight, state, city]);
 
   useEffect(() => {
 
@@ -214,67 +308,59 @@ export default function MyData() {
     )
  
   return (
-    <ScrollView style={styles.container}>
-        <StatusBar style='light'/>
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <TouchableOpacity 
-              onPress={() => {
-                if(!noChanges){
-                  setWhoCalledTheDialog('left');
-                  whatDataHasChanged();
-                }
-                else navigation.navigate('Profile');
-              }}
-            >
-                <AntDesign name="left" size={20} color="white" />
-            </TouchableOpacity>
-            <Text style={styles.screen}>Meus Dados</Text>
-          </View>
-          <View style={styles.headerRight}>
-            <IconButton
-                icon="check-bold"
-                iconColor={color}
-                style={styles.button}
-                containerColor={mainColor}
-                size={18}
-                disabled={noChanges}
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+          <StatusBar style='light'/>
+          <View style={styles.header}>
+            <View style={styles.headerLeft}>
+              <TouchableOpacity 
                 onPress={() => {
-                  setWhoCalledTheDialog('check-bold');
-                  whatDataHasChanged();
+                  if(!noChanges){
+                    setWhoCalledTheDialog('left');
+                    whatDataHasChanged();
+                  }
+                  else navigation.navigate('Profile');
                 }}
-            />
-          </View>
-        </View>
-        <ChooseAvatar chooseStatusModal={setIsModalActive} size={90}/>
-        <Line width={'100%'} height={'0.3%'} top={'7%'} bottom={'5%'}/>
-        <Text 
-          style={[styles.message, {color: color}]}
-        >
-          Os dados de nome, sobrenome, data de nascimento e {documentLabel} são inalteráveis. Para saber mais, consulte a nossa {'política de privacidade'}.
-        </Text>
-        <KeyboardAvoidingView style={styles.information}>
-          <TextInput
-            mode='outlined'
-            label="Nome"
-            value={user.name}
-            outlineColor={'white'}
-            textColor={color}
-            style={{ backgroundColor: mainColor }}
-            theme={{
-              colors: {
-                  onSurfaceVariant: 'white'
-              }
-            }}
-            editable={false}
-          />
+              >
+                  <AntDesign name="left" size={20} color="white" />
+              </TouchableOpacity>
+              <Text style={styles.screen}>Meus Dados</Text>
+            </View>
+            <View style={styles.headerRight}>
+              <IconButton
+                  icon="check-bold"
+                  iconColor={color}
+                  style={styles.button}
+                  containerColor={mainColor}
+                  size={18}
+                  disabled={noChanges}
+                  onPress={() => {
+                    const can = canISaveChanges();
 
-          {
-            (userType === 'consumer' || user.kindOfPerson === 'PF') &&
+                    if(can) {
+                      setWhoCalledTheDialog('check-bold');
+                      whatDataHasChanged();
+                    } else {
+                      setErrorSnackBar(true);
+                      setMessageSnackbar('Preencha corretamente os campos que deseja alterar');
+                      setVisibleSnackbar(true);
+                    }
+                  }}
+              />
+            </View>
+          </View>
+          <ChooseAvatar chooseStatusModal={setIsModalActive} size={90} err={false}/>
+          <Line width={'100%'} height={'0.3%'} top={'7%'} bottom={'5%'}/>
+          <Text 
+            style={[styles.message, {color: color}]}
+          >
+            Os dados de nome, sobrenome, data de nascimento e {documentLabel} são inalteráveis. Para saber mais, consulte a nossa {'política de privacidade'}.
+          </Text>
+          <KeyboardAvoidingView style={styles.information}>
             <TextInput
               mode='outlined'
-              label="Sobrenome"
-              value={user.familyName}
+              label="Nome"
+              value={user.name}
               outlineColor={'white'}
               textColor={color}
               style={{ backgroundColor: mainColor }}
@@ -285,14 +371,47 @@ export default function MyData() {
               }}
               editable={false}
             />
-          }
 
-          {
-            (userType === 'consumer' || user.kindOfPerson === 'PF') &&
+            {
+              (userType === 'consumer' || user.kindOfPerson === 'PF') &&
               <TextInput
+                mode='outlined'
+                label="Sobrenome"
+                value={user.familyName}
+                outlineColor={'white'}
+                textColor={color}
+                style={{ backgroundColor: mainColor }}
+                theme={{
+                  colors: {
+                      onSurfaceVariant: 'white'
+                  }
+                }}
+                editable={false}
+              />
+            }
+
+            {
+              (userType === 'consumer' || user.kindOfPerson === 'PF') &&
+                <TextInput
+                mode='outlined'
+                label='Data de nascimento'
+                value={dateOfBirth}
+                outlineColor={'white'}
+                textColor={color}
+                style={{ backgroundColor: mainColor }}
+                theme={{
+                  colors: {
+                      onSurfaceVariant: 'white'
+                  }
+                }}
+                editable={false}
+              />
+            }
+
+            <TextInput
               mode='outlined'
-              label='Data de nascimento'
-              value={dateOfBirth}
+              label={documentLabel}
+              value={user.document}
               outlineColor={'white'}
               textColor={color}
               style={{ backgroundColor: mainColor }}
@@ -303,24 +422,8 @@ export default function MyData() {
               }}
               editable={false}
             />
-          }
 
-          <TextInput
-            mode='outlined'
-            label={documentLabel}
-            value={user.document}
-            outlineColor={'white'}
-            textColor={color}
-            style={{ backgroundColor: mainColor }}
-            theme={{
-              colors: {
-                  onSurfaceVariant: 'white'
-              }
-            }}
-            editable={false}
-          />
-
-           {
+            {
               userType === 'consumer' &&
               <>
                   <TextInput
@@ -328,58 +431,131 @@ export default function MyData() {
                     label='Altura'
                     value={height}
                     onChangeText={(value) => {
-                      setHeight(mask(unMask(value), '9,99'));
-                      setHeightAux(mask(unMask(value), '9.99'));
+                      setHeight(mask(unMask(value), ['9,9','9,99']));
+                      setHeightAux(mask(unMask(value), ['9.9','9.99']));
                     }}
-                    outlineColor={'white'}
+                    outlineColor={errHeight ? '#ba1a1a' : 'white'}
                     activeOutlineColor={color}
                     textColor={colorTextHeight}
                     style={{ backgroundColor: mainColor }}
                     theme={{
                       colors: {
-                          onSurfaceVariant: 'white'
+                          onSurfaceVariant: errHeight ? '#ba1a1a' : 'white'
                       }
                     }}
                     editable={true}
                     onFocus={() => setColorTextHeight('white')}
-                    onBlur={() => setColorTextHeight(color)}
+                    onBlur={() => {
+                      setColorTextHeight(color);
+                      isHeightValid();
+                    }}
                     right={<TextInput.Icon icon="pencil-outline" color={colorTextHeight}/>}
                     render={(props) => <NativeTextInput keyboardType={'decimal-pad'} {...props} />}
                   />
+                  {
+                    errHeight &&
+                      <HelperText type="error" visible={errHeight} style={{marginTop: -25}}>
+                        {height.length === 0 ? 'O campo não pode ser deixado em branco' : 'Altura inválida'}
+                      </HelperText>
+                  }
 
                   <TextInput
                     mode='outlined'
                     label='Peso'
                     value={weight}
                     onChangeText={(value) => {
-                      setWeight(mask(unMask(value), ['9,9', '99,9', '999,9']));
-                      setWeightAux(mask(unMask(value), ['9.9', '99.9', '999.9']));
+                      setWeight(mask(unMask(value), ['99,9', '999,9']));
+                      setWeightAux(mask(unMask(value), ['99.9', '999.9']));
                     }}
-                    outlineColor={'white'}
+                    outlineColor={errWeight ? '#ba1a1a' : 'white'}
                     activeOutlineColor={color}
                     textColor={colorTextWeight}
                     style={{ backgroundColor: mainColor }}
                     theme={{
                       colors: {
-                          onSurfaceVariant: 'white'
+                          onSurfaceVariant: errWeight ? '#ba1a1a' : 'white'
                       }
                     }}
                     editable={true}
                     onFocus={() => setColorTextWeight('white')}
-                    onBlur={() => setColorTextWeight(color)}
+                    onBlur={() => {
+                      setColorTextWeight(color);
+                      isWeightValid();
+                    }}
                     right={<TextInput.Icon icon="pencil-outline" color={colorTextWeight}/>}
                     render={(props) => <NativeTextInput keyboardType={'decimal-pad'} {...props} />}
                   />
+                  {
+                    errWeight &&
+                      <HelperText type="error" visible={errWeight} style={{marginTop: -25}}>
+                        {height.length === 0 ? 'O campo não pode ser deixado em branco' : 'Peso inválido'}
+                      </HelperText>
+                  }
               </>
-           }
-        </KeyboardAvoidingView>
-        <DialogAlert
-          visible={visible} 
-          setVisible={setVisible} 
-          title={dialogTitle} 
-          message={dialogContent} 
-          response={() => executeDialogUserChoice()}
-        />
+            }
+
+            <TextInput
+              mode='outlined'
+              label='Estado'
+              value={state}
+              onChangeText={(value) => setState(value)}
+              outlineColor={errState ? '#ba1a1a' : 'white'}
+              activeOutlineColor={color}
+              textColor={colorTextState}
+              style={{ backgroundColor: mainColor }}
+              theme={{
+                colors: {
+                    onSurfaceVariant: errState ? '#ba1a1a' : 'white'
+                }
+              }}
+              editable={true}
+              onFocus={() => setColorTextState('white')}
+              onBlur={() => {
+                setColorTextState(color);
+                isStateValid();
+              }}
+              right={<TextInput.Icon icon="pencil-outline" color={colorTextState}/>}
+            />
+
+            <TextInput
+              mode='outlined'
+              label='Cidade'
+              value={city}
+              onChangeText={(value) => setCity(value)}
+              outlineColor={errCity ? '#ba1a1a' : 'white'}
+              activeOutlineColor={color}
+              textColor={colorTextCity}
+              style={{ backgroundColor: mainColor }}
+              theme={{
+                colors: {
+                    onSurfaceVariant: errCity ? '#ba1a1a' : 'white'
+                }
+              }}
+              editable={true}
+              onFocus={() => setColorTextCity('white')}
+              onBlur={() => {
+                setColorTextCity(color);
+                isCityValid();
+              }}
+              right={<TextInput.Icon icon="pencil-outline" color={colorTextCity}/>}
+            />
+
+          </KeyboardAvoidingView>
+      </ScrollView>
+      <DialogAlert
+        visible={visible} 
+        setVisible={setVisible} 
+        title={dialogTitle} 
+        message={dialogContent} 
+        response={() => executeDialogUserChoice()}
+      />
+      <ModalAvatarsForProfilePicture
+        active={isModalActive}
+        changeMyStatus={setIsModalActive}
+        chooseAvatar={setAvatar}
+        initialValue={avatar}
+      />
+      <View style={{ width: '100%', justifyContent: 'center'}}>
         <SnackBar 
           visible={visibleSnackbar} 
           setVisible={setVisibleSnackbar} 
@@ -387,13 +563,8 @@ export default function MyData() {
           error={errorSnackBar}
           width={315} 
         />
-        <ModalAvatarsForProfilePicture
-          active={isModalActive}
-          changeMyStatus={setIsModalActive}
-          chooseAvatar={setAvatar}
-          initialValue={avatar}
-       /> 
-    </ScrollView>
+      </View> 
+    </SafeAreaView>
   );
 }
 
@@ -409,6 +580,8 @@ const styles = StyleSheet.create({
     backgroundColor: mainColor,
     paddingLeft: '8%',
     paddingRight: '8%',
+    justifyContent: 'center',
+
   },
   header: {
     marginTop: 45,
@@ -435,7 +608,7 @@ const styles = StyleSheet.create({
   },
   information: {
     width: '100%',
-    marginBottom: 25,
+    marginBottom: 45,
     gap: 25
   },
   icon: {

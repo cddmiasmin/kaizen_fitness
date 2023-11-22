@@ -80,6 +80,8 @@ export const UserContextProvider = ({ userData , children }) => {
 
     useEffect(() => console.log('UserContext - User', user), [user]);
 
+    useEffect(() => console.log('UserContext - UserType', userType), []);
+
     return (
         <UserContext.Provider
             value={{

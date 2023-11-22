@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
@@ -17,16 +18,22 @@ import DataProfessional      from '../components/Register/DataProfessional';
 import DataBasicPerson       from '../components/Register/DataBasicPerson';
 import DataBasicProfessional from '../components/Register/DataBasicProfessional';
 
-import { consumerControllerCreateProfile } from '../../controller/ConsumerController';
+import { 
+  consumerControllerCreateProfile, 
+  consumerControllerIMC, 
+  consumerControllerWater 
+} from '../../controller/ConsumerController';
 import { professionalControllerCreateProfile } from '../../controller/ProfessionalController';
-import { useNavigation } from '@react-navigation/native';
 
 export default function Register() {
 
   const navigation = useNavigation();
  
   const { setUser, userType, getProfile } = useContext(UserContext);
-  const { stepNum, data, setData } = useContext(DataContext);
+  const { 
+    stepNum, kindOfPerson, document, avatar, dateOfBirth, height, weight,
+    topics, city, state, name, familyName, heightAux, weightAux,
+  } = useContext(DataContext);
 
   const [visibleSnackbar, setVisibleSnackbar] = useState(false);
   const [messageSnackBar, setMessageSnackbar] = useState('');
@@ -42,25 +49,55 @@ export default function Register() {
       if(userType === 'consumer') navigation.navigate('HomeConsumer');
       else navigation.navigate('HomeProfessional');
     }
-
   }
 
   const consumerCreateProfile = async () => {
-    let dataAux = data;
-    dataAux.created = new Date();
+    const imc = consumerControllerIMC(heightAux, weightAux);
+    const water = consumerControllerWater(weightAux);
 
-    const response = await consumerControllerCreateProfile(dataAux);
-    
+    let data = {
+      created: new Date(),
+      searchHistory: [],
+      avatar: avatar,
+      name: name,
+      familyName: familyName,
+      dateOfBirth: new Date(dateOfBirth),
+      document: document,
+      topics: topics,
+      city: city,
+      state: state,
+      imc: imc,
+      dailyWaterConsumption: water,
+      height: height,
+      weight: weight,
+    };
+
+    const response = await consumerControllerCreateProfile(data);
+
     setErrorSnackBar(!response.result);
     setMessageSnackbar(response.message);
     setVisibleSnackbar(true);
   }
 
   const professionalCreateProfile = async () => {
-    let dataAux = data;
-    dataAux.created = new Date();
+    let data = {
+      created: new Date(),
+      kindOfPerson: kindOfPerson,
+      document: document,
+      avatar: avatar,
+      name: name,
+      document: document,
+      topics: topics,
+      city: city,
+      state: state
+    };
+
+    if(kindOfPerson === 'PF') {
+      data.familyName = familyName,
+      data.dateOfBirth = new Date(dateOfBirth)
+    }
     
-    const response = await professionalControllerCreateProfile(dataAux);
+    const response = await professionalControllerCreateProfile(data);
     
     setErrorSnackBar(!response.result);
     setMessageSnackbar(response.message);
@@ -68,23 +105,11 @@ export default function Register() {
   }
 
   useEffect(() => {
-    
     if(stepNum === 5) {
-     
       if(userType === 'consumer') consumerCreateProfile();
       else professionalCreateProfile();
-
     }
-
   }, [stepNum]);
-
-  useEffect(() => {
-    if(userType === 'consumer') {
-      let dataAux = data;
-      dataAux.searchHistory = [];
-      setData(dataAux);
-    }
-  }, []);
 
   return (
         <ScrollView style={styles.container}>
@@ -94,17 +119,17 @@ export default function Register() {
             {
               userType === 'professional' 
               ?
-                stepNum === 1 && <DataProfessional/> 
-                  ||  stepNum === 2 && <DataBasicProfessional/> 
-                  ||  stepNum === 3 && <Services/> 
-                  ||  stepNum === 4 && <LocationUser/> 
-                  ||  stepNum === 5 && <LocationUser/> 
+                stepNum === 1 && <DataProfessional /> 
+                  ||  stepNum === 2 && <DataBasicProfessional /> 
+                  ||  stepNum === 3 && <Services /> 
+                  ||  stepNum === 4 && <LocationUser /> 
+                  ||  stepNum === 5 && <LocationUser /> 
               :
-                stepNum === 1 && <DataBasicPerson/> 
-                  ||  stepNum === 2 && <DataConsumer/> 
-                  ||  stepNum === 3 && <LocationUser/> 
-                  ||  stepNum === 4 && <Services/> 
-                  ||  stepNum === 5 && <Services/> 
+                stepNum === 1 && <DataBasicPerson /> 
+                  ||  stepNum === 2 && <DataConsumer /> 
+                  ||  stepNum === 3 && <LocationUser /> 
+                  ||  stepNum === 4 && <Services /> 
+                  ||  stepNum === 5 && <Services /> 
             }
           </View>
           <SnackBar 
