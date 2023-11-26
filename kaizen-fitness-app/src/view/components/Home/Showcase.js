@@ -19,6 +19,10 @@ import Category from '../Categories/Category';
 
 export default function Showcase({ setActiveTextinput, data }) {
 
+  const forYou = data.forYou;
+  const recentlyCreated = data.recentlyCreated;
+  const upcomingEvents = data.upcomingEvents;
+
   const { color } = useContext(ColorContext);
 
   const navigation = useNavigation();
@@ -89,7 +93,6 @@ export default function Showcase({ setActiveTextinput, data }) {
       ]
   }
 
-  
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -138,30 +141,36 @@ export default function Showcase({ setActiveTextinput, data }) {
                 }
               </View>
             </View>
-            <View style={styles.horizontalShowcase}>
-                <View style={styles.showcaseHeader}>
-                  <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>
-                    Eventos para você
-                  </Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Eventos para você'}, { data: '' })} >
-                    <Text style={{color: color, fontSize: 10}}>
-                      Mostrar tudo
-                    </Text>
-                  </TouchableOpacity>
+            {
+              forYou.length !== 0 &&
+                <View style={styles.horizontalShowcase}>
+                    <View style={styles.showcaseHeader}>
+                      <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>
+                        Eventos para você
+                      </Text>
+                      <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Eventos para você', data: forYou })} >
+                        <Text style={{color: color, fontSize: 10}}>
+                          Mostrar tudo
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <ScrollView horizontal={true}>
+                      <View style={styles.cardContainerHorizontalShowcase}>
+                          {
+                            forYou?.map((event, key) => (
+                              <EventCard key={key} data={event} orientation={'horizontal'}/>
+                            ))
+                          }
+                      </View>
+                    </ScrollView>
                 </View>
-                <ScrollView horizontal={true}>
-                  <View style={styles.cardContainerHorizontalShowcase}>
-                      <EventCard data={inPersonEvent} orientation={'horizontal'}/>
-                      <EventCard data={eventOnline}   orientation={'horizontal'}/>
-                  </View>
-                </ScrollView>
-            </View>
+            }
             <View style={styles.horizontalShowcase}>
                 <View style={styles.showcaseHeader}>
                   <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>
                     Criados recentemente
                   </Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Criados recentemente' }, { data: '' })} >
+                  <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Criados recentemente', data: recentlyCreated })} >
                     <Text style={{color: color, fontSize: 10}}>
                       Mostrar tudo
                     </Text>
@@ -169,8 +178,11 @@ export default function Showcase({ setActiveTextinput, data }) {
                 </View>
                 <ScrollView horizontal={true}>
                   <View style={styles.cardContainerHorizontalShowcase}>
-                      <EventCard data={inPersonEvent} orientation={'horizontal'}/>
-                      <EventCard data={eventOnline}   orientation={'horizontal'}/>
+                    {
+                      recentlyCreated.map((event, key) => (
+                        <EventCard key={key} data={event} orientation={'horizontal'}/>
+                      ))
+                    }
                   </View>
                 </ScrollView>
             </View>
@@ -179,15 +191,18 @@ export default function Showcase({ setActiveTextinput, data }) {
                   <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>
                     Próximos eventos
                   </Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Próximos eventos'}, { data: '' })} >
+                  <TouchableOpacity onPress={() => navigation.navigate('Calendar', { screen: 'Próximos eventos', data: upcomingEvents })} >
                     <Text style={{color: color, fontSize: 10}}>
                       Mostrar tudo
                     </Text>
                   </TouchableOpacity>
                 </View>      
                 <View style={styles.cardContainerVerticalShowcase}>
-                    <EventCard data={eventOnline} orientation={'vertical'}/>
-                    <EventCard data={inPersonEvent} orientation={'vertical'}/>
+                  {
+                    upcomingEvents.map((event, key) => (
+                      <EventCard key={key} data={event} orientation={'vertical'}/>
+                    ))
+                  }
                 </View>
             </View>
           </View>

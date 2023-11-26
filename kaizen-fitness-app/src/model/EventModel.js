@@ -42,16 +42,15 @@ export const eventModelGetCalendarProfessionalUser = async () => {
     return response;
 }
 
-export const eventModelGetShowcaseForYou = async (topics) => {
+export const eventModelGetShowcaseForYou = async (currentDate, topics) => {
     const response = await firestore()
                             .collection("Events")
-                            // .where(          
-                            //     firestore.Filter.and(
-                            //         firestore.Filter('topics', 'array-contains', topics),
-                            //         firestore.Filter('datetime', '>', currentDate),
-                            //     )
-                            // )
-                            .where('topics', 'array-contains', topics)
+                            .where(          
+                                firestore.Filter.and(
+                                    firestore.Filter('topics', 'array-contains-any', topics),
+                                    firestore.Filter('datetime', '>', currentDate)
+                                )
+                            )
                             .orderBy("datetime", "asc")
                             .limit(20)
                             .get();
@@ -62,10 +61,8 @@ export const eventModelGetShowcaseRecentlyCreated = async () => {
 
     const response = await firestore()
                             .collection("Events")
-                            .orderBy([
-                                ["created", "desc"],
-                                ["datetime", "asc"]
-                            ])
+                            .orderBy("created", "desc")
+                            .orderBy("datetime", "asc")
                             .limit(20)
                             .get();
     return response;
@@ -75,12 +72,6 @@ export const eventModelGetShowcaseUpcomingEvents = async (startDate) => {
 
     const response = await firestore()
                             .collection("Events")
-                            // .where(          
-                            //     firestore.Filter.and(
-                            //         firestore.Filter('datetime', '>=', startDate),
-                            //         firestore.Filter('datetime', '<=', endDate),
-                            //     )
-                            // )
                             .where('datetime', '>=', startDate)
                             .orderBy("datetime", "asc")
                             .limit(20)

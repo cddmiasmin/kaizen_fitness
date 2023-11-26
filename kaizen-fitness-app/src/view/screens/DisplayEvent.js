@@ -84,7 +84,7 @@ export default function DisplayEvent() {
     const checkIfTheUserParticipatesInThisEvent = () => {
         if(userCalendar === null) setParticipantOfThisEvent(false);
         else {
-            const filter = userCalendar.filter(event => event.id === data.id);
+            const filter = userCalendar.filter(event => event.idDoc === data.idDoc);
 
             if(filter.length !== 0) setParticipantOfThisEvent(true);
             else setParticipantOfThisEvent(false);

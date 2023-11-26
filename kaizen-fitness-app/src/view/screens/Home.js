@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, IconButton } from 'react-native-paper';
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -12,40 +12,57 @@ import Search from '../components/Search';
 import Footer from '../components/Footer';
 import Showcase from '../components/Home/Showcase';
 import { eventControllerGetShowcase } from '../../controller/EventController';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function Home() {
 
+  const { user } = useContext(UserContext);
   const { color } = useContext(ColorContext);
 
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [activeTextinput, setActiveTextinput] = useState(false);
 
-  // const getData = async () => {
-  //   const response = await eventControllerGetShowcase();
-  //   setData(response);
-  // }
+  const getData = async () => {
+    console.log(user.topics)
+    const response = await eventControllerGetShowcase(user.topics);
+    setData(response);
+  }
 
-  // const getShowcaseData = () => {
-  //   getData();
-  // }
+  const getShowcaseData = () => {
+    getData();
+  }
 
-  // useEffect(() => {
-  //   getShowcaseData();
-  // }, []);
+  useEffect(() => {
+    console.log('ju')
+    if(user.topics) getShowcaseData();
+  }, [], [user]);
 
-  // useEffect(() => {
-  //   if(data !== null) console.log(data);
-  // }, [data]);
+  useEffect(() => {
+    if(data !== null) {
+      console.log('data', data.forYou);
+      setLoading(false);
+    }
+  }, [data]);
 
   if(loading)
     return (
-        <View style={styles.loading}> 
-            <StatusBar style='light'/>
-            <ActivityIndicator animating={true} color={color} />
-            <Footer />
-        </View>
+      <View style={styles.loading}> 
+          <StatusBar style='light'/>
+          <ActivityIndicator animating={true} color={color} />
+          <View style={styles.registerEvent}> 
+                            <IconButton
+                                icon="calendar-plus"
+                                iconColor={'white'}
+                                mode='contained'
+                                containerColor={color}
+                                size={24}
+                                onPress={() => getShowcaseData()}
+                            />
+                        </View>
+          <Footer />
+      </View>
     )
 
   return (
@@ -54,10 +71,20 @@ export default function Home() {
         {
           !activeTextinput 
           ?
-            <Showcase setActiveTextinput={setActiveTextinput} setLoading={setLoading}/>
+            <Showcase data={data} setActiveTextinput={setActiveTextinput} setLoading={setLoading}/>
           :
             <Search search={search} setSearch={setSearch} setActiveTextinput={setActiveTextinput}/>
         }
+                                <View style={styles.registerEvent}> 
+                            <IconButton
+                                icon="calendar-plus"
+                                iconColor={'white'}
+                                mode='contained'
+                                containerColor={color}
+                                size={24}
+                                onPress={() => getShowcaseData()}
+                            />
+                        </View>
       </View>
   );
 }
@@ -73,4 +100,9 @@ const styles =  StyleSheet.create({
     flex: 1,
     backgroundColor: mainColor,
   },
+  registerEvent: {
+    position: 'absolute',
+    bottom: 75,
+    left: 330
+},
 });

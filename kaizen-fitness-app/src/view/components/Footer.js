@@ -50,7 +50,7 @@ export default function Footer() {
                     key={`button#${tap.key}`}
                     style={[styles.bottomTaps]}
                     onPress={() => {
-                        if(tap.route === 'Calendar') navigation.navigate(tap.route, { screen: 'Calendar'});
+                        if(tap.route === 'Calendar') navigation.navigate(tap.route, { screen: 'Calendar' });
                         else navigation.navigate(tap.route);
                     }}
                 >

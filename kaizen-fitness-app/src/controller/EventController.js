@@ -73,20 +73,20 @@ export const eventControllerGetShowcase = async (topics) => {
     futureDate.setMilliseconds(0);
 
     const forYou = await eventControllerGetShowcaseForYou(currentDate, topics);
-    // const recentlyCreated = await eventControllerGetShowcaseRecentlyCreated();
-    //const upcomingEvents = await eventControllerGetShowcaseUpcomingEvents(currentDate);
+    const recentlyCreated = await eventControllerGetShowcaseRecentlyCreated();
+    const upcomingEvents = await eventControllerGetShowcaseUpcomingEvents(currentDate);
 
     response.forYou = forYou;
-    // response.recentlyCreated = recentlyCreated;
-    // response.upcomingEvents = [];
+    response.recentlyCreated = recentlyCreated;
+    response.upcomingEvents = upcomingEvents;
 
     return response;
 
 }
 
-export const eventControllerGetShowcaseForYou = async (topics) => {
+export const eventControllerGetShowcaseForYou = async (currentDate, topics) => {
     let response = [];
-    const events = await eventModelGetShowcaseForYou(topics);
+    const events = await eventModelGetShowcaseForYou(currentDate, topics);
 
     if(!events.empty){
         events.forEach((doc) => {

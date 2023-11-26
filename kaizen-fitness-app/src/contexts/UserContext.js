@@ -30,7 +30,7 @@ export const UserContextProvider = ({ userData , children }) => {
     const userHasAProfile = async () => {
         const profile = await userControllerHasAProfile();
         setUser(profile.data);
-        setUserType(userData.userType);
+        setUserType(profile.userType);
     
         console.log('UserContext - Profile', profile);
     

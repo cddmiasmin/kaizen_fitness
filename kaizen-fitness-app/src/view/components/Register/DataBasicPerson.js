@@ -19,7 +19,7 @@ import { validateDocumentFormat, validateEqualDigits } from '../../../services/v
 
 export default function DataBasicPerson() {
 
-  const onlyLetterRegex = new RegExp(/^[a-zA-Z]+$/);
+  const onlyLetterRegex = new RegExp(/^[A-Za-zÀ-ú\s]+$/);
 
   const [errAvatar, setErrAvatar] = useState(false);
   const [errName, setErrName] = useState(false);

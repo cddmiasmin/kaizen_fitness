@@ -28,7 +28,7 @@ import _ from 'lodash';
 
 export default function MyData() {
 
-  const onlyLetterRegex = new RegExp(/^[a-zA-Z]+$/);
+  const onlyLetterRegex = new RegExp(/^[A-Za-zÀ-ú\s]+$/);
 
   const navigation = useNavigation();
 

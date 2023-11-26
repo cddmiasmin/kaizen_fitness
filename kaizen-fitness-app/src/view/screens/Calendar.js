@@ -288,7 +288,12 @@ export default function Calendar() {
     }, [temporaryModalityData]);
 
     useEffect(() => {
-        if(onlineModalityData !== null && inPersonModalityData !== null) setLoading(false);
+        if(onlineModalityData !== null && inPersonModalityData !== null) {
+            setLoading(false);
+
+            if(onlineModalityData.length === 0) setSelectedDate(new Date());
+            else setSelectedDate(new Date(onlineModalityData[0].date));
+        }
     }, [onlineModalityData, inPersonModalityData]);
 
     if(eventData === null && screen === 'Calendar')
@@ -436,10 +441,16 @@ export default function Calendar() {
                                     ?
                                         <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', gap: 15}}>
                                             <Text style={{ color: 'white', fontWeight: 'bold'}}>
-                                                Você não possui eventos { segmentedButtonsValue === 'online' ? 'online' : 'presenciais'}
+                                                {
+                                                    screen === 'Calendar'
+                                                    ? 
+                                                        `Você não possui eventos ${ segmentedButtonsValue === 'online' ? 'online' : 'presenciais'}`
+                                                    : 
+                                                        `Essa lista não tem eventos ${ segmentedButtonsValue === 'online' ? 'online' : 'presenciais'}`
+                                                }
                                             </Text>
                                             {
-                                                userType === 'consumer' &&
+                                                userType === 'consumer' && screen === 'Calendar' &&
                                                     <TouchableOpacity
                                                         style={[styles.buttonAlertMessage, { backgroundColor: color }]}
                                                         onPress={() => navigation.navigate('HomeConsumer')}

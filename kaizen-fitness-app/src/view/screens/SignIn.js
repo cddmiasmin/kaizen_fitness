@@ -188,7 +188,6 @@ export default function SignIn() {
               <Text style={{color: grayText, fontWeight: 'normal'}}>Novo usuário?</Text>
               <Text style={{color: color, fontWeight: 'bold'}}>Inscreva-se</Text>
           </TouchableOpacity>
-
         </View>
         <SnackBar
           visible={visibleSnackbar} 
