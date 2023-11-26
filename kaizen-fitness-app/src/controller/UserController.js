@@ -6,6 +6,7 @@ import {
     userModelSignInGoogle, 
     userModelForgotPassword,
     userModelEmailValidation,
+    userModelAuthDelete,
 } from "../model/UserModel"
 import { consumerControllerReadProfile } from "./ConsumerController";
 import { professionalControllerReadProfile } from "./ProfessionalController";
@@ -60,3 +61,8 @@ export const userControllerAuthenticationDelete = async () => {
 export const userControllerEmailValidation = async () => {
     return await userModelEmailValidation();
 }
+
+export const userControllerAuthDelete = async () => {
+    return await userModelAuthDelete();
+}
+

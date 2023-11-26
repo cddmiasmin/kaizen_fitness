@@ -50,5 +50,18 @@ export const consumerModelUpdateProfile = async (consumer) => {
 }
 
 export const consumerModelDeleteProfile = async () => {
-    
+
+    const idUser = auth().currentUser.uid;
+
+    const response = await firestore()
+                            .collection('ConsumerUsers')
+                            .doc(idUser)
+                            .delete()
+                            .then(() => { 
+                                return true
+                            })
+                            .catch(() => {
+                                return false
+                            });
+    return response;
 }

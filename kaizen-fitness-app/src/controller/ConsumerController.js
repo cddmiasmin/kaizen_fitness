@@ -1,10 +1,13 @@
 import { 
     consumerModelCreateProfile, 
+    consumerModelDeleteProfile, 
     consumerModelReadProfile, 
     consumerModelUpdateProfile 
 } from "../model/ConsumerModel";
 
 import { mask, unMask } from 'remask';
+import { userControllerAuthDelete } from "./UserController";
+import { eventControllerRemoveConsumerUserEvents } from "./EventController";
 
 const timestampToDate = (timestamp) => {
     const date = new Date(timestamp.seconds * 1000);
@@ -33,6 +36,22 @@ export const consumerControllerUpdateProfile = async (consumer) => {
 }
 
 export const consumerControllerDeleteProfile = async () => {
+    return await consumerModelDeleteProfile()
+}
+
+export const consumerControllerDeleteAccount = async (calendar) => {
+
+    const user = await userControllerAuthDelete();
+    const events = calendar === null ? true : await eventControllerRemoveConsumerUserEvents();
+    const profile = await consumerControllerDeleteProfile();
+
+    console.log(user, events, profile);
+    
+    if(user && events && profile) {
+        return { result: true, message: 'Sua conta foi excluida :( Sentiremos sua falta eternamente. Adeus!'}
+    } else {
+        return { result: false, message: 'Ops! Algo deu errado. Tente novamente mais tarde!'}
+    }
     
 }
 

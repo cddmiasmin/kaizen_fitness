@@ -39,7 +39,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [routeName, setRouteName] = useState('PastEvent');
+  const [routeName, setRouteName] = useState('Test');
   const [initializing, setInitializing] = useState(false);
   const [userData, setUserData] = useState({});
   const [stepNum, setStepNum] = useState(1);

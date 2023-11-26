@@ -127,14 +127,38 @@ export const eventModelDeleteProfessionalUserEvents = async () => {
                             
                                     batch.commit()
                                         .then(() => {
-                                            return { result: true};
+                                            return { result: true };
                                         })
                                         .catch(() => { 
-                                            return { result: false};
+                                            return { result: false };
                                         })
                             });
     return response;
 
+}
+
+export const eventModelRemoveConsumerUserEvents = async () => {
+
+    const idUser = 'OPlh5LL4uFd9mU32uLjCkuQ7jrf1';
+    const batch = firestore().batch();
+   
+    const response = await firestore()
+        .collection('Events')
+        .where("participants", "array-contains", idUser)
+        .get()
+        .then(async (querySnapshot) => {
+            
+            querySnapshot.forEach((doc) => {
+                let participantsAux = doc.data().participants.filter(participant => participant !== idUser);
+                batch.update(doc.ref, {
+                    participants: participantsAux
+                });
+            });
+            
+            return await batch.commit();            
+    });
+   
+    return response;
 }
 
 export const eventModelSearch = async (search) => {

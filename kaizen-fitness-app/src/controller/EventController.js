@@ -1,14 +1,16 @@
 import { 
     eventModelCreate, 
+    eventModelUpdate, 
     eventModelDelete, 
-    eventModelGetCalendarConsumerUser,
-    eventModelGetCalendarProfessionalUser, 
-    eventModelGetShowcaseForYou, 
-    eventModelGetShowcaseRecentlyCreated, 
-    eventModelGetShowcaseUpcomingEvents, 
     eventModelSearch, 
     eventModelSearchByCategory, 
-    eventModelUpdate 
+    eventModelGetShowcaseForYou, 
+    eventModelGetCalendarConsumerUser,
+    eventModelRemoveConsumerUserEvents, 
+    eventModelGetShowcaseUpcomingEvents, 
+    eventModelGetShowcaseRecentlyCreated, 
+    eventModelGetCalendarProfessionalUser, 
+    eventModelDeleteProfessionalUserEvents, 
 } from "../model/EventModel"
 
 const timestampToDate = (timestamp) => {
@@ -143,8 +145,12 @@ export const eventControllerDelete = async (doc) => {
     return await eventModelDelete(doc);
 }
 
-export const eventControllerDeleteProfessionalUserEvents = async (doc) => {
-    return await eventModelDelete(doc);
+export const eventControllerDeleteProfessionalUserEvents = async () => {
+    return await eventModelDeleteProfessionalUserEvents();
+}
+
+export const eventControllerRemoveConsumerUserEvents = async () => {
+    return await eventModelRemoveConsumerUserEvents();
 }
 
 export const eventControllerSearch = async (search) => {

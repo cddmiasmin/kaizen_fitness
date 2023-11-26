@@ -7,7 +7,8 @@ import firestore from '@react-native-firebase/firestore';
 import { UserContext } from '../../contexts/UserContext';
 
 import { mask, unMask } from 'remask';
-import { eventControllerSearch } from '../../controller/EventController';
+import { eventControllerRemoveConsumerUserEvents, eventControllerSearch } from '../../controller/EventController';
+import { StatusBar } from 'expo-status-bar';
 
 export default function Test() {
 
@@ -143,7 +144,7 @@ export default function Test() {
 
     // return response;
 
-    const response = await eventControllerSearch('Evan');
+    const response = await eventControllerRemoveConsumerUserEvents();
 
     return response
 
@@ -151,12 +152,14 @@ export default function Test() {
 
  return (
     <View style={styles.container}>
+        <StatusBar style='light'/>
         <Text
             onPress={async () => {
               const a = await registerEvent();
               console.log('Event', a)
               
             }}
+            style={{ color: 'white'}}
         >Event</Text>
         <Text
             onPress={async () => {
@@ -164,11 +167,13 @@ export default function Test() {
               console.log('A', a)
               
             }}
+            style={{ color: 'white'}}
         >Professional</Text>
         <Text
             onPress={async () => {
               user();
             }}
+            style={{ color: 'white'}}
         >User</Text>
     </View>
   );

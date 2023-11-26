@@ -17,6 +17,8 @@ import { ColorContext } from '../../contexts/ColorContext';
 import { StatusBar } from 'expo-status-bar';
 
 import { userControllerSignOut } from '../../controller/UserController';
+import { consumerControllerDeleteAccount } from '../../controller/ConsumerController';
+import { professionalControllerDeleteAccount } from '../../controller/ProfessionalController';
 
 export default function Perfil() {
 
@@ -50,21 +52,30 @@ export default function Perfil() {
     setVisibleSnackbar(false);
 
     if(!errorSnackBar) {
-      if(whoCalledTheDialog === 'exit') {
         setUser([]);
         setUserType('noProfile'); 
         setUserCalendar(undefined);
         navigation.navigate('SignIn');
-      }
     }
     
   }
 
   const executeDialogUserChoice = async () => {
-    if(whoCalledTheDialog === 'deleteAccount') console.log('delete');
-    else {
-      const response = await userControllerSignOut();
+    let response = [];
 
+    if(whoCalledTheDialog === 'deleteAccount') {
+      // if(userType === 'consumer')
+      //   response = await consumerControllerDeleteAccount();
+      // else 
+      //   response = await professionalControllerDeleteAccount();
+
+      console.log('Iasmin');
+    }
+    else {
+      response = await userControllerSignOut();
+    }
+    
+    if(response.length !== 0){      
       setErrorSnackBar(!response.result);
       setMessageSnackbar(response.message);
       setVisibleSnackbar(true);

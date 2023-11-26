@@ -34,3 +34,7 @@ export const professionalControllerUpdateProfile = async (professional) => {
 export const professionalControllerDeleteProfile = async () => {
     
 }
+
+export const professionalControllerDeleteAccount = async () => {
+    
+}

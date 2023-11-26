@@ -101,10 +101,6 @@ export const userModelForgotPassword = async () => {
     return response;
 }
 
-export const userModelAuthenticationDelete = async () => {
-    //return await 
-}
-
 export const userModelEmailValidation = async () => {
 
     const user = auth().currentUser;
@@ -127,4 +123,19 @@ export const userModelEmailValidation = async () => {
     
     return response;
 
+}
+
+export const userModelAuthDelete = async () => {
+
+    const user = auth().currentUser;
+    
+    const response = user.delete()
+                        .then(() => {
+                            return true
+                        })
+                        .catch(() => {
+                            return false
+                        }); 
+    
+    return response;
 }
