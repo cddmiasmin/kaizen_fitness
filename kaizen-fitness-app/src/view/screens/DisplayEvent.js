@@ -26,6 +26,7 @@ import SnackBar from '../components/SnackBar';
 export default function DisplayEvent() {
 
     const route = useRoute();
+    const mode = route.params.mode;
     const data = route.params.data;
 
     const navigation = useNavigation();
@@ -104,7 +105,9 @@ export default function DisplayEvent() {
     }
 
     useEffect(() => {
-        if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
+        if(mode !== 'PastEvent') {
+            if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
+        } else setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -112,7 +115,9 @@ export default function DisplayEvent() {
     }, [participantOfThisEvent]);
 
     useEffect(() => {
-        if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
+        if(mode !== 'PastEvent') {
+            if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
+        } else setLoading(false);
     }, [userCalendar]);
 
     if(loading)
@@ -170,15 +175,18 @@ export default function DisplayEvent() {
                             size={24}
                             onPress={() => navigation.goBack()}
                         />
-                        <IconButton
-                            mode='contained'
-                            icon={participantOfThisEvent ? 'calendar-check' : 'calendar-plus'}
-                            iconColor={color}
-                            style={[styles.button, { marginLeft: 270, backgroundColor: data.styleStatusBar === 'dark' ? 'black' : 'white' }]}
-                            containerColor={'white'}
-                            size={20}
-                            onPress={() => changeUserCalendar()}
-                        />
+                        {
+                            mode !== 'PastEvent' &&
+                                <IconButton
+                                    mode='contained'
+                                    icon={participantOfThisEvent ? 'calendar-check' : 'calendar-plus'}
+                                    iconColor={color}
+                                    style={[styles.button, { marginLeft: 270, backgroundColor: data.styleStatusBar === 'dark' ? 'black' : 'white' }]}
+                                    containerColor={'white'}
+                                    size={20}
+                                    onPress={() => changeUserCalendar()}
+                                />
+                        }
                     </View>                 
                 </View>
                 <View style={styles.body}>

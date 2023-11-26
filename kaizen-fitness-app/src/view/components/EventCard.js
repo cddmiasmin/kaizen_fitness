@@ -26,8 +26,13 @@ export default function EventCard({ data, orientation }) {
         <TouchableOpacity 
             style={[styles.container, { width: orientation === 'vertical' ? '100%' : 260}]}
             onPress={() => {
-                if(userType === 'consumer') navigation.navigate('DisplayEvent', { data: data })
-                else navigation.navigate('UpdateEvent', { data: data })
+                if(data.datetime < nowDate) navigation.navigate('DisplayEvent', { data: data, mode: 'PastEvent' })
+                else {
+                    if(userType === 'consumer') 
+                        navigation.navigate('DisplayEvent', { data: data, mode: 'CurrentEvent' })
+                    else 
+                        navigation.navigate('UpdateEvent', { data: data })
+                }
             }}
         >
             <View style={styles.wallpaper}>

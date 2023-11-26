@@ -13,6 +13,7 @@ import Services         from './src/view/screens/Services';
 import UserType         from './src/view/screens/UserType';
 import Register         from './src/view/screens/Register';
 import Calendar         from './src/view/screens/Calendar';
+import PastEvent        from './src/view/screens/PastEvent';
 import MyAccount        from './src/view/screens/MyAccount';
 import Categories       from './src/view/screens/Categories';
 import KindOfEvent      from './src/view/screens/KindOfEvent';
@@ -34,56 +35,54 @@ import { userControllerHasAProfile } from './src/controller/UserController';
 
 import 'expo-dev-client';
 
-import CalendarAux from './src/view/screens/CalendarAux';
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [routeName, setRouteName] = useState('');
-  const [initializing, setInitializing] = useState(true);
+  const [routeName, setRouteName] = useState('PastEvent');
+  const [initializing, setInitializing] = useState(false);
   const [userData, setUserData] = useState({});
   const [stepNum, setStepNum] = useState(1);
 
-  const onAuthStateChanged = (user) => {
-    setUserData(user);
-    if (initializing) setInitializing(false);
-    console.log(user);
-  }
+  // const onAuthStateChanged = (user) => {
+  //   setUserData(user);
+  //   if (initializing) setInitializing(false);
+  //   console.log(user);
+  // }
 
-  const userHasAProfile = async () => {
-    const profile = await userControllerHasAProfile();
-    setUserData(profile);
+  // const userHasAProfile = async () => {
+  //   const profile = await userControllerHasAProfile();
+  //   setUserData(profile);
 
-    console.log('Profile', profile);
+  //   console.log('Profile', profile);
 
-    if(profile.userType === 'consumer') return 'HomeConsumer';
-    else if(profile.userType === 'professional') return 'HomeProfessional';
-    else return 'CreateProfile';
-  }
+  //   if(profile.userType === 'consumer') return 'HomeConsumer';
+  //   else if(profile.userType === 'professional') return 'HomeProfessional';
+  //   else return 'CreateProfile';
+  // }
 
-  const WhatWillBeTheInitialRouteName = async () => {
-    if(userData === null) setRouteName('SignIn'); 
-    else if(userData.emailVerified === false) setRouteName('EmailValidation');
-    else {
-      const routeAux = await userHasAProfile();
-      console.log(routeAux);
-      setRouteName(routeAux);
-    }
-  }
+  // const WhatWillBeTheInitialRouteName = async () => {
+  //   if(userData === null) setRouteName('SignIn'); 
+  //   else if(userData.emailVerified === false) setRouteName('EmailValidation');
+  //   else {
+  //     const routeAux = await userHasAProfile();
+  //     console.log(routeAux);
+  //     setRouteName(routeAux);
+  //   }
+  // }
 
-  async function route() {
-    await WhatWillBeTheInitialRouteName()
-  }
+  // async function route() {
+  //   await WhatWillBeTheInitialRouteName()
+  // }
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
+  // useEffect(() => {
+  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+  //   return subscriber; // unsubscribe on unmount
+  // }, []);
 
-  useEffect(() => {
-    if(!initializing) route();
-  }, [initializing]);
+  // useEffect(() => {
+  //   if(!initializing) route();
+  // }, [initializing]);
 
   if (initializing || routeName === '') return null;
 
@@ -101,9 +100,9 @@ export default function App() {
               <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
               <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
               <Stack.Screen name="Calendar" component={Calendar} options={{ headerShown: false }}/> 
-              <Stack.Screen name="CalendarAux" component={CalendarAux} options={{ headerShown: false }}/> 
               <Stack.Screen name="Services" component={Services} options={{ headerShown: false }}/>
               <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
+              <Stack.Screen name="PastEvent" component={PastEvent} options={{ headerShown: false }}/>
               <Stack.Screen name="MyAccount" component={MyAccount} options={{ headerShown: false }}/>
               <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
               <Stack.Screen name="KindOfEvent" component={KindOfEvent} options={{ headerShown: false }}/>

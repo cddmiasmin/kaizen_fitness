@@ -7,24 +7,25 @@ export const ColorContext = createContext();
 export const ColorContextProvider = ({ children }) => {
 
     const { userType } = useContext(UserContext);
-
     const [color, setColor] = useState(consumerUserColor);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if(userType) {
+    //     if(userType === 'noProfile') {
             
-            if(userType === 'consumer') setColor(consumerUserColor);
-            else setColor(professionalUserColor);
+    //         const drawnNumber = Math.floor(Math.random() * 2);
+            
+    //         if(drawnNumber === 0) setColor(consumerUserColor);
+    //         else setColor(professionalUserColor);
 
-        } else {
-            const drawnNumber = Math.floor(Math.random() * 2);
+    //     } else {
 
-            if(drawnNumber === 0) setColor(consumerUserColor);
-            else setColor(professionalUserColor);
-        }
+    //         if(userType === 'consumer') setColor(consumerUserColor);
+    //         else setColor(professionalUserColor);
 
-    }, [userType]);
+    //     }
+
+    // }, [userType]);
 
     return (
         <ColorContext.Provider

@@ -21,6 +21,9 @@ import { _ } from 'lodash';
 const ItemSeparator = () => <View style={styles.separator} />;
 
 export default function Calendar() {
+
+    const arrowLeft = { uri: 'https://firebasestorage.googleapis.com/v0/b/kaizenfitness-77033.appspot.com/o/Calendar_CalendarStrip%2Farrow-left.png?alt=media&token=a40a2f45-cd70-4d05-9127-3a237c4dac94'};
+    const arrowRight = { uri: 'https://firebasestorage.googleapis.com/v0/b/kaizenfitness-77033.appspot.com/o/Calendar_CalendarStrip%2Farrow-right.png?alt=media&token=1af4b23d-9408-4177-aad2-3bf07b019be0'};
     
     const dataAux = [
         {
@@ -383,7 +386,6 @@ export default function Calendar() {
                         disabledDateNameStyle={{color: grayText}}
                         disabledDateNumberStyle={{color: grayText}}
                         iconContainer={{flex: 0.1}}
-                        iconStyle={{ overlayColor : 'white' }}
                         datesWhitelist={datesWhitelist}
                         datesBlacklist={datesBlacklist}
                         onDateSelected={(date) => {
@@ -391,6 +393,8 @@ export default function Calendar() {
                         }}
                         markedDates={markedDates}
                         selectedDate={selectedDate}
+                        iconLeft={arrowLeft}
+                        iconRight={arrowRight}
                     />
                     <View style={styles.segmentedButtons}>
                         <TouchableOpacity 
@@ -406,7 +410,7 @@ export default function Calendar() {
                                 <Icon 
                                     name={'monitor-shimmer'} 
                                     size={18} 
-                                    color={segmentedButtonsValue === 'online' ? 'white' : color} 
+                                    color={segmentedButtonsValue === 'online' ? 'white' : color } 
                                 />
                                 <Text style={{ color: segmentedButtonsValue === 'online' ? 'white' : color, fontWeight: 'bold' }}>
                                     Online
@@ -425,7 +429,7 @@ export default function Calendar() {
                                 <Icon 
                                     name={'account-group'} 
                                     size={18} 
-                                    color={segmentedButtonsValue === 'inPerson' ? 'white' : color} 
+                                    color={segmentedButtonsValue === 'inPerson' ? 'white' : color } 
                                 />
                                 <Text style={{ color: segmentedButtonsValue === 'inPerson' ? 'white' : color, fontWeight: 'bold' }}>
                                    Presencial
@@ -499,10 +503,21 @@ export default function Calendar() {
                     screen === 'Calendar' && <Footer />
                 }
                 {
-                    screen === 'Calendar' && userType === 'professional' &&
-                        <View style={styles.registerEvent}> 
+                    screen === 'Calendar' &&
+                        <View style={styles.registerEvent}>
+                            {
+                                userType === 'consumer' &&
+                                    <IconButton
+                                        icon="calendar-plus"
+                                        iconColor={'white'}
+                                        mode='contained'
+                                        containerColor={color}
+                                        size={24}
+                                        onPress={() => navigation.navigate('KindOfEvent', { goBack: 'HomeProfessional' })}
+                                    />
+                            } 
                             <IconButton
-                                icon="calendar-plus"
+                                icon="calendar-clock"
                                 iconColor={'white'}
                                 mode='contained'
                                 containerColor={color}
@@ -605,7 +620,8 @@ const styles = StyleSheet.create({
     registerEvent: {
         position: 'absolute',
         bottom: 75,
-        left: 330
+        left: 350,
+        gap: 5
     },
     alertMessage: {
         justifyContent: 'center',
