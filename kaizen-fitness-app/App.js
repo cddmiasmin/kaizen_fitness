@@ -13,6 +13,7 @@ import Services         from './src/view/screens/Services';
 import UserType         from './src/view/screens/UserType';
 import Register         from './src/view/screens/Register';
 import Calendar         from './src/view/screens/Calendar';
+import Location         from './src/view/screens/Location';
 import PastEvent        from './src/view/screens/PastEvent';
 import MyAccount        from './src/view/screens/MyAccount';
 import Categories       from './src/view/screens/Categories';
@@ -39,50 +40,50 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [routeName, setRouteName] = useState('Test');
-  const [initializing, setInitializing] = useState(false);
+  const [routeName, setRouteName] = useState('');
+  const [initializing, setInitializing] = useState(true);
   const [userData, setUserData] = useState({});
-  const [stepNum, setStepNum] = useState(1);
+  const [stepNum, setStepNum] = useState(3);
 
-  // const onAuthStateChanged = (user) => {
-  //   setUserData(user);
-  //   if (initializing) setInitializing(false);
-  //   console.log(user);
-  // }
+  const onAuthStateChanged = (user) => {
+    setUserData(user);
+    if (initializing) setInitializing(false);
+    console.log(user);
+  }
 
-  // const userHasAProfile = async () => {
-  //   const profile = await userControllerHasAProfile();
-  //   setUserData(profile);
+  const userHasAProfile = async () => {
+    const profile = await userControllerHasAProfile();
+    setUserData(profile);
 
-  //   console.log('Profile', profile);
+    console.log('Profile', profile);
 
-  //   if(profile.userType === 'consumer') return 'HomeConsumer';
-  //   else if(profile.userType === 'professional') return 'HomeProfessional';
-  //   else return 'CreateProfile';
-  // }
+    if(profile.userType === 'consumer') return 'HomeConsumer';
+    else if(profile.userType === 'professional') return 'HomeProfessional';
+    else return 'CreateProfile';
+  }
 
-  // const WhatWillBeTheInitialRouteName = async () => {
-  //   if(userData === null) setRouteName('SignIn'); 
-  //   else if(userData.emailVerified === false) setRouteName('EmailValidation');
-  //   else {
-  //     const routeAux = await userHasAProfile();
-  //     console.log(routeAux);
-  //     setRouteName(routeAux);
-  //   }
-  // }
+  const WhatWillBeTheInitialRouteName = async () => {
+    if(userData === null) setRouteName('SignIn'); 
+    else if(userData.emailVerified === false) setRouteName('EmailValidation');
+    else {
+      const routeAux = await userHasAProfile();
+      console.log(routeAux);
+      setRouteName(routeAux);
+    }
+  }
 
-  // async function route() {
-  //   await WhatWillBeTheInitialRouteName()
-  // }
+  async function route() {
+    await WhatWillBeTheInitialRouteName()
+  }
 
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
-  // useEffect(() => {
-  //   if(!initializing) route();
-  // }, [initializing]);
+  useEffect(() => {
+    if(!initializing) route();
+  }, [initializing]);
 
   if (initializing || routeName === '') return null;
 
@@ -98,6 +99,7 @@ export default function App() {
               <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }}/>
               <Stack.Screen name="MyData" component={MyData} options={{ headerShown: false }}/>
               <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
+              <Stack.Screen name="Location" component={Location} options={{ headerShown: false }}/>
               <Stack.Screen name="UserType" component={UserType} options={{ headerShown: false }}/>
               <Stack.Screen name="Calendar" component={Calendar} options={{ headerShown: false }}/> 
               <Stack.Screen name="Services" component={Services} options={{ headerShown: false }}/>

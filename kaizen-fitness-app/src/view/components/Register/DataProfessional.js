@@ -12,6 +12,7 @@ import Buttons from './Buttons';
 import SnackBar from '../SnackBar';
 
 import { 
+  validateCPFNumber,
   validateDocumentFormat, validateEqualDigits 
 } from '../../../services/validateCPFAndCNPJ';
 
@@ -35,9 +36,15 @@ export default function DataProfessional() {
     const documentFormat = validateDocumentFormat(typeDocument, documentAux);
     const equalDigits = validateEqualDigits(typeDocument, documentAux);
 
-    if(documentFormat || equalDigits) 
-      setErrDocument(true);
-    else setErrDocument(false);
+    if(documentFormat || equalDigits) setErrDocument(true);
+    else {
+
+      const validate = kindOfPerson === 'PF' ? validateCPFNumber(documentAux) : cnpjDigitValidation(documentAux);
+
+      if(validate) setErrDocument(true);
+      else setErrDocument(false);
+
+    }
 
   }
 

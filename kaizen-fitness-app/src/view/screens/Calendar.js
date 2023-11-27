@@ -516,14 +516,14 @@ export default function Calendar() {
                                         onPress={() => navigation.navigate('KindOfEvent', { goBack: 'HomeProfessional' })}
                                     />
                             } 
-                            <IconButton
+                            {/* <IconButton
                                 icon="calendar-clock"
                                 iconColor={'white'}
                                 mode='contained'
                                 containerColor={color}
                                 size={24}
                                 onPress={() => navigation.navigate('KindOfEvent', { goBack: 'HomeProfessional' })}
-                            />
+                            /> */}
                         </View>
                 }
             </View>
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
     registerEvent: {
         position: 'absolute',
         bottom: 75,
-        left: 350,
+        left: 340,
         gap: 5
     },
     alertMessage: {

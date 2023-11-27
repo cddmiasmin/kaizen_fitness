@@ -95,13 +95,13 @@ export default function RegisterEvent() {
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
 
     const canIRegisterOnlineEvent = () => {
-        return  !eventWallpaper.length
-        &&  !eventTopics.length 
-        &&  !eventName.length
-        &&  !eventAbout.length
-        &&  !eventOnlinePlataform.length
-        &&  !eventLink.length
-        &&  eventDateTime !== currentDatetime
+        return eventWallpaper.length
+        &&  eventTopics.length 
+        &&  eventName.length
+        &&  eventAbout.length
+        &&  eventOnlinePlataform.length
+        &&  eventLink.length
+        &&  eventDateTime === currentDatetime
     }
 
     const canIRegisterInPersonEvent = () => {

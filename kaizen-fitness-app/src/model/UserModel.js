@@ -83,7 +83,7 @@ export const userModelSignInGoogle = async () => {
     return userSingIn;
 }
 
-export const userModelForgotPassword = async () => {
+export const userModelForgotPassword = async (email) => {
 
     const response = await auth()
                             .sendPasswordResetEmail(email)
@@ -94,7 +94,6 @@ export const userModelForgotPassword = async () => {
                                 if (error.code === 'auth/invalid-email') 
                                     return { result: false, message: 'Esse endereço de e-mail é inválido!'}
                                 
-
                                 return { result: false, message: error.code + ': ' + error }
                             });
 

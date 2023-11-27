@@ -50,8 +50,8 @@ export const userControllerSignInGoogle = async () => {
     return await userModelSignInGoogle(); 
 }
 
-export const userControllerForgotPassword = async () => {
-    return await userModelForgotPassword();
+export const userControllerForgotPassword = async (email) => {
+    return await userModelForgotPassword(email);
 }
 
 export const userControllerAuthenticationDelete = async () => {

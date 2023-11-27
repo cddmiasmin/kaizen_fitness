@@ -16,6 +16,7 @@ import { StatusBar } from 'expo-status-bar';
 import { error, grayText, mainColor, success } from '../../colors/colors';
 
 import { ColorContext } from '../../contexts/ColorContext';
+import { userControllerForgotPassword } from '../../controller/UserController';
 
 //import UserController from '../../controller/UserController';
 
@@ -36,14 +37,20 @@ export default function ForgotPassword() {
       color
     } = useContext(ColorContext);
 
+    const onDismissSnackBar = async () => {
+
+      setVisibleSnackbar(false);
+  
+      if(forgotPasswordResult) navigation.navigate('SignIn');
+  
+    }
+
     const forgotPassword = async () => {
-      //const response = await userController.forgotPassword(email);
+      const response = await userControllerForgotPassword(email);
 
       setForgotPasswordResult(response.result);
       setMessageSnackbar(response.message);
       setVisibleSnackbar(true)
-
-      //if(forgotPasswordResult) navigation.navigate('Home');
 
     }
    
@@ -105,13 +112,13 @@ export default function ForgotPassword() {
           </View>
           <Snackbar
             visible={visibleSnackbar}
-            onDismiss={() => setVisibleSnackbar(false)}
+            onDismiss={() => onDismissSnackBar()}
             duration={3000}
             action={{
               label: 'Ok',
               textColor: forgotPasswordResult === true ? 'white' : 'black',
               onPress: () => {
-                setVisibleSnackbar(false);
+                onDismissSnackBar();
               },
             }}
             style={[styles.snackbar, forgotPasswordResult === true ? styles.snackbarSucess : styles.snackbarError]}

@@ -17,8 +17,8 @@ import { ColorContext } from '../../contexts/ColorContext';
 import { StatusBar } from 'expo-status-bar';
 
 import { userControllerSignOut } from '../../controller/UserController';
-import { consumerControllerDeleteAccount } from '../../controller/ConsumerController';
-import { professionalControllerDeleteAccount } from '../../controller/ProfessionalController';
+//import { consumerControllerDeleteAccount } from '../../controller/ConsumerController';
+//import { professionalControllerDeleteAccount } from '../../controller/ProfessionalController';
 
 export default function Perfil() {
 
