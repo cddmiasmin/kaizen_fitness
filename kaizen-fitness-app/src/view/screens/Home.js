@@ -37,7 +37,12 @@ export default function Home() {
   useEffect(() => {
     console.log('ju')
     if(user.topics) getShowcaseData();
-  }, [], [user]);
+  }, []);
+
+  useEffect(() => {
+    console.log('ju')
+    if(user.topics) getShowcaseData();
+  }, [user]);
 
   useEffect(() => {
     if(data !== null) {
@@ -51,16 +56,6 @@ export default function Home() {
       <View style={styles.loading}> 
           <StatusBar style='light'/>
           <ActivityIndicator animating={true} color={color} />
-          <View style={styles.registerEvent}> 
-                            <IconButton
-                                icon="calendar-plus"
-                                iconColor={'white'}
-                                mode='contained'
-                                containerColor={color}
-                                size={24}
-                                onPress={() => getShowcaseData()}
-                            />
-                        </View>
           <Footer />
       </View>
     )
@@ -75,16 +70,6 @@ export default function Home() {
           :
             <Search search={search} setSearch={setSearch} setActiveTextinput={setActiveTextinput}/>
         }
-                                <View style={styles.registerEvent}> 
-                            <IconButton
-                                icon="calendar-plus"
-                                iconColor={'white'}
-                                mode='contained'
-                                containerColor={color}
-                                size={24}
-                                onPress={() => getShowcaseData()}
-                            />
-                        </View>
       </View>
   );
 }
@@ -104,5 +89,5 @@ const styles =  StyleSheet.create({
     position: 'absolute',
     bottom: 75,
     left: 330
-},
+  },
 });
