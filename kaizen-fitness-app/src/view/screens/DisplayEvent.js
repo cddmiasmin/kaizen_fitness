@@ -29,10 +29,12 @@ export default function DisplayEvent() {
     // const mode = route.params.mode;
     const data = route.params.data;
 
+    console.log(data.participants);
+
     const navigation = useNavigation();
 
     const [loading, setLoading] = useState(true);
-    const [participantOfThisEvent, setParticipantOfThisEvent] = useState(true);
+    const [participantOfThisEvent, setParticipantOfThisEvent] = useState(null);
     //SnackBar
     const [visibleSnackbar, setVisibleSnackbar] = useState(false);
     const [messageSnackBar, setMessageSnackbar] = useState('');
@@ -68,7 +70,11 @@ export default function DisplayEvent() {
         let participants = [];
 
         if(participantOfThisEvent) {
-            const participantsAux = data.participants.filter(participant => participant !== userAuth.uid);
+            let participantsAux = [];
+
+            if(data.participants.length === 1) participantsAux = [];
+            else participantsAux = data.participants.filter(participant => participant !== userAuth.uid);
+
             console.log('true', participantsAux)
             participants = participantsAux;
         }
@@ -87,6 +93,7 @@ export default function DisplayEvent() {
         else {
             const filter = userCalendar.filter(event => event.idDoc === data.idDoc);
 
+            
             if(filter.length !== 0) setParticipantOfThisEvent(true);
             else setParticipantOfThisEvent(false);
         }
@@ -107,7 +114,7 @@ export default function DisplayEvent() {
     useEffect(() => {
         // if(mode !== 'PastEvent') {
             if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
-        // } else setLoading(false);
+                    // } else setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -117,7 +124,7 @@ export default function DisplayEvent() {
     useEffect(() => {
         // if(mode !== 'PastEvent') {
             if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
-        // } else setLoading(false);
+                    // } else setLoading(false);
     }, [userCalendar]);
 
     if(loading)
@@ -175,8 +182,8 @@ export default function DisplayEvent() {
                             size={24}
                             onPress={() => navigation.goBack()}
                         />
-                        {
-                            mode !== 'PastEvent' &&
+                        {/* {
+                            mode !== 'PastEvent' && */}
                                 <IconButton
                                     mode='contained'
                                     icon={participantOfThisEvent ? 'calendar-check' : 'calendar-plus'}
@@ -186,7 +193,7 @@ export default function DisplayEvent() {
                                     size={20}
                                     onPress={() => changeUserCalendar()}
                                 />
-                        }
+                        {/* } */}
                     </View>                 
                 </View>
                 <View style={styles.body}>

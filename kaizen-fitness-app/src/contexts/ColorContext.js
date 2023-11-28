@@ -9,23 +9,23 @@ export const ColorContextProvider = ({ children }) => {
     const { userType } = useContext(UserContext);
     const [color, setColor] = useState(consumerUserColor);
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if(userType === 'noProfile') {
+        if(userType === 'noProfile') {
             
-    //         const drawnNumber = Math.floor(Math.random() * 2);
+            const drawnNumber = Math.floor(Math.random() * 2);
             
-    //         if(drawnNumber === 0) setColor(consumerUserColor);
-    //         else setColor(professionalUserColor);
+            if(drawnNumber === 0) setColor(consumerUserColor);
+            else setColor(professionalUserColor);
 
-    //     } else {
+        } else {
 
-    //         if(userType === 'consumer') setColor(consumerUserColor);
-    //         else setColor(professionalUserColor);
+            if(userType === 'consumer') setColor(consumerUserColor);
+            else setColor(professionalUserColor);
 
-    //     }
+        }
 
-    // }, [userType]);
+    }, [userType]);
 
     return (
         <ColorContext.Provider

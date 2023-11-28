@@ -32,20 +32,14 @@ export default function Register() {
                                             : require('./../../assets/EmailValidation/professionalEmail.png');
 
     const onDismissSnackBar = async () => {
-
         setVisibleSnackbar(false);
-
         if(validated) navigation.navigate('SignIn');
-
     }
 
     const isTheUserAlreadyValidated = async () => {
-
-        setValidated(true);
         setErrorSnackBar(false);
         setMessageSnackbar('Por favor, entre com suas credenciais na tela de login! Obrigada.');
         setVisibleSnackbar(true);
-        
     }
     
     const sendEmailVerification = async () => {
@@ -67,7 +61,10 @@ export default function Register() {
         <View style={styles.buttons}>
             <TouchableOpacity 
                 style={[styles.button, { backgroundColor: color }]}
-                onPress={() => isTheUserAlreadyValidated()}
+                onPress={() => {
+                    setValidated(true);
+                    isTheUserAlreadyValidated();
+                }}
             >
                 <Text style={[styles.buttonTitle, { color: 'white'}]}>Já validei</Text>
             </TouchableOpacity>

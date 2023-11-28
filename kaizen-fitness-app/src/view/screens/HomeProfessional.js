@@ -43,11 +43,11 @@ export default function HeaderProfessional() {
         else if (userCalendar !== undefined) nextEvent();
     }, [userCalendar]);
 
-    useEffect(() => {
-       console.log('next', nextEventData);
-    }, [nextEventData]);
+    // useEffect(() => {
+    //    console.log('next', nextEventData);
+    // }, [nextEventData]);
 
-    if(nextEventData === undefined)
+    if(nextEventData === undefined || user.length === 0)
         return (
             <View style={styles.loading}> 
                 <StatusBar style='light'/>

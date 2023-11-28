@@ -31,11 +31,11 @@ export default function RegisterEvent() {
 
     const { setUserCalendar, getCalendarUser } = useContext(UserContext);
 
-    const route = useRoute()
-    const modality = route.params === undefined ? 'Online' : route.params.modality;
-    const goBack = route.params === undefined ? 'Calendar' : route.params.goBack;
+    const route = useRoute();
+    const modality = route.params.modality === undefined ? 'Presencial' : route.params.modality;
+    const goBack = route.params.goBack === undefined ? 'Calendar' : route.params.goBack;
 
-    const currentDatetime = new Date();
+    let currentDatetime = new Date(2023,0,1,0,0,0);
 
     const navigation = useNavigation();
 
@@ -70,7 +70,7 @@ export default function RegisterEvent() {
     const [eventWallpaper, setEventWallpaper] = useState('');
     const [eventTopics, setEventTopics] = useState('');
     const [eventName, setEventName] = useState('');
-    const [eventDateTime, setEventDateTime] = useState(new Date());
+    const [eventDateTime, setEventDateTime] = useState(new Date(2023,0,1,0,0,0));
     const [eventAbout, setEventAbout] = useState('');
     const [eventOnlinePlataform, setEventOnlinePlataform] = useState([]);
     const [eventLink, setEventLink] = useState('');
@@ -85,6 +85,16 @@ export default function RegisterEvent() {
     const [messageSnackBar, setMessageSnackbar] = useState('');
     const [errorSnackBar, setErrorSnackBar] = useState(false);
 
+    const minimumDate = () => {
+
+        var date = new Date();
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setMilliseconds(0);
+
+        return date;
+    }
+
     const onChange = (event, datetime) => {
         setEventDateTime(datetime);
         setDateTimePicker(false);
@@ -95,22 +105,24 @@ export default function RegisterEvent() {
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
 
     const canIRegisterOnlineEvent = () => {
-        return eventWallpaper.length
-        &&  eventTopics.length 
-        &&  eventName.length
-        &&  eventAbout.length
-        &&  eventOnlinePlataform.length
-        &&  eventLink.length
-        &&  eventDateTime === currentDatetime
+        return eventWallpaper.length === 0
+        ||  eventTopics.length === 0
+        ||  eventName.length === 0
+        ||  eventAbout.length === 0
+        ||  eventOnlinePlataform.length === 0
+        ||  eventLink.length === 0
+        ||  eventDateTime.toDateString() === currentDatetime.toDateString()
+        ||  eventDateTime.toTimeString() === currentDatetime.toTimeString();
     }
 
     const canIRegisterInPersonEvent = () => {
-        return  !eventWallpaper.length
-        &&  !eventTopics.length  
-        &&  !eventName.length
-        &&  !eventAbout.length
-        &&  !eventAddress.length
-        &&  eventDateTime !== currentDatetime
+        return  eventWallpaper.length === 0
+        ||  eventTopics.length === 0
+        ||  eventName.length === 0
+        ||  eventAbout.length === 0
+        ||  eventAddress.length === 0
+        ||  eventDateTime.toDateString() === currentDatetime.toDateString()
+        ||  eventDateTime.toTimeString() === currentDatetime.toTimeString();
     }
 
     const canIRegisterEvent = () => {
@@ -168,7 +180,12 @@ export default function RegisterEvent() {
     }
 
     useEffect(() => {
+        currentDatetime = eventDateTime
+    }, []);
+
+    useEffect(() => {
         const can = canIRegisterEvent();
+        console.log(can)
         setComplete(can);
     }, 
     [
@@ -309,12 +326,13 @@ export default function RegisterEvent() {
 
                                 {isDateTimePickerActive && dateTimePickerMode === 'date' && (
                                     <DateTimePicker
-                                    value={eventDateTime}
-                                    mode={dateTimePickerMode}
-                                    display={'default'}
-                                    is24Hour={true}
-                                    onChange={onChange}
-                                    style={styles.datePicker}
+                                        value={eventDateTime}
+                                        mode={dateTimePickerMode}
+                                        display={'default'}
+                                        is24Hour={true}
+                                        onChange={onChange}
+                                        style={styles.datePicker}
+                                        minimumDate={new Date(minimumDate())}
                                     />
                                 )}
 

@@ -19,7 +19,7 @@ export default function KindOfEvent() {
 
  const route = useRoute();
  const navigation = useNavigation();
- const goBack = route.params.goBack === undefined ? 'Calendar' : route.params.goBack; 
+ const home = route.params.goBack === undefined ? 'Calendar' : route.params.goBack; 
 
  const { color } = useContext(ColorContext);
       
@@ -79,7 +79,7 @@ export default function KindOfEvent() {
             </TouchableOpacity>
         </View>
         <TouchableOpacity 
-            onPress={() => navigation.navigate('RegisterEvent', { modality: buttonSelected, goBack: 'Calendar' })} 
+            onPress={() => navigation.navigate('RegisterEvent', { modality: buttonSelected, goBack: home })} 
             style={[styles.buttonContinue, { backgroundColor: color }]}
         >
             <Text style={{ color: 'white', fontWeight: 'bold'}}> Prosseguir </Text>

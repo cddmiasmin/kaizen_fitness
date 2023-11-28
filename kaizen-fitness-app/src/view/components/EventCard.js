@@ -29,7 +29,7 @@ export default function EventCard({ data, orientation }) {
                 // if(data.datetime < nowDate) navigation.navigate('DisplayEvent', { data: data, mode: 'PastEvent' })
                 // else {
                     if(userType === 'consumer') 
-                        navigation.navigate('DisplayEvent', { data: data})
+                        navigation.navigate('DisplayEvent', { data: data })
                     else 
                         navigation.navigate('UpdateEvent', { data: data })
                 // }

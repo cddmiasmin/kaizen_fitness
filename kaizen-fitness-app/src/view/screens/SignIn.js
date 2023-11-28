@@ -29,8 +29,8 @@ export default function SignIn() {
   const emailRegex = new RegExp(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
   const [errEmail, setErrEmail] = useState(false);
-  const [email, setEmail] = useState('ximixah651@marksia.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [colorTextPassword, setColorTextPassword] = useState(color);
   const [secureTextEntry, setSecureTextEntry] = useState(true);

@@ -52,30 +52,26 @@ export default function Perfil() {
     setVisibleSnackbar(false);
 
     if(!errorSnackBar) {
-        setUser([]);
-        setUserType('noProfile'); 
+      if(whoCalledTheDialog === 'exit') {
         setUserCalendar(undefined);
+        setUserType('noProfile'); 
+        setUser([]);
         navigation.navigate('SignIn');
+      }
     }
     
   }
 
   const executeDialogUserChoice = async () => {
-    let response = [];
 
     if(whoCalledTheDialog === 'deleteAccount') {
-      // if(userType === 'consumer')
-      //   response = await consumerControllerDeleteAccount();
-      // else 
-      //   response = await professionalControllerDeleteAccount();
-
-      console.log('Iasmin');
+      setErrorSnackBar(true);
+      setMessageSnackbar('Opção não integrada. Pedimos desculpas :(');
+      setVisibleSnackbar(true);
     }
     else {
-      response = await userControllerSignOut();
-    }
-    
-    if(response.length !== 0){      
+      const response = await userControllerSignOut();
+
       setErrorSnackBar(!response.result);
       setMessageSnackbar(response.message);
       setVisibleSnackbar(true);
@@ -99,7 +95,7 @@ export default function Perfil() {
     }
   }
 
-  if(user.length === 0)
+  if(!user)
     return (
         <View style={styles.loading}> 
             <StatusBar style='light'/>

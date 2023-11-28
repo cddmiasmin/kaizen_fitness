@@ -317,7 +317,7 @@ export default function Calendar() {
                             ?
                                 <TouchableOpacity
                                     style={[styles.buttonAlertMessage, { backgroundColor: color }]}
-                                    onPress={() => navigation.navigate('KindOfEvent')}
+                                    onPress={() => navigation.navigate('KindOfEvent',  { goback: 'Calendar' })}
                                 >
                                     <Text style={styles.textButtonAlertMessage}>
                                         Criar um evento
@@ -506,14 +506,14 @@ export default function Calendar() {
                     screen === 'Calendar' &&
                         <View style={styles.registerEvent}>
                             {
-                                userType === 'consumer' &&
+                                userType === 'professional' &&
                                     <IconButton
                                         icon="calendar-plus"
                                         iconColor={'white'}
                                         mode='contained'
                                         containerColor={color}
                                         size={24}
-                                        onPress={() => navigation.navigate('KindOfEvent', { goBack: 'HomeProfessional' })}
+                                        onPress={() => navigation.navigate('KindOfEvent',  { goback: 'Calendar' })}
                                     />
                             } 
                             {/* <IconButton

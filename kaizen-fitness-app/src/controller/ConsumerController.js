@@ -6,7 +6,7 @@ import {
 } from "../model/ConsumerModel";
 
 import { mask, unMask } from 'remask';
-import { userControllerAuthDelete } from "./UserController";
+//import { userControllerAuthDelete } from "./UserController";
 import { eventControllerRemoveConsumerUserEvents } from "./EventController";
 
 const timestampToDate = (timestamp) => {
@@ -23,7 +23,7 @@ export const consumerControllerReadProfile = async () => {
     const response = await consumerModelReadProfile();
     let consumer = response.data();
 
-    if(consumer !== undefined){
+    if(consumer !== undefined) {
         const datetime = timestampToDate(consumer.dateOfBirth);
         consumer.dateOfBirth = datetime;
     }
@@ -39,21 +39,21 @@ export const consumerControllerDeleteProfile = async () => {
     return await consumerModelDeleteProfile()
 }
 
-export const consumerControllerDeleteAccount = async (calendar) => {
+// export const consumerControllerDeleteAccount = async (calendar) => {
 
-    const user = await userControllerAuthDelete();
-    const events = calendar === null ? true : await eventControllerRemoveConsumerUserEvents();
-    const profile = await consumerControllerDeleteProfile();
+//     const user = await userControllerAuthDelete();
+//     const events = calendar === null ? true : await eventControllerRemoveConsumerUserEvents();
+//     const profile = await consumerControllerDeleteProfile();
 
-    console.log(user, events, profile);
+//     console.log(user, events, profile);
     
-    if(user && events && profile) {
-        return { result: true, message: 'Sua conta foi excluida :( Sentiremos sua falta eternamente. Adeus!'}
-    } else {
-        return { result: false, message: 'Ops! Algo deu errado. Tente novamente mais tarde!'}
-    }
+//     if(user && events && profile) {
+//         return { result: true, message: 'Sua conta foi excluida :( Sentiremos sua falta eternamente. Adeus!'}
+//     } else {
+//         return { result: false, message: 'Ops! Algo deu errado. Tente novamente mais tarde!'}
+//     }
     
-}
+// }
 
 export const consumerControllerIMC = (height, weight) => {
     let result = {};

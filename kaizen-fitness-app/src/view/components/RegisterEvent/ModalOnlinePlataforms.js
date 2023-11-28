@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        height: 610
+        height: 'auto'
     },
     message: {
         width:'100%',
@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         gap: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     plataformSelected: {
         borderWidth: 1,

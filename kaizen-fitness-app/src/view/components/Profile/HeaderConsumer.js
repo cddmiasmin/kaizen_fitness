@@ -9,6 +9,8 @@ export default function HeaderConsumer() {
     const { user } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
+    if(!user) return null;
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
