@@ -21,7 +21,7 @@ export default function LocationUser() {
   const { userType } = useContext(UserContext);
   const { color } = useContext(ColorContext);
   
-  const onlyLetterRegex = new RegExp(/^[a-zA-Z]+$/);
+  const onlyLetterRegex = new RegExp(/^[A-Za-zÀ-ú\s]+$/);
   const message = userType === 'professional'
                       ?
                         'Preencha os campos corretamente para concluir o cadastro!'

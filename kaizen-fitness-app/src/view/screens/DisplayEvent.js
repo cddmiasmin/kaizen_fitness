@@ -26,7 +26,7 @@ import SnackBar from '../components/SnackBar';
 export default function DisplayEvent() {
 
     const route = useRoute();
-    const mode = route.params.mode;
+    // const mode = route.params.mode;
     const data = route.params.data;
 
     const navigation = useNavigation();
@@ -105,9 +105,9 @@ export default function DisplayEvent() {
     }
 
     useEffect(() => {
-        if(mode !== 'PastEvent') {
+        // if(mode !== 'PastEvent') {
             if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
-        } else setLoading(false);
+        // } else setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -115,9 +115,9 @@ export default function DisplayEvent() {
     }, [participantOfThisEvent]);
 
     useEffect(() => {
-        if(mode !== 'PastEvent') {
+        // if(mode !== 'PastEvent') {
             if(userCalendar !== undefined) checkIfTheUserParticipatesInThisEvent();
-        } else setLoading(false);
+        // } else setLoading(false);
     }, [userCalendar]);
 
     if(loading)
