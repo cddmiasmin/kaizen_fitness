@@ -47,7 +47,7 @@ export default function HeaderProfessional() {
     //    console.log('next', nextEventData);
     // }, [nextEventData]);
 
-    if(nextEventData === undefined || user.length === 0)
+    if(nextEventData === undefined || !user)
         return (
             <View style={styles.loading}> 
                 <StatusBar style='light'/>

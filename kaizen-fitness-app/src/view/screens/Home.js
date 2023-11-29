@@ -36,12 +36,12 @@ export default function Home() {
 
   useEffect(() => {
     console.log('ju')
-    if(user.topics) getShowcaseData();
+    if(user?.topics) getShowcaseData();
   }, []);
 
   useEffect(() => {
     console.log('ju')
-    if(user.topics) getShowcaseData();
+    if(user?.topics) getShowcaseData();
   }, [user]);
 
   useEffect(() => {

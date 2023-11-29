@@ -105,24 +105,22 @@ export default function RegisterEvent() {
     const [isModalOnlinePlataformsActive, setModalOnlinePlataforms] = useState(false);
 
     const canIRegisterOnlineEvent = () => {
-        return eventWallpaper.length === 0
-        ||  eventTopics.length === 0
-        ||  eventName.length === 0
-        ||  eventAbout.length === 0
-        ||  eventOnlinePlataform.length === 0
-        ||  eventLink.length === 0
-        ||  eventDateTime.toDateString() === currentDatetime.toDateString()
-        ||  eventDateTime.toTimeString() === currentDatetime.toTimeString();
+        return  eventTopics.length === 0
+            ||  eventName.length === 0
+            ||  eventAbout.length === 0
+            ||  eventOnlinePlataform.length === 0
+            ||  eventLink.length === 0
+            ||  eventDateTime.toDateString() === currentDatetime.toDateString()
+            ||  eventDateTime.toTimeString() === currentDatetime.toTimeString();
     }
 
     const canIRegisterInPersonEvent = () => {
-        return  eventWallpaper.length === 0
-        ||  eventTopics.length === 0
-        ||  eventName.length === 0
-        ||  eventAbout.length === 0
-        ||  eventAddress.length === 0
-        ||  eventDateTime.toDateString() === currentDatetime.toDateString()
-        ||  eventDateTime.toTimeString() === currentDatetime.toTimeString();
+        return eventTopics.length === 0
+            ||  eventName.length === 0
+            ||  eventAbout.length === 0
+            ||  eventAddress.length === 0
+            ||  eventDateTime.toDateString() === currentDatetime.toDateString()
+            ||  eventDateTime.toTimeString() === currentDatetime.toTimeString();
     }
 
     const canIRegisterEvent = () => {

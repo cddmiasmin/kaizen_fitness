@@ -41,8 +41,8 @@ export default function HeaderConsumer() {
                     />
                     <View style={styles.frameText}>
                         <Text style={{ color: color, fontWeight: 'bold', fontSize: 14}}>IMC</Text>
-                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>{user.imc.classification}</Text>
-                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>{user.imc.value}</Text>
+                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>{user.imc?.classification}</Text>
+                        <Text style={{ color: 'white', fontWeight: 'normal', fontSize: 14}}>{user.imc?.value}</Text>
                     </View>
                 </View>
 
