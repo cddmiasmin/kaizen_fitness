@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, RefreshControl, SafeAreaView } from 'react-native';
 import { ActivityIndicator, Avatar } from 'react-native-paper';
 
 import { StatusBar } from 'expo-status-bar';
@@ -22,7 +22,21 @@ export default function HeaderProfessional() {
     const { user, userCalendar } = useContext(UserContext);
     const { color } = useContext(ColorContext);
 
+    const [refreshing, setRefreshing] = useState(false);
     const [nextEventData, setNextEventData] = useState(undefined);
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+
+        if(nextEventData === undefined){
+            if(userCalendar === null) setNextEventData(null);
+            else if (userCalendar !== undefined) nextEvent();
+
+            setRefreshing(false);
+
+        } else setRefreshing(false);
+
+    }, []);
 
     const sortEventsByDate = (object) => {
         return _.orderBy(object ,  [ 'datetime' ] ,  [ 'asc' ]);
@@ -49,11 +63,16 @@ export default function HeaderProfessional() {
 
     if(nextEventData === undefined || !user)
         return (
-            <View style={styles.loading}> 
+            <SafeAreaView style={styles.loading}>
                 <StatusBar style='light'/>
-                <ActivityIndicator animating={true} color={color} />
-                <Footer />
-            </View>
+                <RefreshControl 
+                    refreshing={refreshing} onRefresh={onRefresh} 
+                    style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <ActivityIndicator animating={true} color={color} style={[StyleSheet.absoluteFillObject]}/>
+                    <Footer />
+                </RefreshControl>
+            </SafeAreaView>  
         )
 
     return (
@@ -113,8 +132,6 @@ const styles = StyleSheet.create({
     loading: {
         flex: 1,
         backgroundColor: mainColor,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     container: {
         flex: 1,
@@ -127,7 +144,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
-        marginTop: 50
+        marginTop: 60
     },
     containerTextos: {
         width: '80%',

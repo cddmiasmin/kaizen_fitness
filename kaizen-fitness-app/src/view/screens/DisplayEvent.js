@@ -29,7 +29,7 @@ export default function DisplayEvent() {
     // const mode = route.params.mode;
     const data = route.params.data;
 
-    console.log(data.participants);
+    //console.log(data.participants);
 
     const navigation = useNavigation();
 

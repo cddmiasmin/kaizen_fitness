@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext} from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
+import { useState, useEffect, useContext, useCallback} from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, FlatList, RefreshControl, SafeAreaView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ActivityIndicator, IconButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -157,6 +157,7 @@ export default function Calendar() {
     const [onlineModalityData, setOnlineModalityData] = useState(null);
     const [inPersonModalityData, setInPersonModalityData] = useState(null);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [refreshing, setRefreshing] = useState(false);
 
     const groupModality = () => {
         return _.groupBy(eventData, 'modality');
@@ -299,6 +300,16 @@ export default function Calendar() {
         }
     }, [onlineModalityData, inPersonModalityData]);
 
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+    
+        if(screen === 'Calendar') setEventData(userCalendar); 
+        else setEventData(data);
+        
+        setRefreshing(false);
+    
+    }, []);
+
     if(eventData === null && screen === 'Calendar')
         return (
             <View style={styles.container}> 
@@ -340,14 +351,19 @@ export default function Calendar() {
 
 
     if(loading)
-        return (
-            <View style={styles.loading}> 
+        return (  
+            <SafeAreaView style={styles.loading}>
                 <StatusBar style='light'/>
-                <ActivityIndicator animating={true} color={color} />
-                {
-                    screen === 'Calendar' && <Footer />
-                }
-            </View>
+                <RefreshControl 
+                    refreshing={refreshing} onRefresh={onRefresh} 
+                    style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <ActivityIndicator animating={true} color={color} style={[StyleSheet.absoluteFillObject]}/>
+                    {
+                        screen === 'Calendar' && <Footer />
+                    }
+                </RefreshControl>
+            </SafeAreaView>         
         )
     else {
 
@@ -535,8 +551,6 @@ const styles = StyleSheet.create({
     loading: {
         flex: 1,
         backgroundColor: mainColor,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     container: {
         flex: 1,

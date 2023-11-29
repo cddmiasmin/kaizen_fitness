@@ -29,6 +29,8 @@ import { eventControllerCreate } from '../../controller/EventController';
 
 export default function RegisterEvent() {
 
+    const alternativeWallpaper = 'https://firebasestorage.googleapis.com/v0/b/kaizenfitness-77033.appspot.com/o/wallpaper_reserva.jpg?alt=media&token=a70605e8-3acc-4b9e-b1ca-cb4c4358b3b4' 
+
     const { setUserCalendar, getCalendarUser } = useContext(UserContext);
 
     const route = useRoute();
@@ -140,9 +142,12 @@ export default function RegisterEvent() {
 
     const completedRegistration = async () => {
 
+        const wallpaper = eventWallpaper.length === 0 ? alternativeWallpaper : eventWallpaper;
+
         const data = {
+            created: new Date(),
             styleStatusBar: styleStatusBar,
-            wallpaper: eventWallpaper,
+            wallpaper: wallpaper,
             topics: eventTopics,
             name: eventName ,
             about: eventAbout,

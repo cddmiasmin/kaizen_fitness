@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ActivityIndicator, IconButton } from 'react-native-paper';
+import { useContext, useEffect, useState, useCallback } from 'react';
+import { StyleSheet, View, RefreshControl, SafeAreaView } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -23,9 +23,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [activeTextinput, setActiveTextinput] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const getData = async () => {
-    console.log(user.topics)
+    //console.log(user.topics)
     const response = await eventControllerGetShowcase(user.topics);
     setData(response);
   }
@@ -35,29 +36,45 @@ export default function Home() {
   }
 
   useEffect(() => {
-    console.log('ju')
+    //console.log('ju')
     if(user?.topics) getShowcaseData();
   }, []);
 
   useEffect(() => {
-    console.log('ju')
+    //console.log('ju')
     if(user?.topics) getShowcaseData();
   }, [user]);
 
   useEffect(() => {
     if(data !== null) {
-      console.log('data', data.forYou);
+      //console.log('data', data.forYou);
       setLoading(false);
     }
   }, [data]);
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    if(user?.topics) {
+      getShowcaseData();
+      setRefreshing(false);
+    }
+    else setRefreshing(false);
+
+  }, []);
+
   if(loading)
     return (
-      <View style={styles.loading}> 
-          <StatusBar style='light'/>
-          <ActivityIndicator animating={true} color={color} />
-          <Footer />
-      </View>
+      <SafeAreaView style={styles.loading}>
+        <StatusBar style='light'/>
+        <RefreshControl 
+            refreshing={refreshing} onRefresh={onRefresh} 
+            style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center'}}
+        >
+            <ActivityIndicator animating={true} color={color} style={[StyleSheet.absoluteFillObject]}/>
+            <Footer />
+        </RefreshControl>
+      </SafeAreaView>       
     )
 
   return (
@@ -75,11 +92,10 @@ export default function Home() {
 }
 
 const styles =  StyleSheet.create({
-  loading: {
-    flex: 1,
+  loading: { 
     backgroundColor: mainColor,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1,
+    overflow: 'hidden'
   },
   container: {
     flex: 1,
